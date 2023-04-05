@@ -1,4 +1,4 @@
-package skustra.focusflow.domain.session
+package skustra.focusflow.domain.usecase.session
 
 import kotlinx.coroutines.*
 import kotlinx.coroutines.flow.MutableSharedFlow
@@ -8,7 +8,7 @@ import skustra.focusflow.data.alias.Minute
 import skustra.focusflow.data.SessionProgress
 import skustra.focusflow.data.SessionState
 
-class FocusSessionImpl : FocusSession {
+class FocusSessionUseCase : FocusSession {
 
     private val mutableSessionState = MutableSharedFlow<SessionState>()
     private val sessionState: SharedFlow<SessionState> = mutableSessionState.asSharedFlow()

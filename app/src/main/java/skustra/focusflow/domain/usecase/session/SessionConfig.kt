@@ -1,4 +1,4 @@
-package skustra.focusflow.domain.session
+package skustra.focusflow.domain.usecase.session
 
 import skustra.focusflow.BuildConfig
 import skustra.focusflow.data.alias.Minute

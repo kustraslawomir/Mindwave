@@ -2,19 +2,23 @@ package skustra.focusflow.ui
 
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
+import dagger.hilt.android.AndroidEntryPoint
+import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.launch
 import skustra.focusflow.data.SessionState
 import skustra.focusflow.data.alias.Minute
 import skustra.focusflow.domain.logs.AppLog
-import skustra.focusflow.domain.session.FocusSession
-import skustra.focusflow.domain.session.FocusSessionImpl
-import timber.log.Timber
+import skustra.focusflow.domain.usecase.session.FocusSession
+import skustra.focusflow.domain.usecase.session.FocusSessionUseCase
+import javax.inject.Inject
 
-class FocusSessionViewModel : ViewModel() {
+@HiltViewModel
+class FocusSessionViewModel @Inject constructor(
+    val session: FocusSession,
+) : ViewModel() {
 
-    private val session: FocusSession = FocusSessionImpl()
 
     private val _sessionMutableStateFlow: MutableStateFlow<SessionState> =
         MutableStateFlow(SessionState.SessionIdle)

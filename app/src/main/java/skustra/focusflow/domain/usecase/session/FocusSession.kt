@@ -1,4 +1,4 @@
-package skustra.focusflow.domain.session
+package skustra.focusflow.domain.usecase.session
 
 import kotlinx.coroutines.flow.SharedFlow
 import skustra.focusflow.data.alias.Minute
