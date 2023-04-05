@@ -7,7 +7,6 @@ import kotlinx.coroutines.flow.asSharedFlow
 import skustra.focusflow.data.alias.Minute
 import skustra.focusflow.data.SessionProgress
 import skustra.focusflow.data.SessionState
-import java.util.*
 
 class FocusSessionImpl : FocusSession {
 
@@ -35,7 +34,7 @@ class FocusSessionImpl : FocusSession {
             }
 
             currentSessionProgress -= 1
-            if (sessionEnds()) {
+            if (sessionEnded()) {
                 mutableSessionState.emit(SessionState.SessionCompleted)
                 return
             }
@@ -50,8 +49,6 @@ class FocusSessionImpl : FocusSession {
             )
         }
     }
-
-    private suspend fun sessionEnds() = currentSessionProgress == 0
 
     override fun pauseSession() {
         sessionPaused = true
@@ -71,4 +68,6 @@ class FocusSessionImpl : FocusSession {
     override fun sessionState(): SharedFlow<SessionState> {
         return sessionState
     }
+
+    private fun sessionEnded() = currentSessionProgress == 0
 }
