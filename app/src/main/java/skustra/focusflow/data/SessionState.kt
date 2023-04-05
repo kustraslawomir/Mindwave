@@ -3,9 +3,21 @@ package skustra.focusflow.data
 
 sealed class SessionState {
 
-    data class SessionInProgress(val sessionProgress: SessionProgress) : SessionState()
-    object SessionPaused : SessionState()
-    object SessionResumed : SessionState()
-    object SessionCompleted : SessionState()
-    object SessionIdle : SessionState()
+    abstract val sessionProgress: SessionProgress
+
+    data class SessionInProgress(override val sessionProgress: SessionProgress) : SessionState()
+    data class SessionPaused(override val sessionProgress: SessionProgress) : SessionState()
+    data class SessionCompleted(
+        override val sessionProgress: SessionProgress = SessionProgress(
+            currentSessionProgress = 0,
+            sessionDuration = 0
+        )
+    ) : SessionState()
+
+    data class SessionIdle(
+        override val sessionProgress: SessionProgress = SessionProgress(
+            currentSessionProgress = 0,
+            sessionDuration = 0
+        )
+    ) : SessionState()
 }

@@ -4,6 +4,7 @@ import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import dagger.hilt.android.AndroidEntryPoint
 import dagger.hilt.android.lifecycle.HiltViewModel
+import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.launch
@@ -16,15 +17,20 @@ import javax.inject.Inject
 
 @HiltViewModel
 class FocusSessionViewModel @Inject constructor(
-    val session: FocusSession,
+    private val session: FocusSession,
 ) : ViewModel() {
 
-
     private val _sessionMutableStateFlow: MutableStateFlow<SessionState> =
-        MutableStateFlow(SessionState.SessionIdle)
+        MutableStateFlow(SessionState.SessionIdle())
 
     fun sessionStateFlow(): StateFlow<SessionState> {
         return _sessionMutableStateFlow
+    }
+
+    private val _arcProgress: MutableStateFlow<Float> = MutableStateFlow(0f)
+
+    fun arcProgress(): Flow<Float> {
+        return _arcProgress
     }
 
     init {
@@ -32,6 +38,7 @@ class FocusSessionViewModel @Inject constructor(
             session.sessionState().collect { state ->
                 AppLog.sessionDebug(state)
                 _sessionMutableStateFlow.emit(state)
+                _arcProgress.emit(state.sessionProgress.percentageProgress())
             }
         }
     }

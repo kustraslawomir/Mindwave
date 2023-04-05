@@ -13,11 +13,14 @@ class FocusSessionUseCase : FocusSession {
     private val mutableSessionState = MutableSharedFlow<SessionState>()
     private val sessionState: SharedFlow<SessionState> = mutableSessionState.asSharedFlow()
 
+    private var sessionDuration: Minute = 0
     private var currentSessionProgress: Minute = 0
     private var sessionPaused = false
 
     override suspend fun startSession(sessionDuration: Minute) {
+        this.sessionDuration = sessionDuration
         this.currentSessionProgress = sessionDuration
+
         mutableSessionState.emit(
             SessionState.SessionInProgress(
                 sessionProgress = SessionProgress(
@@ -35,16 +38,13 @@ class FocusSessionUseCase : FocusSession {
 
             currentSessionProgress -= 1
             if (sessionEnded()) {
-                mutableSessionState.emit(SessionState.SessionCompleted)
+                mutableSessionState.emit(SessionState.SessionCompleted())
                 return
             }
 
             mutableSessionState.emit(
                 SessionState.SessionInProgress(
-                    sessionProgress = SessionProgress(
-                        currentSessionProgress = currentSessionProgress,
-                        sessionDuration = sessionDuration
-                    )
+                    sessionProgress = getSessionProgress()
                 )
             )
         }
@@ -52,17 +52,27 @@ class FocusSessionUseCase : FocusSession {
 
     override fun pauseSession() {
         sessionPaused = true
-        mutableSessionState.tryEmit(SessionState.SessionPaused)
+        mutableSessionState.tryEmit(
+            SessionState.SessionPaused(
+                sessionProgress = getSessionProgress()
+            )
+        )
+    }
+
+    private fun getSessionProgress(): SessionProgress {
+        return SessionProgress(
+            currentSessionProgress = currentSessionProgress,
+            sessionDuration = sessionDuration
+        )
     }
 
     override fun resumeSession() {
         sessionPaused = false
-        mutableSessionState.tryEmit(SessionState.SessionResumed)
     }
 
     override fun stopSession() {
         sessionPaused = false
-        mutableSessionState.tryEmit(SessionState.SessionIdle)
+        mutableSessionState.tryEmit(SessionState.SessionIdle())
     }
 
     override fun sessionState(): SharedFlow<SessionState> {
