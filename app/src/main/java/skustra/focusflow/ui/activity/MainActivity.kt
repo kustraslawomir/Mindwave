@@ -24,16 +24,6 @@ class MainActivity : ComponentActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
 
-
-        lifecycleScope.launch {
-            FocusSessionImpl.sessionState().collect { state ->
-                Timber.d("$state")
-            }
-        }
-        lifecycleScope.launch {
-            FocusSessionImpl.startSession(15)
-        }
-
         setContent {
             FocusFlowTheme {
                 // A surface container using the 'background' color from the theme

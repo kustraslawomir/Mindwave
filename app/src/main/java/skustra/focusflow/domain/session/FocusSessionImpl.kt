@@ -9,7 +9,7 @@ import skustra.focusflow.data.SessionProgress
 import skustra.focusflow.data.SessionState
 import java.util.*
 
-object FocusSessionImpl : FocusSession {
+class FocusSessionImpl : FocusSession {
 
     private val mutableSessionState = MutableSharedFlow<SessionState>()
     private val sessionState: SharedFlow<SessionState> = mutableSessionState.asSharedFlow()
@@ -33,14 +33,10 @@ object FocusSessionImpl : FocusSession {
             if (sessionPaused) {
                 return
             }
+
             currentSessionProgress -= 1
             if (sessionEnds()) {
-                mutableSessionState.emit(
-                    SessionState.SessionCompleted(
-                        UUID.randomUUID(),
-                        sessionDuration
-                    )
-                )
+                mutableSessionState.emit(SessionState.SessionCompleted)
                 return
             }
 
