@@ -17,5 +17,8 @@ class SessionConfig {
             45,
             60
         )
+
+        fun defaultSessionDuration() = predefinedSessionDuration
+            .first()
     }
 }

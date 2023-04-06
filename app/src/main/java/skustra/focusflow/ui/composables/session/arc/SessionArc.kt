@@ -25,17 +25,15 @@ import androidx.compose.ui.graphics.drawscope.DrawScope
 import androidx.compose.ui.text.TextStyle
 import androidx.compose.ui.unit.sp
 import skustra.focusflow.data.SessionState
+import skustra.focusflow.domain.usecase.session.SessionConfig
 
 @Composable
 fun SessionFocusArc(
-    size: Dp = 260.dp,
-    foregroundIndicatorColor: Color = Color(0xFF35898f),
-    shadowColor: Color = Color.LightGray,
-    indicatorThickness: Dp = 20.dp,
     sessionState: SessionState,
-    animationDuration: Int = 1000,
-    dataTextStyle: TextStyle = MaterialTheme.typography.titleLarge,
-    remainingTextStyle: TextStyle = MaterialTheme.typography.bodyMedium
+    size: Dp = 280.dp,
+    indicatorThickness: Dp = 15.dp,
+    animationDuration: Int = SessionConfig.tickInterval().toInt(),
+    titleStyle: TextStyle = MaterialTheme.typography.labelLarge
 ) {
 
     val progress = when (sessionState) {
@@ -54,6 +52,8 @@ fun SessionFocusArc(
         progress
     }
 
+    val primaryColor = MaterialTheme.colorScheme.primary
+    val backgroundColor = MaterialTheme.colorScheme.background
     Box(
         modifier = Modifier.size(size), contentAlignment = Alignment.Center
     ) {
@@ -61,14 +61,13 @@ fun SessionFocusArc(
             modifier = Modifier.size(size)
         ) {
 
-            drawShadow(shadowColor)
-            drawOutlineIndicator(animation, foregroundIndicatorColor, indicatorThickness, size)
+            drawOutlineIndicator(animation, primaryColor, indicatorThickness, size)
+            drawShadowForeground(size, indicatorThickness, backgroundColor)
         }
 
         ProgressText(
-            animateNumber = animation,
-            titleTextStyle = dataTextStyle,
-            subTitleTextStyle = remainingTextStyle
+            titleTextStyle = titleStyle,
+            sessionState = sessionState
         )
     }
 
@@ -95,6 +94,18 @@ private fun DrawScope.drawOutlineIndicator(
     )
 }
 
+private fun DrawScope.drawShadowForeground(
+    size: Dp,
+    indicatorThickness: Dp,
+    color : Color
+) {
+    drawCircle(
+        color = color,
+        radius = (size / 2 - indicatorThickness).toPx(),
+        center = Offset(x = this.size.width / 2, y = this.size.height / 2)
+    )
+}
+
 private fun DrawScope.drawShadow(shadowColor: Color) {
     drawCircle(
         brush = Brush.radialGradient(
@@ -108,36 +119,40 @@ private fun DrawScope.drawShadow(shadowColor: Color) {
 }
 
 @Composable
-private fun ProgressText(
-    animateNumber: State<Float>, titleTextStyle: TextStyle, subTitleTextStyle: TextStyle
+private fun ProgressText(titleTextStyle: TextStyle, sessionState : SessionState
 ) {
+
+    val minutesLeft = when (sessionState) {
+        is SessionState.SessionInProgress -> sessionState.sessionProgress.minutesLeft.toString()
+        is SessionState.SessionPaused -> sessionState.sessionProgress.minutesLeft.toString()
+        is SessionState.SessionIdle -> SessionConfig.defaultSessionDuration().toString()
+        else -> 0.toString()
+    }
+
     Column(
         verticalArrangement = Arrangement.Center,
         horizontalAlignment = Alignment.CenterHorizontally
     ) {
         Text(
-            text = (animateNumber.value).toInt().toString() + " %", style = titleTextStyle
-        )
-        Spacer(modifier = Modifier.height(2.dp))
-        Text(
-            text = "Remaining", style = subTitleTextStyle
+            text = "$minutesLeft min.", style = titleTextStyle
         )
     }
 }
 
 @Composable
 private fun ButtonProgressbar(
-    backgroundColor: Color = Color(0xFF35898f), onClickButton: () -> Unit
+    onClickButton: () -> Unit
 ) {
+    val secondaryColor = MaterialTheme.colorScheme.secondary
     Button(
         onClick = {
             onClickButton()
         }, colors = ButtonDefaults.buttonColors(
-            containerColor = MaterialTheme.colorScheme.primary
+            containerColor = secondaryColor
         )
     ) {
         Text(
-            text = "TODO", color = Color.White, fontSize = 16.sp
+            text = "TODO"
         )
     }
 }

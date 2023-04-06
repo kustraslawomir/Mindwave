@@ -25,7 +25,7 @@ class FocusSessionUseCase : FocusSession {
             SessionState.SessionInProgress(
                 sessionProgress = SessionProgress(
                     sessionDuration = sessionDuration,
-                    currentSessionProgress = currentSessionProgress
+                    minutesLeft = currentSessionProgress
                 )
             )
         )
@@ -61,7 +61,7 @@ class FocusSessionUseCase : FocusSession {
 
     private fun getSessionProgress(): SessionProgress {
         return SessionProgress(
-            currentSessionProgress = currentSessionProgress,
+            minutesLeft = currentSessionProgress,
             sessionDuration = sessionDuration
         )
     }

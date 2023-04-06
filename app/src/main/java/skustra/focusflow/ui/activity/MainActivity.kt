@@ -17,6 +17,7 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import dagger.hilt.android.AndroidEntryPoint
 import skustra.focusflow.data.SessionState
+import skustra.focusflow.domain.usecase.session.SessionConfig
 import skustra.focusflow.ui.FocusSessionViewModel
 import skustra.focusflow.ui.composables.session.arc.SessionFocusArc
 import skustra.focusflow.ui.theme.AppTheme
@@ -37,8 +38,7 @@ class MainActivity : ComponentActivity() {
                 ) {
                     Column(
                         modifier = Modifier
-                            .fillMaxSize()
-                            .background(color = Color.White),
+                            .fillMaxSize(),
                         verticalArrangement = Arrangement.Center,
                         horizontalAlignment = Alignment.CenterHorizontally
                     ) {
@@ -49,6 +49,6 @@ class MainActivity : ComponentActivity() {
             }
         }
 
-        viewModel.startSession(60)
+        viewModel.startSession(SessionConfig.defaultSessionDuration())
     }
 }
