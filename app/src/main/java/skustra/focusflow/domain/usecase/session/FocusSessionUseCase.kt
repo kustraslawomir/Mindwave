@@ -38,7 +38,7 @@ class FocusSessionUseCase : FocusSession {
 
             currentSessionProgress -= 1
             if (sessionEnded()) {
-                mutableSessionState.emit(SessionState.SessionCompleted())
+                mutableSessionState.emit(SessionState.SessionCompleted)
                 return
             }
 
@@ -72,7 +72,7 @@ class FocusSessionUseCase : FocusSession {
 
     override fun stopSession() {
         sessionPaused = false
-        mutableSessionState.tryEmit(SessionState.SessionIdle())
+        mutableSessionState.tryEmit(SessionState.SessionIdle)
     }
 
     override fun sessionState(): SharedFlow<SessionState> {

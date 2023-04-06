@@ -21,12 +21,10 @@ import androidx.compose.material3.Text
 import androidx.compose.runtime.*
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.graphics.Brush
+import androidx.compose.ui.graphics.drawscope.DrawScope
 import androidx.compose.ui.text.TextStyle
-import androidx.compose.ui.text.font.Font
-import androidx.compose.ui.text.font.FontFamily
-import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.sp
-import skustra.focusflow.R
+import skustra.focusflow.data.SessionState
 
 @Composable
 fun SessionFocusArc(
@@ -34,138 +32,112 @@ fun SessionFocusArc(
     foregroundIndicatorColor: Color = Color(0xFF35898f),
     shadowColor: Color = Color.LightGray,
     indicatorThickness: Dp = 20.dp,
-    dataUsage: Float = 60f,
+    sessionState: SessionState,
     animationDuration: Int = 1000,
-    dataTextStyle: TextStyle = TextStyle(
-        fontFamily = FontFamily(Font(R.font.roboto_bold, FontWeight.Bold)),
-        //fontSize = MaterialTheme.typography.h3.fontSize
-    ),
-    remainingTextStyle: TextStyle = TextStyle(
-        fontFamily = FontFamily(Font(R.font.roboto_regular, FontWeight.Normal)),
-        fontSize = 16.sp
-    )
+    dataTextStyle: TextStyle = MaterialTheme.typography.titleLarge,
+    remainingTextStyle: TextStyle = MaterialTheme.typography.bodyMedium
 ) {
-    // It remembers the data usage value
-/*    var dataUsageRemember by remember {
-        mutableStateOf(dataUsage)
-    }*/
 
-    // This is to animate the foreground indicator
-    val dataUsageAnimate = animateFloatAsState(
-        targetValue = dataUsage,
-        animationSpec = tween(
+    val progress = when (sessionState) {
+        is SessionState.SessionInProgress -> sessionState.sessionProgress.percentageProgress()
+        is SessionState.SessionPaused -> sessionState.sessionProgress.percentageProgress()
+        else -> 100f
+    }
+
+    val animation = animateFloatAsState(
+        targetValue = progress, animationSpec = tween(
             durationMillis = animationDuration
         )
     )
 
-    // This is to start the animation when the activity is opened
     LaunchedEffect(Unit) {
-        dataUsage
+        progress
     }
 
     Box(
-        modifier = Modifier
-            .size(size),
-        contentAlignment = Alignment.Center
+        modifier = Modifier.size(size), contentAlignment = Alignment.Center
     ) {
         Canvas(
-            modifier = Modifier
-                .size(size)
+            modifier = Modifier.size(size)
         ) {
-            // For shadow
-            drawCircle(
-                brush = Brush.radialGradient(
-                    colors = listOf(shadowColor, Color.White),
-                    center = Offset(x = this.size.width / 2, y = this.size.height / 2),
-                    radius = this.size.height / 2
-                ),
-                radius = this.size.height / 2,
-                center = Offset(x = this.size.width / 2, y = this.size.height / 2)
-            )
 
-            // This is the white circle that appears on the top of the shadow circle
-            drawCircle(
-                color = Color.White,
-                radius = (size / 2 - indicatorThickness).toPx(),
-                center = Offset(x = this.size.width / 2, y = this.size.height / 2)
-            )
-
-            // Convert the dataUsage to angle
-            val sweepAngle = (dataUsageAnimate.value) * 360 / 100
-
-            // Foreground indicator
-            drawArc(
-                color = foregroundIndicatorColor,
-                startAngle = -90f,
-                sweepAngle = sweepAngle,
-                useCenter = false,
-                style = Stroke(width = indicatorThickness.toPx(), cap = StrokeCap.Round),
-                size = Size(
-                    width = (size - indicatorThickness).toPx(),
-                    height = (size - indicatorThickness).toPx()
-                ),
-                topLeft = Offset(
-                    x = (indicatorThickness / 2).toPx(),
-                    y = (indicatorThickness / 2).toPx()
-                )
-            )
+            drawShadow(shadowColor)
+            drawOutlineIndicator(animation, foregroundIndicatorColor, indicatorThickness, size)
         }
 
-        DisplayText(
-            animateNumber = dataUsageAnimate,
-            dataTextStyle = dataTextStyle,
-            remainingTextStyle = remainingTextStyle
+        ProgressText(
+            animateNumber = animation,
+            titleTextStyle = dataTextStyle,
+            subTitleTextStyle = remainingTextStyle
         )
     }
 
     Spacer(modifier = Modifier.height(32.dp))
+    ButtonProgressbar {}
+}
 
-    ButtonProgressbar {
-    }
+private fun DrawScope.drawOutlineIndicator(
+    animation: State<Float>, foregroundIndicatorColor: Color, indicatorThickness: Dp, size: Dp
+) {
+    val sweepAngle = (animation.value) * 360 / 100
+    drawArc(
+        color = foregroundIndicatorColor,
+        startAngle = -90f,
+        sweepAngle = sweepAngle,
+        useCenter = false,
+        style = Stroke(width = indicatorThickness.toPx(), cap = StrokeCap.Round),
+        size = Size(
+            width = (size - indicatorThickness).toPx(), height = (size - indicatorThickness).toPx()
+        ),
+        topLeft = Offset(
+            x = (indicatorThickness / 2).toPx(), y = (indicatorThickness / 2).toPx()
+        )
+    )
+}
+
+private fun DrawScope.drawShadow(shadowColor: Color) {
+    drawCircle(
+        brush = Brush.radialGradient(
+            colors = listOf(shadowColor, Color.White),
+            center = Offset(x = this.size.width / 2, y = this.size.height / 2),
+            radius = this.size.height / 2
+        ),
+        radius = this.size.height / 2,
+        center = Offset(x = this.size.width / 2, y = this.size.height / 2)
+    )
 }
 
 @Composable
-private fun DisplayText(
-    animateNumber: State<Float>,
-    dataTextStyle: TextStyle,
-    remainingTextStyle: TextStyle
+private fun ProgressText(
+    animateNumber: State<Float>, titleTextStyle: TextStyle, subTitleTextStyle: TextStyle
 ) {
     Column(
         verticalArrangement = Arrangement.Center,
         horizontalAlignment = Alignment.CenterHorizontally
     ) {
-        // Text that shows the number inside the circle
         Text(
-            text = (animateNumber.value).toInt().toString() + " %",
-            style = dataTextStyle
+            text = (animateNumber.value).toInt().toString() + " %", style = titleTextStyle
         )
-
         Spacer(modifier = Modifier.height(2.dp))
-
         Text(
-            text = "Remaining",
-            style = remainingTextStyle
+            text = "Remaining", style = subTitleTextStyle
         )
     }
 }
 
 @Composable
 private fun ButtonProgressbar(
-    backgroundColor: Color = Color(0xFF35898f),
-    onClickButton: () -> Unit
+    backgroundColor: Color = Color(0xFF35898f), onClickButton: () -> Unit
 ) {
     Button(
         onClick = {
             onClickButton()
-        },
-        colors = ButtonDefaults.buttonColors(
-            containerColor = backgroundColor
+        }, colors = ButtonDefaults.buttonColors(
+            containerColor = MaterialTheme.colorScheme.primary
         )
     ) {
         Text(
-            text = "TODO",
-            color = Color.White,
-            fontSize = 16.sp
+            text = "TODO", color = Color.White, fontSize = 16.sp
         )
     }
 }

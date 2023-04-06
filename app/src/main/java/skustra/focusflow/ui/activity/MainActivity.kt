@@ -16,10 +16,10 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import dagger.hilt.android.AndroidEntryPoint
-import skustra.focusflow.domain.logs.AppLog
+import skustra.focusflow.data.SessionState
 import skustra.focusflow.ui.FocusSessionViewModel
 import skustra.focusflow.ui.composables.session.arc.SessionFocusArc
-import skustra.focusflow.ui.theme.FocusFlowTheme
+import skustra.focusflow.ui.theme.AppTheme
 
 @AndroidEntryPoint
 class MainActivity : ComponentActivity() {
@@ -30,7 +30,7 @@ class MainActivity : ComponentActivity() {
         super.onCreate(savedInstanceState)
 
         setContent {
-            FocusFlowTheme {
+            AppTheme {
                 Surface(
                     modifier = Modifier.fillMaxSize(),
                     color = MaterialTheme.colorScheme.background
@@ -42,15 +42,9 @@ class MainActivity : ComponentActivity() {
                         verticalArrangement = Arrangement.Center,
                         horizontalAlignment = Alignment.CenterHorizontally
                     ) {
-                        val arcProgress by viewModel.sessionStateFlow().collectAsState()
-                        AppLog.sessionDebug(arcProgress.sessionProgress.percentageProgress())
-                        SessionFocusArc(
-                            dataUsage = arcProgress.sessionProgress.percentageProgress()
-
-                        )
+                        val sessionState by viewModel.sessionStateFlow().collectAsState()
+                        SessionFocusArc(sessionState = sessionState)
                     }
-
-
                 }
             }
         }
