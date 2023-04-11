@@ -15,5 +15,5 @@ interface SessionManager {
 
     fun stopSession()
 
-    fun sessionState(): SharedFlow<SessionState>
+    fun getCurrentSessionState(): SharedFlow<SessionState>
 }

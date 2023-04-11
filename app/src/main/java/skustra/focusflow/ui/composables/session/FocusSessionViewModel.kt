@@ -26,7 +26,7 @@ class FocusSessionViewModel @Inject constructor(
 
     init {
         viewModelScope.launch {
-            sessionManager.sessionState().collect { state ->
+            sessionManager.getCurrentSessionState().collect { state ->
                 AppLog.sessionDebug(state)
                 _sessionMutableStateFlow.emit(state)
             }

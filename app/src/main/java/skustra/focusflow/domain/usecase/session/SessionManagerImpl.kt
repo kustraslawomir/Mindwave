@@ -51,7 +51,7 @@ class SessionManagerImpl : SessionManager {
 
                 mutableSessionState.emit(
                     SessionState.SessionInProgress(
-                        sessionProgress = getSessionProgress()
+                        sessionProgress = getCurrentSessionProgress()
                     )
                 )
             }
@@ -62,15 +62,8 @@ class SessionManagerImpl : SessionManager {
         sessionPaused = true
         mutableSessionState.tryEmit(
             SessionState.SessionPaused(
-                sessionProgress = getSessionProgress()
+                sessionProgress = getCurrentSessionProgress()
             )
-        )
-    }
-
-    private fun getSessionProgress(): SessionProgress {
-        return SessionProgress(
-            minutesLeft = currentSessionProgress,
-            sessionDuration = sessionDuration
         )
     }
 
@@ -84,7 +77,14 @@ class SessionManagerImpl : SessionManager {
         mutableSessionState.tryEmit(SessionState.SessionIdle)
     }
 
-    override fun sessionState(): SharedFlow<SessionState> {
+    private fun getCurrentSessionProgress(): SessionProgress {
+        return SessionProgress(
+            minutesLeft = currentSessionProgress,
+            sessionDuration = sessionDuration
+        )
+    }
+
+    override fun getCurrentSessionState(): SharedFlow<SessionState> {
         return sessionState
     }
 
