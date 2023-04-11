@@ -23,9 +23,10 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.graphics.Brush
 import androidx.compose.ui.graphics.drawscope.DrawScope
 import androidx.compose.ui.text.TextStyle
-import androidx.compose.ui.unit.sp
 import skustra.focusflow.data.SessionState
 import skustra.focusflow.domain.usecase.session.SessionConfig
+import skustra.focusflow.ui.localization.LocalizationKey
+import skustra.focusflow.ui.localization.LocalizationManager
 
 @Composable
 fun SessionFocusArc(
@@ -152,7 +153,7 @@ private fun ButtonProgressbar(
         )
     ) {
         Text(
-            text = "TODO"
+            text = LocalizationManager.getText(LocalizationKey.Start)
         )
     }
 }
