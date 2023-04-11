@@ -16,7 +16,7 @@ class SessionManagerImpl : SessionManager {
     private var sessionDuration: Minute = 0
     private var currentSessionProgress: Minute = 0
     private var sessionPaused = false
-    private var periodicJob: Deferred<Unit>? = null
+    private var interval: Deferred<Unit>? = null
 
     override suspend fun createSession(sessionDuration: Minute, scope: CoroutineScope) {
         this.sessionDuration = sessionDuration
@@ -32,7 +32,11 @@ class SessionManagerImpl : SessionManager {
         )
 
         cancelInterval()
-        periodicJob = scope.launchPeriodicAsync {
+        runInterval(scope)
+    }
+
+    private fun runInterval(scope: CoroutineScope) {
+        interval = scope.launchPeriodicAsync {
             scope.launch {
                 if (sessionPaused) {
                     return@launch
@@ -87,6 +91,6 @@ class SessionManagerImpl : SessionManager {
     private fun sessionEnded() = currentSessionProgress == 0
 
     private fun cancelInterval() {
-        periodicJob?.cancel()
+        interval?.cancel()
     }
 }
