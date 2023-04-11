@@ -13,7 +13,7 @@ import skustra.focusflow.domain.usecase.session.SessionManager
 import javax.inject.Inject
 
 @HiltViewModel
-class FocusSessionViewModel @Inject constructor(
+class SessionViewModel @Inject constructor(
     private val sessionManager: SessionManager,
 ) : ViewModel() {
 
