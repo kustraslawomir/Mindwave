@@ -65,8 +65,8 @@ fun SessionFocusArc(
         ) {
 
             drawOutlineIndicator(animation, primaryColor, indicatorThickness, composableSize)
-            drawShadowForeground(composableSize, indicatorThickness, backgroundColor)
             drawShadow(Color.Black)
+            drawShadowForeground(composableSize, indicatorThickness, backgroundColor)
         }
 
         ProgressText(

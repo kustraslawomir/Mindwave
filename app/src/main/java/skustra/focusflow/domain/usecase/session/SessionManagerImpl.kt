@@ -16,8 +16,9 @@ class SessionManagerImpl : SessionManager {
     private var sessionDuration: Minute = 0
     private var currentSessionProgress: Minute = 0
     private var sessionPaused = false
+    private var periodicJob: Deferred<Unit>? = null
 
-    override suspend fun startSession(sessionDuration: Minute) {
+    override suspend fun createSession(sessionDuration: Minute, scope: CoroutineScope) {
         this.sessionDuration = sessionDuration
         this.currentSessionProgress = sessionDuration
 
@@ -30,23 +31,26 @@ class SessionManagerImpl : SessionManager {
             )
         )
 
-        while (true) {
-            delay(SessionConfig.tickInterval())
-            if (sessionPaused) {
-                return
-            }
+        cancelInterval()
+        periodicJob = scope.launchPeriodicAsync {
+            scope.launch {
+                if (sessionPaused) {
+                    return@launch
+                }
 
-            currentSessionProgress -= 1
-            if (sessionEnded()) {
-                mutableSessionState.emit(SessionState.SessionCompleted)
-                return
-            }
+                currentSessionProgress -= 1
+                if (sessionEnded()) {
+                    cancelInterval()
+                    mutableSessionState.emit(SessionState.SessionCompleted)
+                    return@launch
+                }
 
-            mutableSessionState.emit(
-                SessionState.SessionInProgress(
-                    sessionProgress = getSessionProgress()
+                mutableSessionState.emit(
+                    SessionState.SessionInProgress(
+                        sessionProgress = getSessionProgress()
+                    )
                 )
-            )
+            }
         }
     }
 
@@ -71,6 +75,7 @@ class SessionManagerImpl : SessionManager {
     }
 
     override fun stopSession() {
+        cancelInterval()
         sessionPaused = false
         mutableSessionState.tryEmit(SessionState.SessionIdle)
     }
@@ -80,4 +85,8 @@ class SessionManagerImpl : SessionManager {
     }
 
     private fun sessionEnded() = currentSessionProgress == 0
+
+    private fun cancelInterval() {
+        periodicJob?.cancel()
+    }
 }

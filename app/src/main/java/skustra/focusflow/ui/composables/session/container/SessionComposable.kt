@@ -29,7 +29,7 @@ fun SessionComposable(viewModel: FocusSessionViewModel = viewModel()) {
     ) {
         SessionFocusArc(sessionState = sessionState)
         ButtonProgressbar {
-            viewModel.startSession(SessionConfig.defaultSessionDuration())
+            viewModel.createSession(SessionConfig.defaultSessionDuration())
         }
     }
 }

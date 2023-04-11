@@ -33,9 +33,9 @@ class FocusSessionViewModel @Inject constructor(
         }
     }
 
-    fun startSession(minute: Minute) {
+    fun createSession(minute: Minute) {
         viewModelScope.launch {
-            sessionManager.startSession(minute)
+            sessionManager.createSession(minute, viewModelScope)
         }
     }
 
