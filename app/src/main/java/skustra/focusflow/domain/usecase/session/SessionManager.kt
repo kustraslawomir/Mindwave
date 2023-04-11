@@ -4,7 +4,7 @@ import kotlinx.coroutines.flow.SharedFlow
 import skustra.focusflow.data.alias.Minute
 import skustra.focusflow.data.SessionState
 
-interface FocusSession {
+interface SessionManager {
 
     suspend fun startSession(sessionDuration: Minute)
 

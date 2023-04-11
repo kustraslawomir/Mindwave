@@ -1,6 +1,5 @@
 package skustra.focusflow.ui.theme
 
-import androidx.compose.foundation.isSystemInDarkTheme
 import androidx.compose.material3.Typography
 import androidx.compose.ui.text.TextStyle
 import androidx.compose.ui.text.font.Font
@@ -28,16 +27,21 @@ val Typography = Typography(
     titleMedium = TextStyle(
         fontFamily = Roboto,
         fontWeight = FontWeight.SemiBold,
-        fontSize = 18.sp,
+        fontSize = 16.sp,
     ),
     titleLarge = TextStyle(
         fontFamily = Roboto,
         fontWeight = FontWeight.SemiBold,
-        fontSize = 16.sp,
+        fontSize = 18.sp,
+    ),
+    labelMedium = TextStyle(
+        fontFamily = Roboto,
+        fontWeight = FontWeight.Medium,
+        fontSize = 20.sp,
     ),
     labelLarge = TextStyle(
         fontFamily = Roboto,
-        fontWeight = FontWeight.Bold,
-        fontSize = 30.sp,
+        fontWeight = FontWeight.Medium,
+        fontSize = 50.sp,
     ),
 )

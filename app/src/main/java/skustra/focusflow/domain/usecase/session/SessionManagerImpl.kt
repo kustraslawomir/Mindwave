@@ -8,7 +8,7 @@ import skustra.focusflow.data.alias.Minute
 import skustra.focusflow.data.SessionProgress
 import skustra.focusflow.data.SessionState
 
-class FocusSessionUseCase : FocusSession {
+class SessionManagerImpl : SessionManager {
 
     private val mutableSessionState = MutableSharedFlow<SessionState>()
     private val sessionState: SharedFlow<SessionState> = mutableSessionState.asSharedFlow()

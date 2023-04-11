@@ -14,15 +14,14 @@ import androidx.compose.ui.unit.dp
 import androidx.compose.animation.core.animateFloatAsState
 import androidx.compose.animation.core.tween
 import androidx.compose.foundation.layout.*
-import androidx.compose.material3.Button
-import androidx.compose.material3.ButtonDefaults
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Text
 import androidx.compose.runtime.*
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.graphics.Brush
 import androidx.compose.ui.graphics.drawscope.DrawScope
-import androidx.compose.ui.text.TextStyle
+import androidx.compose.ui.platform.LocalConfiguration
+import androidx.compose.ui.platform.LocalContext
 import skustra.focusflow.data.SessionState
 import skustra.focusflow.domain.usecase.session.SessionConfig
 import skustra.focusflow.ui.localization.LocalizationKey
@@ -31,10 +30,8 @@ import skustra.focusflow.ui.localization.LocalizationManager
 @Composable
 fun SessionFocusArc(
     sessionState: SessionState,
-    size: Dp = 280.dp,
-    indicatorThickness: Dp = 15.dp,
-    animationDuration: Int = SessionConfig.tickInterval().toInt(),
-    titleStyle: TextStyle = MaterialTheme.typography.labelLarge
+    indicatorThickness: Dp = 7.dp,
+    animationDuration: Int = SessionConfig.tickInterval().toInt()
 ) {
 
     val progress = when (sessionState) {
@@ -55,25 +52,29 @@ fun SessionFocusArc(
 
     val primaryColor = MaterialTheme.colorScheme.primary
     val backgroundColor = MaterialTheme.colorScheme.background
+
+    val configuration = LocalConfiguration.current
+    val composableSize = with(LocalContext.current.resources.displayMetrics) {
+        configuration.screenWidthDp.dp.minus(80.dp)
+    }
     Box(
-        modifier = Modifier.size(size), contentAlignment = Alignment.Center
+        modifier = Modifier.size(composableSize), contentAlignment = Alignment.Center
     ) {
         Canvas(
-            modifier = Modifier.size(size)
+            modifier = Modifier.size(composableSize)
         ) {
 
-            drawOutlineIndicator(animation, primaryColor, indicatorThickness, size)
-            drawShadowForeground(size, indicatorThickness, backgroundColor)
+            drawOutlineIndicator(animation, primaryColor, indicatorThickness, composableSize)
+            drawShadowForeground(composableSize, indicatorThickness, backgroundColor)
+            drawShadow(Color.Black)
         }
 
         ProgressText(
-            titleTextStyle = titleStyle,
             sessionState = sessionState
         )
     }
 
     Spacer(modifier = Modifier.height(32.dp))
-    ButtonProgressbar {}
 }
 
 private fun DrawScope.drawOutlineIndicator(
@@ -98,7 +99,7 @@ private fun DrawScope.drawOutlineIndicator(
 private fun DrawScope.drawShadowForeground(
     size: Dp,
     indicatorThickness: Dp,
-    color : Color
+    color: Color
 ) {
     drawCircle(
         color = color,
@@ -110,7 +111,7 @@ private fun DrawScope.drawShadowForeground(
 private fun DrawScope.drawShadow(shadowColor: Color) {
     drawCircle(
         brush = Brush.radialGradient(
-            colors = listOf(shadowColor, Color.White),
+            colors = listOf(shadowColor, Color.Transparent),
             center = Offset(x = this.size.width / 2, y = this.size.height / 2),
             radius = this.size.height / 2
         ),
@@ -120,7 +121,8 @@ private fun DrawScope.drawShadow(shadowColor: Color) {
 }
 
 @Composable
-private fun ProgressText(titleTextStyle: TextStyle, sessionState : SessionState
+private fun ProgressText(
+    sessionState: SessionState
 ) {
 
     val minutesLeft = when (sessionState) {
@@ -130,30 +132,19 @@ private fun ProgressText(titleTextStyle: TextStyle, sessionState : SessionState
         else -> 0.toString()
     }
 
-    Column(
-        verticalArrangement = Arrangement.Center,
-        horizontalAlignment = Alignment.CenterHorizontally
+    Row(
     ) {
         Text(
-            text = "$minutesLeft min.", style = titleTextStyle
+            text = minutesLeft,
+            style = MaterialTheme.typography.labelLarge
+        )
+        Text(
+            text = LocalizationManager.getText(LocalizationKey.MinutesShort),
+            modifier = Modifier
+                .align(Alignment.Bottom)
+                .padding(vertical = 8.dp, horizontal = 8.dp),
+            style = MaterialTheme.typography.labelMedium
         )
     }
 }
 
-@Composable
-private fun ButtonProgressbar(
-    onClickButton: () -> Unit
-) {
-    val secondaryColor = MaterialTheme.colorScheme.secondary
-    Button(
-        onClick = {
-            onClickButton()
-        }, colors = ButtonDefaults.buttonColors(
-            containerColor = secondaryColor
-        )
-    ) {
-        Text(
-            text = LocalizationManager.getText(LocalizationKey.Start)
-        )
-    }
-}

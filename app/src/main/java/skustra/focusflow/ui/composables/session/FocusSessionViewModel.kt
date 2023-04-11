@@ -1,23 +1,20 @@
-package skustra.focusflow.ui
+package skustra.focusflow.ui.composables.session
 
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
-import dagger.hilt.android.AndroidEntryPoint
 import dagger.hilt.android.lifecycle.HiltViewModel
-import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.launch
 import skustra.focusflow.data.SessionState
 import skustra.focusflow.data.alias.Minute
 import skustra.focusflow.domain.logs.AppLog
-import skustra.focusflow.domain.usecase.session.FocusSession
-import skustra.focusflow.domain.usecase.session.FocusSessionUseCase
+import skustra.focusflow.domain.usecase.session.SessionManager
 import javax.inject.Inject
 
 @HiltViewModel
 class FocusSessionViewModel @Inject constructor(
-    private val session: FocusSession,
+    private val sessionManager: SessionManager,
 ) : ViewModel() {
 
     private val _sessionMutableStateFlow: MutableStateFlow<SessionState> =
@@ -29,7 +26,7 @@ class FocusSessionViewModel @Inject constructor(
 
     init {
         viewModelScope.launch {
-            session.sessionState().collect { state ->
+            sessionManager.sessionState().collect { state ->
                 AppLog.sessionDebug(state)
                 _sessionMutableStateFlow.emit(state)
             }
@@ -38,25 +35,25 @@ class FocusSessionViewModel @Inject constructor(
 
     fun startSession(minute: Minute) {
         viewModelScope.launch {
-            session.startSession(minute)
+            sessionManager.startSession(minute)
         }
     }
 
     fun pauseSession() {
         viewModelScope.launch {
-            session.pauseSession()
+            sessionManager.pauseSession()
         }
     }
 
     fun resumeSession() {
         viewModelScope.launch {
-            session.resumeSession()
+            sessionManager.resumeSession()
         }
     }
 
     fun stopSession() {
         viewModelScope.launch {
-            session.stopSession()
+            sessionManager.stopSession()
         }
     }
 }

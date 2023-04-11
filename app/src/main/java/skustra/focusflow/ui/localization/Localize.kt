@@ -10,7 +10,11 @@ class Localize {
         currentLocale.value = locale
     }
 
-    fun currentLocale(): String {
-        return currentLocale.value.country
+    fun currentLanguage(): SupportedLanguage {
+        return when (currentLocale.value.country) {
+            SupportedLanguage.English.countryCode -> SupportedLanguage.English
+            SupportedLanguage.Polish.countryCode -> SupportedLanguage.Polish
+            else -> SupportedLanguage.English
+        }
     }
 }

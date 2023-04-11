@@ -1,25 +1,11 @@
 package skustra.focusflow.ui.localization
 
-import java.util.*
 
 object LocalizationManager {
-
-    private const val en = "EN"
-    private const val pl = "PL"
-
     private val localize = Localize()
 
-    fun getText(key: LocalizationKey): String {
-        var currentLocale = localize.currentLocale()
-        if (currentLocale != en && currentLocale != pl) {
-            currentLocale = en
-        }
-        return localizedTexts[currentLocale]?.get(key)
-            ?: "Missing: $key for ${localize.currentLocale()}"
-    }
-
-    private val localizedTexts = mapOf(
-        pl to mapOf(
+    private val localizedTexts: Map<SupportedLanguage, Map<LocalizationKey, String>> = mapOf(
+        SupportedLanguage.Polish to mapOf(
             LocalizationKey.Remaining to "Pozostało",
             LocalizationKey.Start to "Start",
             LocalizationKey.Pause to "Wstrzymaj",
@@ -27,7 +13,7 @@ object LocalizationManager {
             LocalizationKey.Stop to "Zatrzymaj",
             LocalizationKey.MinutesShort to "min.",
         ),
-        en to mapOf(
+        SupportedLanguage.English to mapOf(
             LocalizationKey.Remaining to "Remaining",
             LocalizationKey.Start to "Start",
             LocalizationKey.Pause to "Pause",
@@ -36,4 +22,10 @@ object LocalizationManager {
             LocalizationKey.MinutesShort to "min.",
         )
     )
+
+    fun getText(key: LocalizationKey): String {
+        val currentLocaleCountryCode = localize.currentLanguage()
+        return localizedTexts[currentLocaleCountryCode]?.get(key)
+            ?: "Missing: $key for ${localize.currentLanguage()}"
+    }
 }
