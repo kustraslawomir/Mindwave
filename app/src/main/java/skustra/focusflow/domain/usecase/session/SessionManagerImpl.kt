@@ -88,7 +88,9 @@ class SessionManagerImpl : SessionManager {
         return sessionState
     }
 
-    private fun sessionEnded() = currentSessionProgress == 0
+    private fun sessionEnded(): Boolean {
+        return currentSessionProgress <= 0
+    }
 
     private fun cancelInterval() {
         interval?.cancel()
