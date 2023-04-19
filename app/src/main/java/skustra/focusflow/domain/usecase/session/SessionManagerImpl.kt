@@ -1,17 +1,15 @@
 package skustra.focusflow.domain.usecase.session
 
 import kotlinx.coroutines.*
-import kotlinx.coroutines.flow.MutableSharedFlow
-import kotlinx.coroutines.flow.SharedFlow
-import kotlinx.coroutines.flow.asSharedFlow
+import kotlinx.coroutines.flow.*
 import skustra.focusflow.data.alias.Minute
 import skustra.focusflow.data.SessionProgress
 import skustra.focusflow.data.SessionState
 
 class SessionManagerImpl : SessionManager {
 
-    private val mutableSessionState = MutableSharedFlow<SessionState>()
-    private val sessionState: SharedFlow<SessionState> = mutableSessionState.asSharedFlow()
+    private val mutableSessionStateFlow = MutableStateFlow<SessionState>(SessionState.SessionIdle)
+    private val sessionStateStateFlow: StateFlow<SessionState> = mutableSessionStateFlow
 
     private var sessionDuration: Minute = 0
     private var currentSessionProgress: Minute = 0
@@ -22,7 +20,7 @@ class SessionManagerImpl : SessionManager {
         this.sessionDuration = sessionDuration
         this.currentSessionProgress = sessionDuration
 
-        mutableSessionState.emit(
+        mutableSessionStateFlow.emit(
             SessionState.SessionInProgress(
                 sessionProgress = SessionProgress(
                     sessionDuration = sessionDuration,
@@ -45,11 +43,11 @@ class SessionManagerImpl : SessionManager {
                 currentSessionProgress -= 1
                 if (sessionEnded()) {
                     cancelInterval()
-                    mutableSessionState.emit(SessionState.SessionCompleted)
+                    mutableSessionStateFlow.emit(SessionState.SessionCompleted)
                     return@launch
                 }
 
-                mutableSessionState.emit(
+                mutableSessionStateFlow.emit(
                     SessionState.SessionInProgress(
                         sessionProgress = getCurrentSessionProgress()
                     )
@@ -60,7 +58,7 @@ class SessionManagerImpl : SessionManager {
 
     override fun pauseSession() {
         sessionPaused = true
-        mutableSessionState.tryEmit(
+        mutableSessionStateFlow.tryEmit(
             SessionState.SessionPaused(
                 sessionProgress = getCurrentSessionProgress()
             )
@@ -74,7 +72,7 @@ class SessionManagerImpl : SessionManager {
     override fun stopSession() {
         cancelInterval()
         sessionPaused = false
-        mutableSessionState.tryEmit(SessionState.SessionIdle)
+        mutableSessionStateFlow.tryEmit(SessionState.SessionIdle)
     }
 
     private fun getCurrentSessionProgress(): SessionProgress {
@@ -84,8 +82,8 @@ class SessionManagerImpl : SessionManager {
         )
     }
 
-    override fun getCurrentSessionState(): SharedFlow<SessionState> {
-        return sessionState
+    override fun getCurrentSessionState(): Flow<SessionState> {
+        return sessionStateStateFlow
     }
 
     private fun sessionEnded(): Boolean {

@@ -1,7 +1,7 @@
 package skustra.focusflow.domain.usecase.session
 
 import kotlinx.coroutines.CoroutineScope
-import kotlinx.coroutines.flow.SharedFlow
+import kotlinx.coroutines.flow.Flow
 import skustra.focusflow.data.alias.Minute
 import skustra.focusflow.data.SessionState
 
@@ -15,5 +15,5 @@ interface SessionManager {
 
     fun stopSession()
 
-    fun getCurrentSessionState(): SharedFlow<SessionState>
+    fun getCurrentSessionState(): Flow<SessionState>
 }

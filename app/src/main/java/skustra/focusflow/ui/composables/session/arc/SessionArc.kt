@@ -83,7 +83,7 @@ private fun DrawScope.drawOutlineIndicator(
     val sweepAngle = (animation.value) * 360 / 100
     drawArc(
         color = foregroundIndicatorColor,
-        startAngle = -90f,
+        startAngle = -50f,
         sweepAngle = sweepAngle,
         useCenter = false,
         style = Stroke(width = indicatorThickness.toPx(), cap = StrokeCap.Round),
@@ -136,7 +136,7 @@ private fun ProgressText(
     ) {
         Text(
             text = minutesLeft,
-            style = MaterialTheme.typography.labelLarge
+            style = MaterialTheme.typography.labelLarge,
         )
         Text(
             text = LocalizationManager.getText(LocalizationKey.MinutesShort),

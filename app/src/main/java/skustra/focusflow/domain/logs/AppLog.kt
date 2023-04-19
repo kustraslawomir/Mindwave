@@ -4,7 +4,7 @@ import timber.log.Timber
 
 object AppLog {
 
-    fun sessionDebug(message: Any) {
+    fun debugSession(message: Any) {
         Timber.d("[SESSION] $message")
     }
 }

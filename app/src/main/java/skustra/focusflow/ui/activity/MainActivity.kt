@@ -3,16 +3,14 @@ package skustra.focusflow.ui.activity
 import android.os.Bundle
 import androidx.activity.ComponentActivity
 import androidx.activity.compose.setContent
-import androidx.compose.foundation.isSystemInDarkTheme
-import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Surface
-import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import dagger.hilt.android.AndroidEntryPoint
-import skustra.focusflow.ui.composables.session.session.SessionComposable
+import skustra.focusflow.ui.composables.session.SessionComposable
 import skustra.focusflow.ui.theme.AppTheme
+import skustra.focusflow.ui.theme.isDarkThemeAllowed
 
 @AndroidEntryPoint
 class MainActivity : ComponentActivity() {
@@ -22,18 +20,14 @@ class MainActivity : ComponentActivity() {
 
         setContent {
             AppTheme(
-                isDarkTheme = isSystemInDarkTheme()
+                isDarkTheme = isDarkThemeAllowed()
             ) {
                 Surface(
-                    modifier = Modifier.fillMaxSize(),
-                    color = MaterialTheme.colorScheme.background
+                    color =  MaterialTheme.colorScheme.background,
+                    modifier = Modifier
+                        .fillMaxSize()
                 ) {
-                    Box(
-                        modifier = Modifier.fillMaxSize(),
-                        contentAlignment = Alignment.Center
-                    ) {
-                     SessionComposable()
-                    }
+                    SessionComposable()
                 }
             }
         }

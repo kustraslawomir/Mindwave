@@ -1,4 +1,4 @@
-package skustra.focusflow.ui.composables.session.session
+package skustra.focusflow.ui.composables.session
 
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
@@ -12,16 +12,20 @@ import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import androidx.lifecycle.viewmodel.compose.viewModel
 import skustra.focusflow.domain.usecase.session.SessionConfig
-import skustra.focusflow.ui.composables.session.SessionViewModel
 import skustra.focusflow.ui.composables.session.arc.SessionFocusArc
 import skustra.focusflow.ui.localization.LocalizationKey
 import skustra.focusflow.ui.localization.LocalizationManager
 
 @Composable
 fun SessionComposable(viewModel: SessionViewModel = viewModel()) {
-    val sessionState by viewModel.sessionStateFlow().collectAsState()
+
+    val sessionState by viewModel
+        .sessionStateFlow
+        .collectAsStateWithLifecycle()
+
     Column(
         modifier = Modifier.fillMaxSize(),
         verticalArrangement = Arrangement.Center,

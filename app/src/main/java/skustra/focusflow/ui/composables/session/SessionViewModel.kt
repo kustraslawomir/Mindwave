@@ -3,8 +3,7 @@ package skustra.focusflow.ui.composables.session
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import dagger.hilt.android.lifecycle.HiltViewModel
-import kotlinx.coroutines.flow.MutableStateFlow
-import kotlinx.coroutines.flow.StateFlow
+import kotlinx.coroutines.flow.*
 import kotlinx.coroutines.launch
 import skustra.focusflow.data.SessionState
 import skustra.focusflow.data.alias.Minute
@@ -14,20 +13,18 @@ import javax.inject.Inject
 
 @HiltViewModel
 class SessionViewModel @Inject constructor(
-    private val sessionManager: SessionManager,
+    private val sessionManager: SessionManager
 ) : ViewModel() {
 
     private val _sessionMutableStateFlow: MutableStateFlow<SessionState> =
         MutableStateFlow(SessionState.SessionIdle)
 
-    fun sessionStateFlow(): StateFlow<SessionState> {
-        return _sessionMutableStateFlow
-    }
+    val sessionStateFlow : StateFlow<SessionState> = _sessionMutableStateFlow
 
     init {
         viewModelScope.launch {
             sessionManager.getCurrentSessionState().collect { state ->
-                AppLog.sessionDebug(state)
+                AppLog.debugSession(state)
                 _sessionMutableStateFlow.emit(state)
             }
         }
