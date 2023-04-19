@@ -1,23 +1,22 @@
 package skustra.focusflow.ui.composables.session
 
-import androidx.compose.foundation.layout.Arrangement
-import androidx.compose.foundation.layout.Column
-import androidx.compose.foundation.layout.fillMaxSize
-import androidx.compose.material3.Button
-import androidx.compose.material3.ButtonDefaults
-import androidx.compose.material3.MaterialTheme
-import androidx.compose.material3.Text
+import androidx.compose.foundation.background
+import androidx.compose.foundation.layout.*
+import androidx.compose.foundation.shape.CircleShape
+import androidx.compose.material3.Icon
+import androidx.compose.material3.IconButton
 import androidx.compose.runtime.Composable
-import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.res.painterResource
+import androidx.compose.ui.unit.dp
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import androidx.lifecycle.viewmodel.compose.viewModel
+import skustra.focusflow.data.SessionState
 import skustra.focusflow.domain.usecase.session.SessionConfig
 import skustra.focusflow.ui.composables.session.arc.SessionFocusArc
-import skustra.focusflow.ui.localization.LocalizationKey
-import skustra.focusflow.ui.localization.LocalizationManager
 
 @Composable
 fun SessionComposable(viewModel: SessionViewModel = viewModel()) {
@@ -32,26 +31,86 @@ fun SessionComposable(viewModel: SessionViewModel = viewModel()) {
         horizontalAlignment = Alignment.CenterHorizontally
     ) {
         SessionFocusArc(sessionState = sessionState)
-        ButtonProgressbar {
-            viewModel.createSession(SessionConfig.defaultSessionDuration())
-        }
+        SessionNavigationUi()
     }
 }
 
 @Composable
-private fun ButtonProgressbar(
-    onClickButton: () -> Unit
-) {
-    val secondaryColor = MaterialTheme.colorScheme.secondary
-    Button(
-        onClick = {
-            onClickButton()
-        }, colors = ButtonDefaults.buttonColors(
-            containerColor = secondaryColor
-        )
-    ) {
-        Text(
-            text = LocalizationManager.getText(LocalizationKey.Start)
-        )
+private fun SessionNavigationUi(viewModel: SessionViewModel = viewModel()) {
+
+    val sessionState by viewModel
+        .sessionStateFlow
+        .collectAsStateWithLifecycle()
+
+    when (sessionState) {
+        SessionState.SessionCompleted, SessionState.SessionIdle -> CreateSessionButton()
+        is SessionState.SessionInProgress -> PauseSessionButton()
+        is SessionState.SessionPaused -> ResumeSessionPanel()
     }
+}
+
+@Composable
+private fun CreateSessionButton(viewModel: SessionViewModel = viewModel()) {
+    CircleButton(
+        onClick = {
+            viewModel.createSession(SessionConfig.defaultSessionDuration())
+        },
+        icon = viewModel.resourceManager.getPlayIcon()
+    )
+}
+
+@Composable
+private fun PauseSessionButton(viewModel: SessionViewModel = viewModel()) {
+    CircleButton(
+        onClick = {
+            viewModel.pauseSession()
+        },
+        icon = viewModel.resourceManager.getPauseIcon()
+    )
+}
+
+@Composable
+private fun ResumeSessionButton(viewModel: SessionViewModel = viewModel()) {
+    CircleButton(
+        onClick = {
+            viewModel.resumeSession()
+        },
+        icon = viewModel.resourceManager.getResumeIcon()
+    )
+}
+
+@Composable
+private fun StopSessionButton(viewModel: SessionViewModel = viewModel()) {
+    CircleButton(
+        onClick = {
+            viewModel.stopSession()
+        },
+        icon = viewModel.resourceManager.getStopIcon()
+    )
+}
+
+@Composable
+private fun ResumeSessionPanel() {
+    Row(
+        Modifier.fillMaxWidth(),
+        horizontalArrangement = Arrangement.Center
+    ) {
+        StopSessionButton()
+        Spacer(modifier = Modifier.width(16.dp))
+        ResumeSessionButton()
+    }
+}
+
+@Composable
+private fun CircleButton(onClick: () -> Unit, icon: Int) {
+    IconButton(
+        onClick = { onClick() },
+        modifier = Modifier
+            .size(46.dp)
+            .background(Color.White, CircleShape)
+            .padding(6.dp),
+        content = {
+            Icon(painter = painterResource(id = icon), "$icon", tint = Color.Black)
+        }
+    )
 }

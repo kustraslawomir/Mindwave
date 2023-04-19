@@ -8,18 +8,20 @@ import kotlinx.coroutines.launch
 import skustra.focusflow.data.SessionState
 import skustra.focusflow.data.alias.Minute
 import skustra.focusflow.domain.logs.AppLog
+import skustra.focusflow.domain.usecase.resources.DrawableProvider
 import skustra.focusflow.domain.usecase.session.SessionManager
 import javax.inject.Inject
 
 @HiltViewModel
 class SessionViewModel @Inject constructor(
-    private val sessionManager: SessionManager
+    private val sessionManager: SessionManager,
+    val resourceManager: DrawableProvider
 ) : ViewModel() {
 
     private val _sessionMutableStateFlow: MutableStateFlow<SessionState> =
         MutableStateFlow(SessionState.SessionIdle)
 
-    val sessionStateFlow : StateFlow<SessionState> = _sessionMutableStateFlow
+    val sessionStateFlow: StateFlow<SessionState> = _sessionMutableStateFlow
 
     init {
         viewModelScope.launch {
