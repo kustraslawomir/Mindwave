@@ -5,11 +5,11 @@ import androidx.lifecycle.viewModelScope
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.flow.MutableSharedFlow
 import kotlinx.coroutines.flow.SharedFlow
-import kotlinx.coroutines.flow.last
-import kotlinx.coroutines.flow.lastOrNull
 import kotlinx.coroutines.launch
 import skustra.focusflow.data.alias.Minute
+import skustra.focusflow.data.exceptions.SessionCompletedException
 import skustra.focusflow.data.session.SessionState
+import skustra.focusflow.data.timer.TimerState
 import skustra.focusflow.domain.logs.AppLog
 import skustra.focusflow.domain.usecase.getValueBlockedOrNull
 import skustra.focusflow.domain.usecase.resources.DrawableProvider
@@ -24,19 +24,34 @@ class SessionViewModel @Inject constructor(
 
     private val _sessionMutableStateFlow: MutableSharedFlow<SessionState> =
         MutableSharedFlow()
-
     val sessionStateFlow: SharedFlow<SessionState> = _sessionMutableStateFlow
 
     init {
         viewModelScope.launch {
-            timer.getCurrentTimerState().collect { state ->
-                val updatedState =
-                    sessionStateFlow.getValueBlockedOrNull() ?: SessionState.draft().apply {
-                        currentTimerState = state
-                    }
+            timer.getCurrentTimerState().collect { timerState ->
 
-                _sessionMutableStateFlow.emit(updatedState)
-                AppLog.debugSession(updatedState)
+                val currentSessionState = sessionStateFlow
+                    .getValueBlockedOrNull() ?: SessionState.draft()
+
+                if (timerState == TimerState.Completed) {
+                    try {
+                        currentSessionState.increaseCurrentPartCounter()
+                        timer.run(
+                            sessionDuration = currentSessionState.currentSessionPart().sessionPartDuration,
+                            scope = viewModelScope
+                        )
+                    } catch (e: SessionCompletedException) {
+                        _sessionMutableStateFlow.emit(SessionState.draft())
+                        timer.stop()
+                        e.printStackTrace()
+                        return@collect
+                    }
+                }
+
+                _sessionMutableStateFlow.emit(currentSessionState.apply {
+                    currentTimerState = timerState
+                }.deepCopy())
+                AppLog.debugSession(currentSessionState)
             }
         }
     }

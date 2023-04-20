@@ -20,5 +20,7 @@ class SessionConfig {
 
         fun defaultSessionDuration() = predefinedSessionDuration
             .first()
+
+        fun defaultBreakDuration() : Minute = 5
     }
 }
