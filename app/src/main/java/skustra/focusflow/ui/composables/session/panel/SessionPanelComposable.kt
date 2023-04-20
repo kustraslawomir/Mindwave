@@ -13,6 +13,7 @@ import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.unit.dp
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import androidx.lifecycle.viewmodel.compose.viewModel
+import skustra.focusflow.data.session.SessionState
 import skustra.focusflow.data.timer.TimerState
 import skustra.focusflow.domain.usecase.session.SessionConfig
 import skustra.focusflow.ui.composables.session.SessionViewModel
@@ -22,7 +23,7 @@ fun SessionPanelComposable(viewModel: SessionViewModel = viewModel()) {
 
     val sessionState by viewModel
         .sessionStateFlow
-        .collectAsStateWithLifecycle()
+        .collectAsStateWithLifecycle(initialValue = SessionState.draft())
 
     when (sessionState.currentTimerState) {
         TimerState.Completed, TimerState.Idle -> CreateSessionButton()

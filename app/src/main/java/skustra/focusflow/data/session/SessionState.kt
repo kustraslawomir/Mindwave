@@ -13,6 +13,14 @@ data class SessionState(
         return parts[currentPartCounter]
     }
 
+    fun deepCopy(): SessionState {
+        return SessionState(
+            currentTimerState = currentTimerState,
+            currentPartCounter = currentPartCounter,
+            parts = parts
+        )
+    }
+
     companion object {
         fun draft(): SessionState {
             return SessionState(

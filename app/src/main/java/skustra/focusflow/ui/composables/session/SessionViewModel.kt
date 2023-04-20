@@ -3,12 +3,15 @@ package skustra.focusflow.ui.composables.session
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import dagger.hilt.android.lifecycle.HiltViewModel
-import kotlinx.coroutines.flow.*
+import kotlinx.coroutines.flow.MutableSharedFlow
+import kotlinx.coroutines.flow.SharedFlow
+import kotlinx.coroutines.flow.last
+import kotlinx.coroutines.flow.lastOrNull
 import kotlinx.coroutines.launch
-import skustra.focusflow.data.timer.TimerState
 import skustra.focusflow.data.alias.Minute
 import skustra.focusflow.data.session.SessionState
 import skustra.focusflow.domain.logs.AppLog
+import skustra.focusflow.domain.usecase.getValueBlockedOrNull
 import skustra.focusflow.domain.usecase.resources.DrawableProvider
 import skustra.focusflow.domain.usecase.session.Timer
 import javax.inject.Inject
@@ -19,18 +22,21 @@ class SessionViewModel @Inject constructor(
     val resourceManager: DrawableProvider
 ) : ViewModel() {
 
-    private val _sessionMutableStateFlow: MutableStateFlow<SessionState> =
-        MutableStateFlow(SessionState.draft())
+    private val _sessionMutableStateFlow: MutableSharedFlow<SessionState> =
+        MutableSharedFlow()
 
-    val sessionStateFlow: StateFlow<SessionState> = _sessionMutableStateFlow
+    val sessionStateFlow: SharedFlow<SessionState> = _sessionMutableStateFlow
 
     init {
         viewModelScope.launch {
             timer.getCurrentTimerState().collect { state ->
-                AppLog.debugSession(state)
-                _sessionMutableStateFlow.emit(sessionStateFlow.value.apply {
-                    currentTimerState = state
-                })
+                val updatedState =
+                    sessionStateFlow.getValueBlockedOrNull() ?: SessionState.draft().apply {
+                        currentTimerState = state
+                    }
+
+                _sessionMutableStateFlow.emit(updatedState)
+                AppLog.debugSession(updatedState)
             }
         }
     }
