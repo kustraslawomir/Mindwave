@@ -14,7 +14,7 @@ import javax.inject.Inject
 
 @HiltViewModel
 class SessionViewModel @Inject constructor(
-    private val sessionManager: Timer,
+    private val timer: Timer,
     val resourceManager: DrawableProvider
 ) : ViewModel() {
 
@@ -25,7 +25,7 @@ class SessionViewModel @Inject constructor(
 
     init {
         viewModelScope.launch {
-            sessionManager.getCurrentTimerState().collect { state ->
+            timer.getCurrentTimerState().collect { state ->
                 AppLog.debugSession(state)
                 _sessionMutableStateFlow.emit(state)
             }
@@ -34,25 +34,25 @@ class SessionViewModel @Inject constructor(
 
     fun createSession(minute: Minute) {
         viewModelScope.launch {
-            sessionManager.run(minute, this)
+            timer.run(minute, this)
         }
     }
 
     fun pauseSession() {
         viewModelScope.launch {
-            sessionManager.pause()
+            timer.pause()
         }
     }
 
     fun resumeSession() {
         viewModelScope.launch {
-            sessionManager.resume()
+            timer.resume()
         }
     }
 
     fun stopSession() {
         viewModelScope.launch {
-            sessionManager.stop()
+            timer.stop()
         }
     }
 }
