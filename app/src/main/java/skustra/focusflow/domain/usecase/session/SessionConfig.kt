@@ -13,7 +13,7 @@ class SessionConfig {
         }
 
         val predefinedSessionDuration = listOf<Minute>(
-            25,
+            15,
             45,
             60
         )
@@ -21,6 +21,6 @@ class SessionConfig {
         fun defaultSessionDuration() = predefinedSessionDuration
             .first()
 
-        fun defaultBreakDuration() : Minute = 5
+        fun defaultBreakDuration() : Minute = 3
     }
 }

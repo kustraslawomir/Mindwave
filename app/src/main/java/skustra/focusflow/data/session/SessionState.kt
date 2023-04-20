@@ -4,6 +4,7 @@ import skustra.focusflow.data.alias.Minute
 import skustra.focusflow.data.exceptions.SessionAlreadyCompletedException
 import skustra.focusflow.data.timer.TimerState
 import skustra.focusflow.domain.usecase.session.SessionConfig
+import java.util.UUID
 
 data class SessionState(
     var currentTimerState: TimerState,
@@ -58,4 +59,4 @@ sealed class SessionPartType {
     object Break : SessionPartType()
 }
 
-data class SessionPart(val type: SessionPartType, val sessionPartDuration: Minute)
+data class SessionPart(val type: SessionPartType, val sessionPartDuration: Minute, val id : UUID = UUID.randomUUID())

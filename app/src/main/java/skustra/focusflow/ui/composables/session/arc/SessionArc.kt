@@ -133,9 +133,20 @@ private fun ProgressText(
         else -> 0.toString()
     }
 
-    val workParts = sessionState.parts.filter { it.type == SessionPartType.Work }
     val sessionStateStatusText = when (sessionState.currentSessionPart().type) {
-        SessionPartType.Work -> "${workParts.indexOf(sessionState.currentSessionPart()) + 1}/${workParts.size}"
+        SessionPartType.Work -> {
+            val workParts = sessionState.parts
+                .filter { sessionPart ->
+                    sessionPart.type == SessionPartType.Work
+                }
+
+            val currentWorkIndex = workParts
+                .indexOfFirst { sessionPart ->
+                    sessionPart.id == sessionState.currentSessionPart().id
+                } + 1
+
+            "$currentWorkIndex/${workParts.size}"
+        }
         SessionPartType.Break -> LocalizationManager.getText(LocalizationKey.Break)
     }
 
