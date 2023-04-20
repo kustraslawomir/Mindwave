@@ -25,15 +25,13 @@ class SessionViewModel @Inject constructor(
     private val _sessionMutableStateFlow: MutableSharedFlow<SessionState> =
         MutableSharedFlow()
     val sessionStateFlow: SharedFlow<SessionState> = _sessionMutableStateFlow
+    private var currentSessionState = SessionState.draft()
 
     init {
         viewModelScope.launch {
-            timer.getCurrentTimerState().collect { timerState ->
+            timer.getCurrentTimerState().collect { state ->
 
-                val currentSessionState = sessionStateFlow
-                    .getValueBlockedOrNull() ?: SessionState.draft()
-
-                if (timerState == TimerState.Completed) {
+                if (state == TimerState.Completed) {
                     try {
                         currentSessionState.increaseCurrentPartCounter()
                         timer.run(
@@ -41,15 +39,15 @@ class SessionViewModel @Inject constructor(
                             scope = viewModelScope
                         )
                     } catch (e: SessionCompletedException) {
-                        _sessionMutableStateFlow.emit(SessionState.draft())
+                        currentSessionState = SessionState.draft()
+                        _sessionMutableStateFlow.emit(currentSessionState)
                         timer.stop()
                         e.printStackTrace()
                         return@collect
                     }
                 }
-
                 _sessionMutableStateFlow.emit(currentSessionState.apply {
-                    currentTimerState = timerState
+                    currentTimerState = state
                 }.deepCopy())
                 AppLog.debugSession(currentSessionState)
             }
