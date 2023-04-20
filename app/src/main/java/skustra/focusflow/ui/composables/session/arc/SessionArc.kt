@@ -22,7 +22,8 @@ import androidx.compose.ui.graphics.Brush
 import androidx.compose.ui.graphics.drawscope.DrawScope
 import androidx.compose.ui.platform.LocalConfiguration
 import androidx.compose.ui.platform.LocalContext
-import skustra.focusflow.data.TimerState
+import skustra.focusflow.data.session.SessionPart
+import skustra.focusflow.data.timer.TimerState
 import skustra.focusflow.domain.usecase.session.SessionConfig
 import skustra.focusflow.ui.localization.LocalizationKey
 import skustra.focusflow.ui.localization.LocalizationManager
@@ -30,6 +31,7 @@ import skustra.focusflow.ui.localization.LocalizationManager
 @Composable
 fun SessionFocusArc(
     sessionState: TimerState,
+    sessionPart: SessionPart,
     indicatorThickness: Dp = 7.dp,
     animationDuration: Int = SessionConfig.tickInterval().toInt()
 ) {
@@ -70,7 +72,8 @@ fun SessionFocusArc(
         }
 
         ProgressText(
-            sessionState = sessionState
+            sessionState = sessionState,
+            sessionPart = sessionPart
         )
     }
 
@@ -122,18 +125,18 @@ private fun DrawScope.drawShadow(shadowColor: Color) {
 
 @Composable
 private fun ProgressText(
-    sessionState: TimerState
+    sessionState: TimerState,
+    sessionPart : SessionPart
 ) {
 
     val minutesLeft = when (sessionState) {
         is TimerState.InProgress -> sessionState.progress.minutesLeft.toString()
         is TimerState.Paused -> sessionState.progress.minutesLeft.toString()
-        is TimerState.Idle -> SessionConfig.defaultSessionDuration().toString()
+        is TimerState.Idle -> sessionPart.sessionPartDuration.toString()
         else -> 0.toString()
     }
 
-    Row(
-    ) {
+    Row {
         Text(
             text = minutesLeft,
             style = MaterialTheme.typography.labelLarge,

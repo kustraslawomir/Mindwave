@@ -16,7 +16,7 @@ object ActivityComponent {
 
     @Provides
     @ViewModelScoped
-    fun provideFocusSessionUseCase(): Timer = TimerImpl()
+    fun provideTimerUseCase(): Timer = TimerImpl()
 
     @Provides
     @ViewModelScoped

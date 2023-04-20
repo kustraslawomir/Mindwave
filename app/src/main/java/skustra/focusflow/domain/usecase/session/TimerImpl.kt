@@ -3,8 +3,8 @@ package skustra.focusflow.domain.usecase.session
 import kotlinx.coroutines.*
 import kotlinx.coroutines.flow.*
 import skustra.focusflow.data.alias.Minute
-import skustra.focusflow.data.Progress
-import skustra.focusflow.data.TimerState
+import skustra.focusflow.data.timer.Progress
+import skustra.focusflow.data.timer.TimerState
 
 class TimerImpl : Timer {
 

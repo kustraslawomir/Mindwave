@@ -22,7 +22,10 @@ fun SessionComposable(viewModel: SessionViewModel = viewModel()) {
         verticalArrangement = Arrangement.Center,
         horizontalAlignment = Alignment.CenterHorizontally
     ) {
-        SessionFocusArc(sessionState = sessionState)
+        SessionFocusArc(
+            sessionState = sessionState.currentTimerState,
+            sessionPart = sessionState.currentSessionPart()
+        )
         SessionPanelComposable()
     }
 }

@@ -5,8 +5,9 @@ import androidx.lifecycle.viewModelScope
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.flow.*
 import kotlinx.coroutines.launch
-import skustra.focusflow.data.TimerState
+import skustra.focusflow.data.timer.TimerState
 import skustra.focusflow.data.alias.Minute
+import skustra.focusflow.data.session.SessionState
 import skustra.focusflow.domain.logs.AppLog
 import skustra.focusflow.domain.usecase.resources.DrawableProvider
 import skustra.focusflow.domain.usecase.session.Timer
@@ -18,16 +19,18 @@ class SessionViewModel @Inject constructor(
     val resourceManager: DrawableProvider
 ) : ViewModel() {
 
-    private val _sessionMutableStateFlow: MutableStateFlow<TimerState> =
-        MutableStateFlow(TimerState.Idle)
+    private val _sessionMutableStateFlow: MutableStateFlow<SessionState> =
+        MutableStateFlow(SessionState.draft())
 
-    val sessionStateFlow: StateFlow<TimerState> = _sessionMutableStateFlow
+    val sessionStateFlow: StateFlow<SessionState> = _sessionMutableStateFlow
 
     init {
         viewModelScope.launch {
             timer.getCurrentTimerState().collect { state ->
                 AppLog.debugSession(state)
-                _sessionMutableStateFlow.emit(state)
+                _sessionMutableStateFlow.emit(sessionStateFlow.value.apply {
+                    currentTimerState = state
+                })
             }
         }
     }
