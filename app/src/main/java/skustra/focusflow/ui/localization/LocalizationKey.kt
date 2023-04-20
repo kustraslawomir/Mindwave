@@ -7,4 +7,5 @@ sealed class LocalizationKey {
    object Resume : LocalizationKey()
    object Stop : LocalizationKey()
    object MinutesShort : LocalizationKey()
+   object Break : LocalizationKey()
 }

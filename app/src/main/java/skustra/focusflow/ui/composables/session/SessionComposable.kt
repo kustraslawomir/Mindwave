@@ -26,8 +26,7 @@ fun SessionComposable(viewModel: SessionViewModel = viewModel()) {
         horizontalAlignment = Alignment.CenterHorizontally
     ) {
         SessionFocusArc(
-            sessionState = sessionState.currentTimerState,
-            sessionPart = sessionState.currentSessionPart()
+            sessionState = sessionState
         )
         SessionPanelComposable()
     }

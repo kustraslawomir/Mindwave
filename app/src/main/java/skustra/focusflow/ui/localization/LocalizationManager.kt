@@ -12,6 +12,7 @@ object LocalizationManager {
             LocalizationKey.Resume to "Wznów",
             LocalizationKey.Stop to "Zatrzymaj",
             LocalizationKey.MinutesShort to "min.",
+            LocalizationKey.Break to "Przerwa",
         ),
         SupportedLanguage.English to mapOf(
             LocalizationKey.Remaining to "Remaining",
@@ -20,6 +21,7 @@ object LocalizationManager {
             LocalizationKey.Resume to "Resume",
             LocalizationKey.Stop to "Stop",
             LocalizationKey.MinutesShort to "min.",
+            LocalizationKey.Break to "Break",
         )
     )
 

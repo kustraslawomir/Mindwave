@@ -1,28 +1,29 @@
 package skustra.focusflow.ui.composables.session.arc
 
-import androidx.compose.foundation.Canvas
-import androidx.compose.foundation.layout.size
-import androidx.compose.runtime.Composable
-import androidx.compose.ui.Modifier
-import androidx.compose.ui.geometry.Offset
-import androidx.compose.ui.geometry.Size
-import androidx.compose.ui.graphics.Color
-import androidx.compose.ui.graphics.StrokeCap
-import androidx.compose.ui.graphics.drawscope.Stroke
-import androidx.compose.ui.unit.Dp
-import androidx.compose.ui.unit.dp
 import androidx.compose.animation.core.animateFloatAsState
 import androidx.compose.animation.core.tween
+import androidx.compose.foundation.Canvas
 import androidx.compose.foundation.layout.*
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Text
-import androidx.compose.runtime.*
+import androidx.compose.runtime.Composable
+import androidx.compose.runtime.LaunchedEffect
+import androidx.compose.runtime.State
 import androidx.compose.ui.Alignment
+import androidx.compose.ui.Modifier
+import androidx.compose.ui.geometry.Offset
+import androidx.compose.ui.geometry.Size
 import androidx.compose.ui.graphics.Brush
+import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.graphics.StrokeCap
 import androidx.compose.ui.graphics.drawscope.DrawScope
+import androidx.compose.ui.graphics.drawscope.Stroke
 import androidx.compose.ui.platform.LocalConfiguration
 import androidx.compose.ui.platform.LocalContext
-import skustra.focusflow.data.session.SessionPart
+import androidx.compose.ui.unit.Dp
+import androidx.compose.ui.unit.dp
+import skustra.focusflow.data.session.SessionPartType
+import skustra.focusflow.data.session.SessionState
 import skustra.focusflow.data.timer.TimerState
 import skustra.focusflow.domain.usecase.session.SessionConfig
 import skustra.focusflow.ui.localization.LocalizationKey
@@ -30,15 +31,14 @@ import skustra.focusflow.ui.localization.LocalizationManager
 
 @Composable
 fun SessionFocusArc(
-    sessionState: TimerState,
-    sessionPart: SessionPart,
+    sessionState: SessionState,
     indicatorThickness: Dp = 7.dp,
     animationDuration: Int = SessionConfig.tickInterval().toInt()
 ) {
 
-    val progress = when (sessionState) {
-        is TimerState.InProgress -> sessionState.progress.percentageProgress()
-        is TimerState.Paused -> sessionState.progress.percentageProgress()
+    val progress = when (val currentTimerState = sessionState.currentTimerState) {
+        is TimerState.InProgress -> currentTimerState.progress.percentageProgress()
+        is TimerState.Paused -> currentTimerState.progress.percentageProgress()
         else -> 100f
     }
 
@@ -72,8 +72,7 @@ fun SessionFocusArc(
         }
 
         ProgressText(
-            sessionState = sessionState,
-            sessionPart = sessionPart
+            sessionState = sessionState
         )
     }
 
@@ -125,29 +124,44 @@ private fun DrawScope.drawShadow(shadowColor: Color) {
 
 @Composable
 private fun ProgressText(
-    sessionState: TimerState,
-    sessionPart : SessionPart
+    sessionState: SessionState
 ) {
-
-    val minutesLeft = when (sessionState) {
-        is TimerState.InProgress -> sessionState.progress.minutesLeft.toString()
-        is TimerState.Paused -> sessionState.progress.minutesLeft.toString()
-        is TimerState.Idle -> sessionPart.sessionPartDuration.toString()
+    val minutesLeft = when (val timerState = sessionState.currentTimerState) {
+        is TimerState.InProgress -> timerState.progress.minutesLeft.toString()
+        is TimerState.Paused -> timerState.progress.minutesLeft.toString()
+        is TimerState.Idle -> sessionState.currentSessionPart().sessionPartDuration.toString()
         else -> 0.toString()
     }
 
-    Row {
+    val workParts = sessionState.parts.filter { it.type == SessionPartType.Work }
+    val sessionStateStatusText = when (sessionState.currentSessionPart().type) {
+        SessionPartType.Work -> "${workParts.indexOf(sessionState.currentSessionPart()) + 1}/${workParts.size}"
+        SessionPartType.Break -> LocalizationManager.getText(LocalizationKey.Break)
+    }
+
+    Column(
+        modifier = Modifier.fillMaxSize(),
+        verticalArrangement = Arrangement.Center,
+        horizontalAlignment = Alignment.CenterHorizontally
+    ) {
+        Row {
+            Text(
+                text = minutesLeft,
+                style = MaterialTheme.typography.labelLarge,
+            )
+            Text(
+                text = LocalizationManager.getText(LocalizationKey.MinutesShort),
+                modifier = Modifier
+                    .align(Alignment.Bottom)
+                    .padding(vertical = 8.dp, horizontal = 8.dp),
+                style = MaterialTheme.typography.labelMedium
+            )
+        }
         Text(
-            text = minutesLeft,
-            style = MaterialTheme.typography.labelLarge,
-        )
-        Text(
-            text = LocalizationManager.getText(LocalizationKey.MinutesShort),
-            modifier = Modifier
-                .align(Alignment.Bottom)
-                .padding(vertical = 8.dp, horizontal = 8.dp),
-            style = MaterialTheme.typography.labelMedium
+            text = sessionStateStatusText,
+            style = MaterialTheme.typography.bodyMedium
         )
     }
+
 }
 

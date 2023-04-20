@@ -20,9 +20,9 @@ class SessionViewModel @Inject constructor(
     val resourceManager: DrawableProvider
 ) : ViewModel() {
 
-    private val _sessionMutableStateFlow: MutableSharedFlow<SessionState> =
-        MutableSharedFlow()
+    private val _sessionMutableStateFlow  = MutableSharedFlow<SessionState>()
     val sessionStateFlow: SharedFlow<SessionState> = _sessionMutableStateFlow
+
     private var currentSessionState = SessionState.draft()
 
     init {
