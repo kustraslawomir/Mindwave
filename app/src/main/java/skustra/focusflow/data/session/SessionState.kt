@@ -30,6 +30,10 @@ data class SessionState(
         )
     }
 
+    fun sessionDuration(): Int {
+        return parts.sumOf { it.sessionPartDuration }
+    }
+
     companion object {
         fun draft(): SessionState {
             return SessionState(
@@ -38,15 +42,15 @@ data class SessionState(
                 parts = listOf(
                     SessionPart(
                         type = SessionPartType.Work,
-                        sessionPartDuration = SessionConfig.defaultSessionDuration()
+                        sessionPartDuration = 27
                     ),
                     SessionPart(
                         type = SessionPartType.Break,
-                        sessionPartDuration = SessionConfig.defaultBreakDuration()
+                        sessionPartDuration = 5
                     ),
                     SessionPart(
                         type = SessionPartType.Work,
-                        sessionPartDuration = SessionConfig.defaultSessionDuration()
+                        sessionPartDuration = 28
                     ),
                 )
             )
@@ -59,4 +63,8 @@ sealed class SessionPartType {
     object Break : SessionPartType()
 }
 
-data class SessionPart(val type: SessionPartType, val sessionPartDuration: Minute, val id : UUID = UUID.randomUUID())
+data class SessionPart(
+    val type: SessionPartType,
+    val sessionPartDuration: Minute,
+    val id: UUID = UUID.randomUUID()
+)

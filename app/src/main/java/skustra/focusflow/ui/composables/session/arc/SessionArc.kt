@@ -129,7 +129,7 @@ private fun ProgressText(
     val minutesLeft = when (val timerState = sessionState.currentTimerState) {
         is TimerState.InProgress -> timerState.progress.minutesLeft.toString()
         is TimerState.Paused -> timerState.progress.minutesLeft.toString()
-        is TimerState.Idle -> sessionState.currentSessionPart().sessionPartDuration.toString()
+        is TimerState.Idle -> sessionState.sessionDuration().toString()
         else -> 0.toString()
     }
 
