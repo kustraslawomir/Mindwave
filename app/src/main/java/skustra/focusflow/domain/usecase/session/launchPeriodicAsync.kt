@@ -9,7 +9,7 @@ fun CoroutineScope.launchPeriodicAsync(
     onTick: () -> Unit
 ) = this.async {
     while (isActive) {
-        onTick()
         delay(SessionConfig.tickInterval())
+        onTick()
     }
 }

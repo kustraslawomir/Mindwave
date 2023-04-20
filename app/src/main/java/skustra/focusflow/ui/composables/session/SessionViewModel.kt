@@ -44,6 +44,7 @@ class SessionViewModel @Inject constructor(
                         return@collect
                     }
                 }
+
                 emiTimerState(timerState)
                 AppLog.debugSession(currentSessionState)
             }
