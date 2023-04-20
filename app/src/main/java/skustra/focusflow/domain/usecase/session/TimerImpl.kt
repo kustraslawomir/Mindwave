@@ -16,7 +16,7 @@ class TimerImpl : Timer {
     private var isPaused = false
     private var intervalJob: Deferred<Unit>? = null
 
-    override suspend fun run(sessionDuration: Minute, scope: CoroutineScope) {
+    override suspend fun start(sessionDuration: Minute, scope: CoroutineScope) {
         this.duration = sessionDuration
         this.currentProgress = sessionDuration
 

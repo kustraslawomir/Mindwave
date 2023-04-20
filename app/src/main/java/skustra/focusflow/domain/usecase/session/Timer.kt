@@ -7,7 +7,7 @@ import skustra.focusflow.data.timer.TimerState
 
 interface Timer {
 
-    suspend fun run(sessionDuration: Minute, scope: CoroutineScope)
+    suspend fun start(sessionDuration: Minute, scope: CoroutineScope)
 
     fun pause()
 

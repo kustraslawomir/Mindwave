@@ -1,7 +1,7 @@
 package skustra.focusflow.data.session
 
 import skustra.focusflow.data.alias.Minute
-import skustra.focusflow.data.exceptions.SessionCompletedException
+import skustra.focusflow.data.exceptions.SessionAlreadyCompletedException
 import skustra.focusflow.data.timer.TimerState
 import skustra.focusflow.domain.usecase.session.SessionConfig
 
@@ -14,11 +14,11 @@ data class SessionState(
         return parts[currentPartCounter]
     }
 
-    @Throws(SessionCompletedException::class)
-    fun increaseCurrentPartCounter() {
+    @Throws(SessionAlreadyCompletedException::class)
+    fun activateTheNextPartOfTheSession() {
         if (currentPartCounter < parts.size - 1) {
             currentPartCounter += 1
-        } else throw SessionCompletedException()
+        } else throw SessionAlreadyCompletedException()
     }
 
     fun deepCopy(): SessionState {

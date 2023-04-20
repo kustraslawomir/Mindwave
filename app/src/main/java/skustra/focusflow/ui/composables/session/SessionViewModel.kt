@@ -6,12 +6,10 @@ import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.flow.MutableSharedFlow
 import kotlinx.coroutines.flow.SharedFlow
 import kotlinx.coroutines.launch
-import skustra.focusflow.data.alias.Minute
-import skustra.focusflow.data.exceptions.SessionCompletedException
+import skustra.focusflow.data.exceptions.SessionAlreadyCompletedException
 import skustra.focusflow.data.session.SessionState
 import skustra.focusflow.data.timer.TimerState
 import skustra.focusflow.domain.logs.AppLog
-import skustra.focusflow.domain.usecase.getValueBlockedOrNull
 import skustra.focusflow.domain.usecase.resources.DrawableProvider
 import skustra.focusflow.domain.usecase.session.Timer
 import javax.inject.Inject
@@ -33,14 +31,12 @@ class SessionViewModel @Inject constructor(
 
                 if (state == TimerState.Completed) {
                     try {
-                        currentSessionState.increaseCurrentPartCounter()
-                        timer.run(
+                        currentSessionState.activateTheNextPartOfTheSession()
+                        timer.start(
                             sessionDuration = currentSessionState.currentSessionPart().sessionPartDuration,
                             scope = viewModelScope
                         )
-                    } catch (e: SessionCompletedException) {
-                        currentSessionState = SessionState.draft()
-                        _sessionMutableStateFlow.emit(currentSessionState)
+                    } catch (e: SessionAlreadyCompletedException) {
                         timer.stop()
                         e.printStackTrace()
                         return@collect
@@ -54,9 +50,10 @@ class SessionViewModel @Inject constructor(
         }
     }
 
-    fun createSession(minute: Minute) {
+    fun createSession(sessionState: SessionState) {
         viewModelScope.launch {
-            timer.run(minute, this)
+            currentSessionState = sessionState
+            timer.start(sessionState.currentSessionPart().sessionPartDuration, this)
         }
     }
 

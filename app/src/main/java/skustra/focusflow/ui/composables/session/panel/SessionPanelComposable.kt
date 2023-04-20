@@ -36,7 +36,7 @@ fun SessionPanelComposable(viewModel: SessionViewModel = viewModel()) {
 private fun CreateSessionButton(viewModel: SessionViewModel = viewModel()) {
     CircleButton(
         onClick = {
-            viewModel.createSession(SessionConfig.defaultSessionDuration())
+            viewModel.createSession(SessionState.draft())
         },
         icon = viewModel.resourceManager.getPlayIcon()
     )
