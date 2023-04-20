@@ -27,24 +27,24 @@ class SessionViewModel @Inject constructor(
 
     init {
         viewModelScope.launch {
-            timer.getCurrentTimerState().collect { state ->
+            timer.getCurrentTimerState().collect { timerState ->
 
-                if (state == TimerState.Completed) {
+                if (timerState == TimerState.Completed) {
                     try {
                         currentSessionState.activateTheNextPartOfTheSession()
                         timer.start(
-                            sessionDuration = currentSessionState.currentSessionPart().sessionPartDuration,
+                            sessionDuration = currentSessionState
+                                .currentSessionPart()
+                                .sessionPartDuration,
                             scope = viewModelScope
                         )
-                    } catch (e: SessionAlreadyCompletedException) {
+                    } catch (exception: SessionAlreadyCompletedException) {
+                        exception.printStackTrace()
                         timer.stop()
-                        e.printStackTrace()
                         return@collect
                     }
                 }
-                _sessionMutableStateFlow.emit(currentSessionState.apply {
-                    currentTimerState = state
-                }.deepCopy())
+                emiTimerState(timerState)
                 AppLog.debugSession(currentSessionState)
             }
         }
@@ -73,5 +73,11 @@ class SessionViewModel @Inject constructor(
         viewModelScope.launch {
             timer.stop()
         }
+    }
+
+    private suspend fun emiTimerState(state: TimerState) {
+        _sessionMutableStateFlow.emit(currentSessionState.apply {
+            currentTimerState = state
+        }.deepCopy())
     }
 }
