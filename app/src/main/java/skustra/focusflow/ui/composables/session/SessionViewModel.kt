@@ -5,27 +5,27 @@ import androidx.lifecycle.viewModelScope
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.flow.*
 import kotlinx.coroutines.launch
-import skustra.focusflow.data.SessionState
+import skustra.focusflow.data.TimerState
 import skustra.focusflow.data.alias.Minute
 import skustra.focusflow.domain.logs.AppLog
 import skustra.focusflow.domain.usecase.resources.DrawableProvider
-import skustra.focusflow.domain.usecase.session.SessionManager
+import skustra.focusflow.domain.usecase.session.Timer
 import javax.inject.Inject
 
 @HiltViewModel
 class SessionViewModel @Inject constructor(
-    private val sessionManager: SessionManager,
+    private val sessionManager: Timer,
     val resourceManager: DrawableProvider
 ) : ViewModel() {
 
-    private val _sessionMutableStateFlow: MutableStateFlow<SessionState> =
-        MutableStateFlow(SessionState.SessionIdle)
+    private val _sessionMutableStateFlow: MutableStateFlow<TimerState> =
+        MutableStateFlow(TimerState.Idle)
 
-    val sessionStateFlow: StateFlow<SessionState> = _sessionMutableStateFlow
+    val sessionStateFlow: StateFlow<TimerState> = _sessionMutableStateFlow
 
     init {
         viewModelScope.launch {
-            sessionManager.getCurrentSessionState().collect { state ->
+            sessionManager.getCurrentTimerState().collect { state ->
                 AppLog.debugSession(state)
                 _sessionMutableStateFlow.emit(state)
             }
@@ -34,25 +34,25 @@ class SessionViewModel @Inject constructor(
 
     fun createSession(minute: Minute) {
         viewModelScope.launch {
-            sessionManager.createSession(minute, viewModelScope)
+            sessionManager.run(minute, this)
         }
     }
 
     fun pauseSession() {
         viewModelScope.launch {
-            sessionManager.pauseSession()
+            sessionManager.pause()
         }
     }
 
     fun resumeSession() {
         viewModelScope.launch {
-            sessionManager.resumeSession()
+            sessionManager.resume()
         }
     }
 
     fun stopSession() {
         viewModelScope.launch {
-            sessionManager.stopSession()
+            sessionManager.stop()
         }
     }
 }

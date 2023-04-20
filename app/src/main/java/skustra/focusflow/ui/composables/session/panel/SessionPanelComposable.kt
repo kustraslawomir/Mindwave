@@ -13,7 +13,7 @@ import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.unit.dp
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import androidx.lifecycle.viewmodel.compose.viewModel
-import skustra.focusflow.data.SessionState
+import skustra.focusflow.data.TimerState
 import skustra.focusflow.domain.usecase.session.SessionConfig
 import skustra.focusflow.ui.composables.session.SessionViewModel
 
@@ -25,9 +25,9 @@ fun SessionPanelComposable(viewModel: SessionViewModel = viewModel()) {
         .collectAsStateWithLifecycle()
 
     when (sessionState) {
-        SessionState.SessionCompleted, SessionState.SessionIdle -> CreateSessionButton()
-        is SessionState.SessionInProgress -> PauseSessionButton()
-        is SessionState.SessionPaused -> ResumeSession()
+        TimerState.Completed, TimerState.Idle -> CreateSessionButton()
+        is TimerState.InProgress -> PauseSessionButton()
+        is TimerState.Paused -> ResumeSession()
     }
 }
 

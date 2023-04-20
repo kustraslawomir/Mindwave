@@ -22,21 +22,21 @@ import androidx.compose.ui.graphics.Brush
 import androidx.compose.ui.graphics.drawscope.DrawScope
 import androidx.compose.ui.platform.LocalConfiguration
 import androidx.compose.ui.platform.LocalContext
-import skustra.focusflow.data.SessionState
+import skustra.focusflow.data.TimerState
 import skustra.focusflow.domain.usecase.session.SessionConfig
 import skustra.focusflow.ui.localization.LocalizationKey
 import skustra.focusflow.ui.localization.LocalizationManager
 
 @Composable
 fun SessionFocusArc(
-    sessionState: SessionState,
+    sessionState: TimerState,
     indicatorThickness: Dp = 7.dp,
     animationDuration: Int = SessionConfig.tickInterval().toInt()
 ) {
 
     val progress = when (sessionState) {
-        is SessionState.SessionInProgress -> sessionState.sessionProgress.percentageProgress()
-        is SessionState.SessionPaused -> sessionState.sessionProgress.percentageProgress()
+        is TimerState.InProgress -> sessionState.progress.percentageProgress()
+        is TimerState.Paused -> sessionState.progress.percentageProgress()
         else -> 100f
     }
 
@@ -122,13 +122,13 @@ private fun DrawScope.drawShadow(shadowColor: Color) {
 
 @Composable
 private fun ProgressText(
-    sessionState: SessionState
+    sessionState: TimerState
 ) {
 
     val minutesLeft = when (sessionState) {
-        is SessionState.SessionInProgress -> sessionState.sessionProgress.minutesLeft.toString()
-        is SessionState.SessionPaused -> sessionState.sessionProgress.minutesLeft.toString()
-        is SessionState.SessionIdle -> SessionConfig.defaultSessionDuration().toString()
+        is TimerState.InProgress -> sessionState.progress.minutesLeft.toString()
+        is TimerState.Paused -> sessionState.progress.minutesLeft.toString()
+        is TimerState.Idle -> SessionConfig.defaultSessionDuration().toString()
         else -> 0.toString()
     }
 

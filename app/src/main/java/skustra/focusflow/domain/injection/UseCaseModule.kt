@@ -7,9 +7,8 @@ import dagger.hilt.android.components.ViewModelComponent
 import dagger.hilt.android.scopes.ViewModelScoped
 import skustra.focusflow.domain.usecase.resources.DrawableProviderImpl
 import skustra.focusflow.domain.usecase.resources.DrawableProvider
-import skustra.focusflow.domain.usecase.session.SessionManager
-import skustra.focusflow.domain.usecase.session.SessionManagerImpl
-import javax.inject.Singleton
+import skustra.focusflow.domain.usecase.session.Timer
+import skustra.focusflow.domain.usecase.session.TimerImpl
 
 @Module
 @InstallIn(ViewModelComponent::class)
@@ -17,7 +16,7 @@ object ActivityComponent {
 
     @Provides
     @ViewModelScoped
-    fun provideFocusSessionUseCase(): SessionManager = SessionManagerImpl()
+    fun provideFocusSessionUseCase(): Timer = TimerImpl()
 
     @Provides
     @ViewModelScoped
