@@ -12,6 +12,6 @@ sealed class LocalizationKey {
    object NoBreakIncluded : LocalizationKey()
    object SingleBreak : LocalizationKey()
    object BreakCount : LocalizationKey()
-
+   object SkipBreaks : LocalizationKey()
 
 }

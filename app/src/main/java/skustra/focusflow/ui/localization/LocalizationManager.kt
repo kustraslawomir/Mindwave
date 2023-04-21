@@ -17,6 +17,7 @@ object LocalizationManager {
             LocalizationKey.NoBreakIncluded to "Nie będziesz mieć już przerw",
             LocalizationKey.SingleBreak to "Będziesz mieć 1 przerwę",
             LocalizationKey.BreakCount to "Liczba przerw:",
+            LocalizationKey.SkipBreaks to "Pomiń przerwy"
         ),
         SupportedLanguage.English to mapOf(
             LocalizationKey.Remaining to "Remaining",
@@ -30,6 +31,7 @@ object LocalizationManager {
             LocalizationKey.NoBreakIncluded to "No more breaks",
             LocalizationKey.SingleBreak to "You will have 1 break",
             LocalizationKey.BreakCount to "Number of breaks:",
+            LocalizationKey.SkipBreaks to "Skip breaks"
         )
     )
 
