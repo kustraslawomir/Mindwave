@@ -71,9 +71,15 @@ fun SessionFocusArc(
             drawShadowForeground(composableSize, indicatorThickness, backgroundColor)
         }
 
-        ProgressText(
-            sessionState = sessionState
-        )
+        Column(
+            modifier = Modifier.fillMaxSize(),
+            verticalArrangement = Arrangement.Center,
+            horizontalAlignment = Alignment.CenterHorizontally
+        ) {
+            TimeProgress(sessionState = sessionState)
+            CurrentSessionCounter(sessionState = sessionState)
+            BreaksCount(sessionState = sessionState)
+        }
     }
 
     Spacer(modifier = Modifier.height(32.dp))
@@ -99,9 +105,7 @@ private fun DrawScope.drawOutlineIndicator(
 }
 
 private fun DrawScope.drawShadowForeground(
-    size: Dp,
-    indicatorThickness: Dp,
-    color: Color
+    size: Dp, indicatorThickness: Dp, color: Color
 ) {
     drawCircle(
         color = color,
@@ -123,7 +127,7 @@ private fun DrawScope.drawShadow(shadowColor: Color) {
 }
 
 @Composable
-private fun ProgressText(
+private fun TimeProgress(
     sessionState: Session
 ) {
     val minutesLeft = when (val timerState = sessionState.currentTimerState) {
@@ -133,46 +137,71 @@ private fun ProgressText(
         else -> 0.toString()
     }
 
+
+
+
+    Row {
+        Text(
+            text = minutesLeft,
+            style = MaterialTheme.typography.labelLarge,
+        )
+        Text(
+            text = LocalizationManager.getText(LocalizationKey.MinutesShort),
+            modifier = Modifier
+                .align(Alignment.Bottom)
+                .padding(vertical = 8.dp, horizontal = 8.dp),
+            style = MaterialTheme.typography.labelMedium
+        )
+    }
+
+
+}
+
+@Composable
+private fun CurrentSessionCounter(sessionState: Session) {
+    if (sessionState.currentTimerState !is TimerState.InProgress) {
+        return
+    }
+
     val sessionStateStatusText = when (sessionState.currentSessionPart().type) {
         SessionPartType.Work -> {
-            val workParts = sessionState.parts
-                .filter { sessionPart ->
-                    sessionPart.type == SessionPartType.Work
-                }
+            val workParts = sessionState.parts.filter { sessionPart ->
+                sessionPart.type == SessionPartType.Work
+            }
 
-            val currentWorkIndex = workParts
-                .indexOfFirst { sessionPart ->
-                    sessionPart.id == sessionState.currentSessionPart().id
-                } + 1
+            val currentWorkIndex = workParts.indexOfFirst { sessionPart ->
+                sessionPart.id == sessionState.currentSessionPart().id
+            } + 1
 
             "$currentWorkIndex/${workParts.size}"
         }
         SessionPartType.Break -> LocalizationManager.getText(LocalizationKey.Break)
     }
+    Text(
+        text = sessionStateStatusText,
+        style = MaterialTheme.typography.bodyMedium
+    )
+}
 
-    Column(
-        modifier = Modifier.fillMaxSize(),
-        verticalArrangement = Arrangement.Center,
-        horizontalAlignment = Alignment.CenterHorizontally
-    ) {
-        Row {
-            Text(
-                text = minutesLeft,
-                style = MaterialTheme.typography.labelLarge,
-            )
-            Text(
-                text = LocalizationManager.getText(LocalizationKey.MinutesShort),
-                modifier = Modifier
-                    .align(Alignment.Bottom)
-                    .padding(vertical = 8.dp, horizontal = 8.dp),
-                style = MaterialTheme.typography.labelMedium
-            )
-        }
-        Text(
-            text = sessionStateStatusText,
-            style = MaterialTheme.typography.bodyMedium
-        )
+@Composable
+private fun BreaksCount(sessionState: Session) {
+    if (sessionState.currentTimerState != TimerState.Idle) {
+        return
     }
 
+    val breaksCount = sessionState.parts.count { sessionPart ->
+        sessionPart.type == SessionPartType.Break
+    }
+
+    val breaksCountText = when (breaksCount) {
+        0 -> LocalizationManager.getText(LocalizationKey.NoBreakIncluded)
+        1 -> LocalizationManager.getText(LocalizationKey.SingleBreak)
+        else -> "${LocalizationManager.getText(LocalizationKey.BreakCount)} $breaksCount"
+    }
+
+    Text(
+        text = breaksCountText,
+        style = MaterialTheme.typography.bodySmall
+    )
 }
 
