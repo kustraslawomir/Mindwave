@@ -3,12 +3,12 @@ package skustra.focusflow.data.session
 import skustra.focusflow.data.alias.Minute
 import skustra.focusflow.data.exceptions.SessionAlreadyCompletedException
 import skustra.focusflow.data.timer.TimerState
-import skustra.focusflow.domain.usecase.session.SessionConfig
 import java.util.UUID
 
-data class SessionState(
+data class Session(
     var currentTimerState: TimerState = TimerState.Idle,
     var currentPartCounter: Int = 0,
+    var duration: Minute,
     val parts: List<SessionPart>
 ) {
     fun currentSessionPart(): SessionPart {
@@ -22,16 +22,17 @@ data class SessionState(
         } else throw SessionAlreadyCompletedException()
     }
 
-    fun deepCopy(): SessionState {
-        return SessionState(
+    fun deepCopy(): Session {
+        return Session(
             currentTimerState = currentTimerState,
             currentPartCounter = currentPartCounter,
-            parts = parts
+            parts = parts,
+            duration = duration
         )
     }
 
     fun sessionDuration(): Int {
-        return parts.sumOf { it.sessionPartDuration }
+        return duration
     }
 }
 

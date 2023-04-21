@@ -8,7 +8,7 @@ import kotlinx.coroutines.flow.SharedFlow
 import kotlinx.coroutines.launch
 import skustra.focusflow.data.alias.Minute
 import skustra.focusflow.data.exceptions.SessionAlreadyCompletedException
-import skustra.focusflow.data.session.SessionState
+import skustra.focusflow.data.session.Session
 import skustra.focusflow.data.timer.TimerState
 import skustra.focusflow.domain.logs.AppLog
 import skustra.focusflow.domain.usecase.resources.DrawableProvider
@@ -22,11 +22,13 @@ class SessionViewModel @Inject constructor(
     val resourceManager: DrawableProvider
 ) : ViewModel() {
 
-    private val _sessionMutableStateFlow = MutableSharedFlow<SessionState>()
-    val sessionStateFlow: SharedFlow<SessionState> = _sessionMutableStateFlow
+    private val _sessionMutableStateFlow = MutableSharedFlow<Session>()
+    val sessionStateFlow: SharedFlow<Session> = _sessionMutableStateFlow
 
     var currentSessionState = SessionConfig.generate()
+
     private var durationChosenByUser = SessionConfig.DEFAULT_DURATION
+    private var skipBreaks = false
 
     init {
         viewModelScope.launch {
@@ -53,13 +55,23 @@ class SessionViewModel @Inject constructor(
         }
     }
 
-    fun updateDuration(duration: Minute) {
-        durationChosenByUser = duration
+    fun updateDuration(durationChosenByUser: Minute) {
+        this.durationChosenByUser = durationChosenByUser
+        viewModelScope.launch {
+            emitSession(SessionConfig.generate(durationChosenByUser, skipBreaks))
+        }
+    }
+
+    fun skipBreaks(skipBreaks: Boolean) {
+        this.skipBreaks = skipBreaks
+        viewModelScope.launch {
+            emitSession(SessionConfig.generate(durationChosenByUser, skipBreaks))
+        }
     }
 
     fun createSession() {
         viewModelScope.launch {
-            currentSessionState = SessionConfig.generate(durationChosenByUser)
+            currentSessionState = SessionConfig.generate(durationChosenByUser, skipBreaks)
             timer.start(currentSessionState.currentSessionPart().sessionPartDuration, this)
         }
     }
@@ -86,5 +98,9 @@ class SessionViewModel @Inject constructor(
         _sessionMutableStateFlow.emit(currentSessionState.apply {
             currentTimerState = state
         }.deepCopy())
+    }
+
+    private suspend fun emitSession(session: Session) {
+        _sessionMutableStateFlow.emit(session.deepCopy())
     }
 }

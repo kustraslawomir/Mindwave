@@ -23,7 +23,7 @@ import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.unit.Dp
 import androidx.compose.ui.unit.dp
 import skustra.focusflow.data.session.SessionPartType
-import skustra.focusflow.data.session.SessionState
+import skustra.focusflow.data.session.Session
 import skustra.focusflow.data.timer.TimerState
 import skustra.focusflow.domain.usecase.session.SessionConfig
 import skustra.focusflow.ui.localization.LocalizationKey
@@ -31,7 +31,7 @@ import skustra.focusflow.ui.localization.LocalizationManager
 
 @Composable
 fun SessionFocusArc(
-    sessionState: SessionState,
+    sessionState: Session,
     indicatorThickness: Dp = 7.dp,
     animationDuration: Int = SessionConfig.tickInterval().toInt()
 ) {
@@ -124,7 +124,7 @@ private fun DrawScope.drawShadow(shadowColor: Color) {
 
 @Composable
 private fun ProgressText(
-    sessionState: SessionState
+    sessionState: Session
 ) {
     val minutesLeft = when (val timerState = sessionState.currentTimerState) {
         is TimerState.InProgress -> timerState.progress.minutesLeft.toString()

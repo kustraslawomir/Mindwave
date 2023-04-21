@@ -4,7 +4,7 @@ import skustra.focusflow.BuildConfig
 import skustra.focusflow.data.alias.Minute
 import skustra.focusflow.data.session.SessionPart
 import skustra.focusflow.data.session.SessionPartType
-import skustra.focusflow.data.session.SessionState
+import skustra.focusflow.data.session.Session
 import timber.log.Timber
 
 class SessionConfig {
@@ -17,33 +17,29 @@ class SessionConfig {
         fun generate(
             duration: Minute = DEFAULT_DURATION,
             skipBreaks: Boolean = false
-        ): SessionState {
-            if (skipBreaks) {
-                return SessionState(
-                    parts = listOf(
-                        createSessionPart(duration, SessionPartType.Work)
-                    )
-                )
-            }
-
+        ): Session {
             if (duration <= WORK_DURATION) {
-                return SessionState(
+                return Session(
                     parts = listOf(
                         createSessionPart(duration, SessionPartType.Work)
-                    )
+                    ),
+                    duration = duration
                 )
             }
 
             val parts = mutableListOf<SessionPart>()
             for (i in duration downTo 0 step WORK_DURATION) {
                 parts.add(createSessionPart(WORK_DURATION, SessionPartType.Work))
-                if (i > 0) {
+                if (!skipBreaks && i > 0) {
                     parts.add(createSessionPart(BREAK_DURATION, SessionPartType.Break))
                 }
             }
 
             Timber.w("[SESSION_CREATION] Session for duration of: $duration -> \n${parts.map { "\n${it.sessionPartDuration} ${it.type}" }}")
-            return SessionState(parts = parts)
+            return Session(
+                parts = parts,
+                duration = duration
+            )
         }
 
         fun availableDurations(): List<Minute> {
@@ -73,7 +69,7 @@ class SessionConfig {
             )
         }
 
-        const val DEFAULT_DURATION: Minute = 25
+        const val DEFAULT_DURATION: Minute = 60
         private const val BREAK_DURATION: Minute = 5
         private const val WORK_DURATION: Minute = 25
         private fun createSessionPart(minute: Minute, type: SessionPartType) = SessionPart(

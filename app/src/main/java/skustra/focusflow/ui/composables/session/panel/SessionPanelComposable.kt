@@ -46,7 +46,7 @@ fun SessionPanelComposable(viewModel: SessionViewModel = viewModel()) {
             Column(
                 horizontalAlignment = Alignment.CenterHorizontally
             ) {
-                CheckboxSkipBreaks()
+                SkipBreaksCheckBox()
                 CreateSessionButton()
             }
         }
@@ -66,7 +66,7 @@ private fun CreateSessionButton(viewModel: SessionViewModel = viewModel()) {
             .background(color = ButtonColor)
             .clickable { viewModel.createSession() }
     ) {
-        Row(verticalAlignment = androidx.compose.ui.Alignment.CenterVertically) {
+        Row(verticalAlignment = Alignment.CenterVertically) {
             IconButton(onClick = { viewModel.createSession() }) {
                 Icon(
                     painter = painterResource(id = viewModel.resourceManager.getPlayIcon()),
