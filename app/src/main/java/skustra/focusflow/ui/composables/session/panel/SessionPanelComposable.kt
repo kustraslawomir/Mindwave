@@ -107,20 +107,25 @@ private fun StopSessionButton(viewModel: SessionViewModel = viewModel()) {
         onClick = {
             viewModel.stopSession()
         },
-        icon = viewModel.resourceManager.getStopIcon()
+        icon = viewModel.resourceManager.getStopIcon(),
+        color = Color.White
     )
 }
 
 @Composable
-private fun CircleButton(onClick: () -> Unit, icon: Int) {
+private fun CircleButton(onClick: () -> Unit, icon: Int, color: Color = ButtonColor) {
     IconButton(
         onClick = { onClick() },
         modifier = Modifier
             .size(46.dp)
-            .background(Color.White, CircleShape)
+            .background(color, CircleShape)
             .padding(6.dp),
         content = {
-            Icon(painter = painterResource(id = icon), "$icon", tint = Color.Black)
+            Icon(
+                painter = painterResource(id = icon),
+                "$icon",
+                tint = Color.Black
+            )
         }
     )
 }
