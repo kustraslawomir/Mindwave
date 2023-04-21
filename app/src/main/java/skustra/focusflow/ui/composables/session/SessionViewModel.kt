@@ -56,13 +56,6 @@ class SessionViewModel @Inject constructor(
         }
     }
 
-    fun updateDuration(durationChosenByUser: Minute) {
-        this.durationChosenByUser = durationChosenByUser
-        viewModelScope.launch {
-            emitSession(SessionCreator.generate(durationChosenByUser, skipBreaks))
-        }
-    }
-
     fun skipBreaks(skipBreaks: Boolean) {
         this.skipBreaks = skipBreaks
         viewModelScope.launch {
@@ -95,16 +88,6 @@ class SessionViewModel @Inject constructor(
         }
     }
 
-    private suspend fun emiTimerState(state: TimerState) {
-        _sessionMutableStateFlow.emit(currentSessionState.apply {
-            currentTimerState = state
-        }.deepCopy())
-    }
-
-    private suspend fun emitSession(session: Session) {
-        _sessionMutableStateFlow.emit(session.deepCopy())
-    }
-
     fun increaseSessionDuration() {
         if (!isAvailableToIncrease()) {
             return
@@ -112,6 +95,11 @@ class SessionViewModel @Inject constructor(
         val currentDurationIndex = SessionConfig.availableDurations().indexOf(durationChosenByUser)
         durationChosenByUser = SessionConfig.availableDurations()[currentDurationIndex + 1]
         updateDuration(durationChosenByUser)
+    }
+
+    fun isAvailableToIncrease(): Boolean {
+        val currentDurationIndex = SessionConfig.availableDurations().indexOf(durationChosenByUser)
+        return currentDurationIndex < SessionConfig.availableDurations().size - 1
     }
 
     fun decreaseSessionDuration() {
@@ -124,13 +112,25 @@ class SessionViewModel @Inject constructor(
 
     }
 
-    fun isAvailableToIncrease(): Boolean {
-        val currentDurationIndex = SessionConfig.availableDurations().indexOf(durationChosenByUser)
-        return currentDurationIndex < SessionConfig.availableDurations().size - 1
-    }
-
     fun isAvailableToDecrease(): Boolean {
         val currentDurationIndex = SessionConfig.availableDurations().indexOf(durationChosenByUser)
         return currentDurationIndex > 0
+    }
+
+    private fun updateDuration(durationChosenByUser: Minute) {
+        this.durationChosenByUser = durationChosenByUser
+        viewModelScope.launch {
+            emitSession(SessionCreator.generate(durationChosenByUser, skipBreaks))
+        }
+    }
+
+    private suspend fun emiTimerState(state: TimerState) {
+        _sessionMutableStateFlow.emit(currentSessionState.apply {
+            currentTimerState = state
+        }.deepCopy())
+    }
+
+    private suspend fun emitSession(session: Session) {
+        _sessionMutableStateFlow.emit(session.deepCopy())
     }
 }
