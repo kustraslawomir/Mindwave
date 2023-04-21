@@ -34,6 +34,8 @@ class SessionConfig {
             )
         }
 
+        fun minimalDurationToIncludeBreaks() = 30
+
         val DEFAULT_DURATION: Minute = availableDurations()[3]
         const val BREAK_DURATION: Minute = 5
         const val WORK_DURATION: Minute = 25

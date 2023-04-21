@@ -43,8 +43,11 @@ fun SessionPanelComposable(viewModel: SessionViewModel = viewModel()) {
 
             Column(
                 horizontalAlignment = Alignment.CenterHorizontally
+
             ) {
-                SkipBreaksComposable()
+                if (viewModel.sessionIncludesBreaks()) {
+                    SkipBreaksComposable()
+                }
                 StartSessionComposable()
             }
         }

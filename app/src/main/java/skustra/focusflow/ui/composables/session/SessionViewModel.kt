@@ -133,4 +133,8 @@ class SessionViewModel @Inject constructor(
     private suspend fun emitSession(session: Session) {
         _sessionMutableStateFlow.emit(session.deepCopy())
     }
+
+    fun sessionIncludesBreaks(): Boolean {
+        return durationChosenByUser > SessionConfig.minimalDurationToIncludeBreaks()
+    }
 }

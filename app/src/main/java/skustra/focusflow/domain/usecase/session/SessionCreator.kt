@@ -31,7 +31,12 @@ class SessionCreator {
             for (i in workDuration downTo 0 step singleWorkIntervalDuration) {
                 parts.add(createSessionPart(workDuration / (breaks + 1), SessionPartType.Work))
                 if (i > breaks) {
-                    parts.add(createSessionPart(SessionConfig.BREAK_DURATION, SessionPartType.Break))
+                    parts.add(
+                        createSessionPart(
+                            SessionConfig.BREAK_DURATION,
+                            SessionPartType.Break
+                        )
+                    )
                 }
             }
 
@@ -48,7 +53,7 @@ class SessionCreator {
         )
 
         private fun countBreaks(duration: Minute): Int {
-            return if (duration <= 30)
+            return if (duration <= SessionConfig.minimalDurationToIncludeBreaks())
                 0
             else if (duration <= 60) {
                 1
