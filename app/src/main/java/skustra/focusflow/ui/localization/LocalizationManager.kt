@@ -14,6 +14,9 @@ object LocalizationManager {
             LocalizationKey.MinutesShort to "min.",
             LocalizationKey.Break to "Przerwa",
             LocalizationKey.CreateSession to "Rozpocznij sesję koncentracji",
+            LocalizationKey.NoBreakIncluded to "Nie będziesz mieć już przerw",
+            LocalizationKey.SingleBreak to "Będziesz mieć 1 przerwę",
+            LocalizationKey.BreakCount to "Liczba przerw:",
         ),
         SupportedLanguage.English to mapOf(
             LocalizationKey.Remaining to "Remaining",
@@ -24,6 +27,9 @@ object LocalizationManager {
             LocalizationKey.MinutesShort to "min.",
             LocalizationKey.Break to "Break",
             LocalizationKey.CreateSession to "Start a concentration session",
+            LocalizationKey.NoBreakIncluded to "No more breaks",
+            LocalizationKey.SingleBreak to "You will have 1 break",
+            LocalizationKey.BreakCount to "Number of breaks:",
         )
     )
 

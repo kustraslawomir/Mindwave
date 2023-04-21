@@ -33,7 +33,10 @@ fun SessionPanelComposable(viewModel: SessionViewModel = viewModel()) {
         .collectAsStateWithLifecycle(viewModel.currentSessionState)
 
     when (sessionState.currentTimerState) {
-        TimerState.Completed, TimerState.Idle -> CreateSessionButton()
+        TimerState.Completed, TimerState.Idle -> {
+
+            Column { CreateSessionButton() }
+        }
         is TimerState.InProgress -> PauseSessionButton()
         is TimerState.Paused -> ResumeSession()
     }
@@ -53,7 +56,7 @@ private fun CreateSessionButton(viewModel: SessionViewModel = viewModel()) {
             IconButton(onClick = { viewModel.createSession() }) {
                 Icon(
                     painter = painterResource(id = viewModel.resourceManager.getPlayIcon()),
-                    contentDescription = "",
+                    contentDescription = "todo",
                     tint = Color.Black
                 )
             }

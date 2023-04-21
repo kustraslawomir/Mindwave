@@ -9,4 +9,9 @@ sealed class LocalizationKey {
    object MinutesShort : LocalizationKey()
    object Break : LocalizationKey()
    object CreateSession : LocalizationKey()
+   object NoBreakIncluded : LocalizationKey()
+   object SingleBreak : LocalizationKey()
+   object BreakCount : LocalizationKey()
+
+
 }
