@@ -13,6 +13,7 @@ object LocalizationManager {
             LocalizationKey.Stop to "Zatrzymaj",
             LocalizationKey.MinutesShort to "min.",
             LocalizationKey.Break to "Przerwa",
+            LocalizationKey.CreateSession to "Rozpocznij sesję koncentracji",
         ),
         SupportedLanguage.English to mapOf(
             LocalizationKey.Remaining to "Remaining",
@@ -22,6 +23,7 @@ object LocalizationManager {
             LocalizationKey.Stop to "Stop",
             LocalizationKey.MinutesShort to "min.",
             LocalizationKey.Break to "Break",
+            LocalizationKey.CreateSession to "Start a concentration session",
         )
     )
 
