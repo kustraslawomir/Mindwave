@@ -15,30 +15,34 @@ class SessionConfig {
         }
 
         fun generate(
-            duration: Minute = DEFAULT_DURATION,
+            sessionDuration: Minute = DEFAULT_DURATION,
             skipBreaks: Boolean = false
         ): Session {
-            if (skipBreaks || duration <= WORK_DURATION) {
+            val parts = mutableListOf<SessionPart>()
+
+            val breaks = countBreaks(sessionDuration)
+            if (skipBreaks || sessionDuration <= WORK_DURATION || breaks == 0) {
                 return Session(
                     parts = listOf(
-                        createSessionPart(duration, SessionPartType.Work)
+                        createSessionPart(sessionDuration, SessionPartType.Work)
                     ),
-                    duration = duration
+                    duration = sessionDuration
                 )
             }
 
-            val parts = mutableListOf<SessionPart>()
-            for (i in duration downTo 0 step WORK_DURATION) {
-                parts.add(createSessionPart(WORK_DURATION, SessionPartType.Work))
-                if (i > 0) {
+            val workDuration = sessionDuration - (breaks * BREAK_DURATION)
+            val singleWorkIntervalDuration = workDuration / breaks
+            for (i in workDuration downTo 0 step singleWorkIntervalDuration) {
+                parts.add(createSessionPart(workDuration / (breaks + 1), SessionPartType.Work))
+                if (i > breaks) {
                     parts.add(createSessionPart(BREAK_DURATION, SessionPartType.Break))
                 }
             }
 
-            Timber.w("[SESSION_CREATION] Session for duration of: $duration -> \n${parts.map { "\n${it.sessionPartDuration} ${it.type}" }}")
+            Timber.w("[SESSION_CREATION] Session for duration of: $sessionDuration -> \n${parts.map { "\n${it.sessionPartDuration} ${it.type}" }}")
             return Session(
                 parts = parts,
-                duration = duration
+                duration = sessionDuration
             )
         }
 
@@ -76,5 +80,19 @@ class SessionConfig {
             type = type,
             sessionPartDuration = minute
         )
+
+        private fun countBreaks(duration: Minute): Int {
+            return if (duration <= 30)
+                0
+            else if (duration <= 60) {
+                1
+            } else if (duration <= 100) {
+                2
+            } else if (duration <= 135) {
+                3
+            } else if (duration <= 180) {
+                4
+            } else 5
+        }
     }
 }
