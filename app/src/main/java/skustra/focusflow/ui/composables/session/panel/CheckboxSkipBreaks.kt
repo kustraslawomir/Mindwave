@@ -1,6 +1,5 @@
 package skustra.focusflow.ui.composables.session.panel
 
-import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Row
 import androidx.compose.material3.Checkbox
 import androidx.compose.material3.Text
@@ -30,8 +29,9 @@ fun SkipBreaksCheckBox(viewModel: SessionViewModel = viewModel()) {
     ) {
         Checkbox(
             checked = checkedState.value,
-            onCheckedChange = {
-
+            onCheckedChange = { isChecked ->
+                checkedState.value = isChecked
+                viewModel.skipBreaks(isChecked)
             },
         )
         Text(
