@@ -1,8 +1,10 @@
 package skustra.focusflow.ui.composables.session.arc
 
+import android.widget.Space
 import androidx.compose.animation.core.animateFloatAsState
 import androidx.compose.animation.core.tween
 import androidx.compose.foundation.Canvas
+import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.*
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Text
@@ -11,6 +13,7 @@ import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.State
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.draw.alpha
 import androidx.compose.ui.geometry.Offset
 import androidx.compose.ui.geometry.Size
 import androidx.compose.ui.graphics.Brush
@@ -22,12 +25,16 @@ import androidx.compose.ui.platform.LocalConfiguration
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.unit.Dp
 import androidx.compose.ui.unit.dp
+import androidx.lifecycle.viewmodel.compose.viewModel
 import skustra.focusflow.data.session.SessionPartType
 import skustra.focusflow.data.session.Session
 import skustra.focusflow.data.timer.TimerState
 import skustra.focusflow.domain.usecase.session.SessionConfig
+import skustra.focusflow.ui.composables.session.SessionViewModel
+import skustra.focusflow.ui.extensions.noRippleClickable
 import skustra.focusflow.ui.localization.LocalizationKey
 import skustra.focusflow.ui.localization.LocalizationManager
+import skustra.focusflow.ui.theme.SessionDurationChangeButtonStyle
 
 @Composable
 fun SessionFocusArc(
@@ -79,6 +86,7 @@ fun SessionFocusArc(
             TimeProgress(sessionState = sessionState)
             CurrentSessionCounter(sessionState = sessionState)
             BreaksCount(sessionState = sessionState)
+            ChangeSessionDurationComposable(sessionState = sessionState)
         }
     }
 
@@ -137,9 +145,6 @@ private fun TimeProgress(
         else -> 0.toString()
     }
 
-
-
-
     Row {
         Text(
             text = minutesLeft,
@@ -153,8 +158,39 @@ private fun TimeProgress(
             style = MaterialTheme.typography.labelMedium
         )
     }
+}
 
+@Composable
+private fun ChangeSessionDurationComposable(
+    sessionState: Session, viewModel: SessionViewModel = viewModel()
+) {
+    if (sessionState.currentTimerState != TimerState.Idle) {
+        return
+    }
 
+    Row(
+        modifier = Modifier.padding(16.dp),
+        verticalAlignment = Alignment.CenterVertically,
+    ) {
+        Text(
+            text = "-",
+            style = SessionDurationChangeButtonStyle,
+            modifier = Modifier
+                .noRippleClickable {
+                    viewModel.decreaseSessionDuration()
+                }
+                .alpha(if (viewModel.isAvailableToDecrease()) 1f else 0.2f))
+        Spacer(Modifier.width(24.dp))
+        Text(
+            text = "+",
+            style = SessionDurationChangeButtonStyle,
+            modifier = Modifier
+                .noRippleClickable {
+                    viewModel.increaseSessionDuration()
+                }
+                .alpha(if (viewModel.isAvailableToIncrease()) 1f else 0.2f)
+        )
+    }
 }
 
 @Composable
@@ -178,8 +214,7 @@ private fun CurrentSessionCounter(sessionState: Session) {
         SessionPartType.Break -> LocalizationManager.getText(LocalizationKey.Break)
     }
     Text(
-        text = sessionStateStatusText,
-        style = MaterialTheme.typography.bodyMedium
+        text = sessionStateStatusText, style = MaterialTheme.typography.bodyMedium
     )
 }
 
@@ -200,8 +235,7 @@ private fun BreaksCount(sessionState: Session) {
     }
 
     Text(
-        text = breaksCountText,
-        style = MaterialTheme.typography.bodySmall
+        text = breaksCountText, style = MaterialTheme.typography.bodySmall
     )
 }
 

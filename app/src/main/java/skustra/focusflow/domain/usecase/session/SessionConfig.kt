@@ -69,7 +69,7 @@ class SessionConfig {
             )
         }
 
-        const val DEFAULT_DURATION: Minute = 60
+        val DEFAULT_DURATION: Minute = availableDurations()[3]
         private const val BREAK_DURATION: Minute = 5
         private const val WORK_DURATION: Minute = 25
         private fun createSessionPart(minute: Minute, type: SessionPartType) = SessionPart(

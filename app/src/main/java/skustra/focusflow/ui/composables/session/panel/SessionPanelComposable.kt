@@ -10,9 +10,7 @@ import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
-import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.layout.width
-import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material3.Icon
 import androidx.compose.material3.IconButton
@@ -46,28 +44,28 @@ fun SessionPanelComposable(viewModel: SessionViewModel = viewModel()) {
             Column(
                 horizontalAlignment = Alignment.CenterHorizontally
             ) {
-                SkipBreaksCheckBox()
-                CreateSessionButton()
+                SkipBreaksComposable()
+                StartSessionComposable()
             }
         }
 
-        is TimerState.InProgress -> PauseSessionButton()
-        is TimerState.Paused -> ResumeSession()
+        is TimerState.InProgress -> PauseSessionComposable()
+        is TimerState.Paused -> ResumeSessionGroupComposable()
     }
 }
 
 @Composable
-private fun CreateSessionButton(viewModel: SessionViewModel = viewModel()) {
+private fun StartSessionComposable(viewModel: SessionViewModel = viewModel()) {
     Box(
         modifier = Modifier
             .padding(horizontal = 16.dp, vertical = 8.dp)
             .height(48.dp)
             .clip(shape = RoundedCornerShape(size = 12.dp))
             .background(color = ButtonColor)
-            .clickable { viewModel.createSession() }
+            .clickable { viewModel.startSession() }
     ) {
         Row(verticalAlignment = Alignment.CenterVertically) {
-            IconButton(onClick = { viewModel.createSession() }) {
+            IconButton(onClick = { viewModel.startSession() }) {
                 Icon(
                     painter = painterResource(id = viewModel.resourceManager.getPlayIcon()),
                     contentDescription = "todo",
@@ -84,7 +82,7 @@ private fun CreateSessionButton(viewModel: SessionViewModel = viewModel()) {
 }
 
 @Composable
-private fun PauseSessionButton(viewModel: SessionViewModel = viewModel()) {
+private fun PauseSessionComposable(viewModel: SessionViewModel = viewModel()) {
     CircleButton(
         onClick = {
             viewModel.pauseSession()
@@ -94,7 +92,19 @@ private fun PauseSessionButton(viewModel: SessionViewModel = viewModel()) {
 }
 
 @Composable
-private fun ResumeSessionButton(viewModel: SessionViewModel = viewModel()) {
+private fun ResumeSessionGroupComposable() {
+    Row(
+        Modifier.fillMaxWidth(),
+        horizontalArrangement = Arrangement.Center
+    ) {
+        StopSessionComposable()
+        Spacer(modifier = Modifier.width(16.dp))
+        ResumeSessionComposable()
+    }
+}
+
+@Composable
+private fun ResumeSessionComposable(viewModel: SessionViewModel = viewModel()) {
     CircleButton(
         onClick = {
             viewModel.resumeSession()
@@ -104,19 +114,7 @@ private fun ResumeSessionButton(viewModel: SessionViewModel = viewModel()) {
 }
 
 @Composable
-private fun ResumeSession() {
-    Row(
-        Modifier.fillMaxWidth(),
-        horizontalArrangement = Arrangement.Center
-    ) {
-        StopSessionButton()
-        Spacer(modifier = Modifier.width(16.dp))
-        ResumeSessionButton()
-    }
-}
-
-@Composable
-private fun StopSessionButton(viewModel: SessionViewModel = viewModel()) {
+private fun StopSessionComposable(viewModel: SessionViewModel = viewModel()) {
     CircleButton(
         onClick = {
             viewModel.stopSession()
@@ -126,20 +124,4 @@ private fun StopSessionButton(viewModel: SessionViewModel = viewModel()) {
     )
 }
 
-@Composable
-private fun CircleButton(onClick: () -> Unit, icon: Int, color: Color = ButtonColor) {
-    IconButton(
-        onClick = { onClick() },
-        modifier = Modifier
-            .size(46.dp)
-            .background(color, CircleShape)
-            .padding(6.dp),
-        content = {
-            Icon(
-                painter = painterResource(id = icon),
-                "$icon",
-                tint = Color.Black
-            )
-        }
-    )
-}
+

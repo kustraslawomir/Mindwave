@@ -69,7 +69,7 @@ class SessionViewModel @Inject constructor(
         }
     }
 
-    fun createSession() {
+    fun startSession() {
         viewModelScope.launch {
             currentSessionState = SessionConfig.generate(durationChosenByUser, skipBreaks)
             timer.start(currentSessionState.currentSessionPart().sessionPartDuration, this)
@@ -102,5 +102,34 @@ class SessionViewModel @Inject constructor(
 
     private suspend fun emitSession(session: Session) {
         _sessionMutableStateFlow.emit(session.deepCopy())
+    }
+
+    fun increaseSessionDuration() {
+        if (!isAvailableToIncrease()) {
+            return
+        }
+        val currentDurationIndex = SessionConfig.availableDurations().indexOf(durationChosenByUser)
+        durationChosenByUser = SessionConfig.availableDurations()[currentDurationIndex + 1]
+        updateDuration(durationChosenByUser)
+    }
+
+    fun decreaseSessionDuration() {
+        if (!isAvailableToDecrease()) {
+            return
+        }
+        val currentDurationIndex = SessionConfig.availableDurations().indexOf(durationChosenByUser)
+        durationChosenByUser = SessionConfig.availableDurations()[currentDurationIndex - 1]
+        updateDuration(durationChosenByUser)
+
+    }
+
+    fun isAvailableToIncrease(): Boolean {
+        val currentDurationIndex = SessionConfig.availableDurations().indexOf(durationChosenByUser)
+        return currentDurationIndex < SessionConfig.availableDurations().size - 1
+    }
+
+    fun isAvailableToDecrease(): Boolean {
+        val currentDurationIndex = SessionConfig.availableDurations().indexOf(durationChosenByUser)
+        return currentDurationIndex > 0
     }
 }

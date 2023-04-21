@@ -17,7 +17,7 @@ import skustra.focusflow.ui.localization.LocalizationManager
 
 @Preview
 @Composable
-fun SkipBreaksCheckBox(viewModel: SessionViewModel = viewModel()) {
+fun SkipBreaksComposable(viewModel: SessionViewModel = viewModel()) {
     val checkedState = remember { mutableStateOf(false) }
     Row(
         modifier = Modifier.noRippleClickable{
