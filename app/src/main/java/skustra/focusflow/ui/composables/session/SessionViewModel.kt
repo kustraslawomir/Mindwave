@@ -13,7 +13,8 @@ import skustra.focusflow.data.timer.TimerState
 import skustra.focusflow.domain.logs.AppLog
 import skustra.focusflow.domain.usecase.resources.DrawableProvider
 import skustra.focusflow.domain.usecase.session.SessionConfig
-import skustra.focusflow.domain.usecase.session.Timer
+import skustra.focusflow.domain.usecase.session.SessionCreator
+import skustra.focusflow.domain.usecase.timer.Timer
 import javax.inject.Inject
 
 @HiltViewModel
@@ -25,7 +26,7 @@ class SessionViewModel @Inject constructor(
     private val _sessionMutableStateFlow = MutableSharedFlow<Session>()
     val sessionStateFlow: SharedFlow<Session> = _sessionMutableStateFlow
 
-    var currentSessionState = SessionConfig.generate()
+    var currentSessionState = SessionCreator.generate()
 
     private var durationChosenByUser = SessionConfig.DEFAULT_DURATION
     private var skipBreaks = false
@@ -58,20 +59,20 @@ class SessionViewModel @Inject constructor(
     fun updateDuration(durationChosenByUser: Minute) {
         this.durationChosenByUser = durationChosenByUser
         viewModelScope.launch {
-            emitSession(SessionConfig.generate(durationChosenByUser, skipBreaks))
+            emitSession(SessionCreator.generate(durationChosenByUser, skipBreaks))
         }
     }
 
     fun skipBreaks(skipBreaks: Boolean) {
         this.skipBreaks = skipBreaks
         viewModelScope.launch {
-            emitSession(SessionConfig.generate(durationChosenByUser, skipBreaks))
+            emitSession(SessionCreator.generate(durationChosenByUser, skipBreaks))
         }
     }
 
     fun startSession() {
         viewModelScope.launch {
-            currentSessionState = SessionConfig.generate(durationChosenByUser, skipBreaks)
+            currentSessionState = SessionCreator.generate(durationChosenByUser, skipBreaks)
             timer.start(currentSessionState.currentSessionPart().sessionPartDuration, this)
         }
     }

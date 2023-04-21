@@ -7,8 +7,8 @@ import dagger.hilt.android.components.ViewModelComponent
 import dagger.hilt.android.scopes.ViewModelScoped
 import skustra.focusflow.domain.usecase.resources.DrawableProviderImpl
 import skustra.focusflow.domain.usecase.resources.DrawableProvider
-import skustra.focusflow.domain.usecase.session.Timer
-import skustra.focusflow.domain.usecase.session.TimerImpl
+import skustra.focusflow.domain.usecase.timer.Timer
+import skustra.focusflow.domain.usecase.timer.TimerImpl
 
 @Module
 @InstallIn(ViewModelComponent::class)
