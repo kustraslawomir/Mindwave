@@ -18,7 +18,7 @@ class SessionConfig {
             duration: Minute = DEFAULT_DURATION,
             skipBreaks: Boolean = false
         ): Session {
-            if (duration <= WORK_DURATION) {
+            if (skipBreaks || duration <= WORK_DURATION) {
                 return Session(
                     parts = listOf(
                         createSessionPart(duration, SessionPartType.Work)
@@ -30,7 +30,7 @@ class SessionConfig {
             val parts = mutableListOf<SessionPart>()
             for (i in duration downTo 0 step WORK_DURATION) {
                 parts.add(createSessionPart(WORK_DURATION, SessionPartType.Work))
-                if (!skipBreaks && i > 0) {
+                if (i > 0) {
                     parts.add(createSessionPart(BREAK_DURATION, SessionPartType.Break))
                 }
             }
