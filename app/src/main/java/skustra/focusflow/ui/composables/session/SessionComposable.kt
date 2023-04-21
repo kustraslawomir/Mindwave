@@ -10,6 +10,7 @@ import androidx.compose.ui.Modifier
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import androidx.lifecycle.viewmodel.compose.viewModel
 import skustra.focusflow.data.session.SessionState
+import skustra.focusflow.domain.usecase.session.SessionConfig
 import skustra.focusflow.ui.composables.session.arc.SessionFocusArc
 import skustra.focusflow.ui.composables.session.panel.SessionPanelComposable
 
@@ -18,7 +19,8 @@ fun SessionComposable(viewModel: SessionViewModel = viewModel()) {
 
     val sessionState by viewModel
         .sessionStateFlow
-        .collectAsStateWithLifecycle(initialValue = SessionState.draft())
+        .collectAsStateWithLifecycle(initialValue = viewModel.currentSessionState)
+
 
     Column(
         modifier = Modifier.fillMaxSize(),

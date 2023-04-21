@@ -7,8 +7,8 @@ import skustra.focusflow.domain.usecase.session.SessionConfig
 import java.util.UUID
 
 data class SessionState(
-    var currentTimerState: TimerState,
-    var currentPartCounter: Int,
+    var currentTimerState: TimerState = TimerState.Idle,
+    var currentPartCounter: Int = 0,
     val parts: List<SessionPart>
 ) {
     fun currentSessionPart(): SessionPart {
@@ -32,29 +32,6 @@ data class SessionState(
 
     fun sessionDuration(): Int {
         return parts.sumOf { it.sessionPartDuration }
-    }
-
-    companion object {
-        fun draft(): SessionState {
-            return SessionState(
-                currentTimerState = TimerState.Idle,
-                currentPartCounter = 0,
-                parts = listOf(
-                    SessionPart(
-                        type = SessionPartType.Work,
-                        sessionPartDuration = 27
-                    ),
-                    SessionPart(
-                        type = SessionPartType.Break,
-                        sessionPartDuration = 5
-                    ),
-                    SessionPart(
-                        type = SessionPartType.Work,
-                        sessionPartDuration = 28
-                    ),
-                )
-            )
-        }
     }
 }
 

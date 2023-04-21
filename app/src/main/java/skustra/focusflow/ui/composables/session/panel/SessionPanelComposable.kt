@@ -23,7 +23,7 @@ fun SessionPanelComposable(viewModel: SessionViewModel = viewModel()) {
 
     val sessionState by viewModel
         .sessionStateFlow
-        .collectAsStateWithLifecycle(initialValue = SessionState.draft())
+        .collectAsStateWithLifecycle(viewModel.currentSessionState)
 
     when (sessionState.currentTimerState) {
         TimerState.Completed, TimerState.Idle -> CreateSessionButton()
@@ -36,7 +36,7 @@ fun SessionPanelComposable(viewModel: SessionViewModel = viewModel()) {
 private fun CreateSessionButton(viewModel: SessionViewModel = viewModel()) {
     CircleButton(
         onClick = {
-            viewModel.createSession(SessionState.draft())
+            viewModel.createSession()
         },
         icon = viewModel.resourceManager.getPlayIcon()
     )

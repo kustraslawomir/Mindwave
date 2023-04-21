@@ -6,11 +6,13 @@ import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.flow.MutableSharedFlow
 import kotlinx.coroutines.flow.SharedFlow
 import kotlinx.coroutines.launch
+import skustra.focusflow.data.alias.Minute
 import skustra.focusflow.data.exceptions.SessionAlreadyCompletedException
 import skustra.focusflow.data.session.SessionState
 import skustra.focusflow.data.timer.TimerState
 import skustra.focusflow.domain.logs.AppLog
 import skustra.focusflow.domain.usecase.resources.DrawableProvider
+import skustra.focusflow.domain.usecase.session.SessionConfig
 import skustra.focusflow.domain.usecase.session.Timer
 import javax.inject.Inject
 
@@ -20,15 +22,15 @@ class SessionViewModel @Inject constructor(
     val resourceManager: DrawableProvider
 ) : ViewModel() {
 
-    private val _sessionMutableStateFlow  = MutableSharedFlow<SessionState>()
+    private val _sessionMutableStateFlow = MutableSharedFlow<SessionState>()
     val sessionStateFlow: SharedFlow<SessionState> = _sessionMutableStateFlow
 
-    private var currentSessionState = SessionState.draft()
+    var currentSessionState = SessionConfig.generate()
+    private var durationChosenByUser = SessionConfig.DEFAULT_DURATION
 
     init {
         viewModelScope.launch {
             timer.getCurrentTimerState().collect { timerState ->
-
                 if (timerState == TimerState.Completed) {
                     try {
                         currentSessionState.activateTheNextPartOfTheSession()
@@ -46,15 +48,19 @@ class SessionViewModel @Inject constructor(
                 }
 
                 emiTimerState(timerState)
-                AppLog.debugSession(currentSessionState)
+                AppLog.debugSession(currentSessionState.deepCopy())
             }
         }
     }
 
-    fun createSession(sessionState: SessionState) {
+    fun updateDuration(duration: Minute) {
+        durationChosenByUser = duration
+    }
+
+    fun createSession() {
         viewModelScope.launch {
-            currentSessionState = sessionState
-            timer.start(sessionState.currentSessionPart().sessionPartDuration, this)
+            currentSessionState = SessionConfig.generate(durationChosenByUser)
+            timer.start(currentSessionState.currentSessionPart().sessionPartDuration, this)
         }
     }
 
