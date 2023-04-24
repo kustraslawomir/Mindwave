@@ -10,34 +10,27 @@ class SessionConfig {
             return if (BuildConfig.DEBUG) 1000L else 1000L * 60L
         }
 
+        fun minimalDurationToIncludeBreaks() = 30
+
         fun availableDurations(): List<Minute> {
-            return listOf(
+            val mutableList = mutableListOf(
                 10,
                 15,
                 20,
-                25,
-                30,
-                45,
-                60,
-                75,
-                90,
-                105,
-                120,
-                135,
-                150,
-                165,
-                180,
-                195,
-                210,
-                225,
-                240
+                25
             )
+            for (i in 30..SESSION_MAX_DURATION_LIMIT step SESSION_DURATION_STEP) {
+                mutableList.add(i)
+            }
+            return mutableList
         }
 
-        fun minimalDurationToIncludeBreaks() = 30
-
         val DEFAULT_DURATION: Minute = availableDurations()[3]
-        const val BREAK_DURATION: Minute = 5
+
         const val WORK_DURATION: Minute = 25
+        const val BREAK_DURATION: Minute = 5
+
+        private const val SESSION_DURATION_STEP: Minute = 15
+        private const val SESSION_MAX_DURATION_LIMIT: Minute = 240
     }
 }

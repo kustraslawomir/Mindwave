@@ -53,17 +53,7 @@ class SessionCreator {
         )
 
         private fun countBreaks(duration: Minute): Int {
-            return if (duration <= SessionConfig.minimalDurationToIncludeBreaks())
-                0
-            else if (duration <= 60) {
-                1
-            } else if (duration <= 100) {
-                2
-            } else if (duration <= 135) {
-                3
-            } else if (duration <= 180) {
-                4
-            } else 5
+            return duration / SessionConfig.minimalDurationToIncludeBreaks()
         }
     }
 }
