@@ -3,6 +3,7 @@ package skustra.focusflow.ui.composables.session.arc
 import androidx.compose.animation.core.animateFloatAsState
 import androidx.compose.animation.core.tween
 import androidx.compose.foundation.Canvas
+import androidx.compose.foundation.isSystemInDarkTheme
 import androidx.compose.foundation.layout.*
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.runtime.Composable
@@ -24,7 +25,6 @@ import androidx.compose.ui.unit.dp
 import skustra.focusflow.data.session.Session
 import skustra.focusflow.data.timer.TimerState
 import skustra.focusflow.domain.usecase.session.SessionConfig
-import skustra.focusflow.domain.usecase.session.SessionCreator
 
 @Composable
 fun SessionFocusArc(
@@ -50,7 +50,7 @@ fun SessionFocusArc(
 
     val primaryColor = MaterialTheme.colorScheme.primary
     val backgroundColor = MaterialTheme.colorScheme.background
-
+    val shadowColor = if (isSystemInDarkTheme()) Color.White else Color.Black
     val configuration = LocalConfiguration.current
     val composableSize = with(LocalContext.current.resources.displayMetrics) {
         configuration.screenWidthDp.dp.minus(80.dp)
@@ -63,7 +63,7 @@ fun SessionFocusArc(
         ) {
 
             drawOutlineIndicator(animation, primaryColor, indicatorThickness, composableSize)
-            drawShadow(Color.Black)
+            drawShadow(shadowColor)
             drawShadowForeground(composableSize, indicatorThickness, backgroundColor)
         }
 
@@ -78,8 +78,6 @@ fun SessionFocusArc(
             ChangeSessionDurationComposable(sessionState = sessionState)
         }
     }
-
-    Spacer(modifier = Modifier.height(32.dp))
 }
 
 private fun DrawScope.drawOutlineIndicator(

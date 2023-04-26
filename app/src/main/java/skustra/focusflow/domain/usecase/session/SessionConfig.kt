@@ -2,6 +2,8 @@ package skustra.focusflow.domain.usecase.session
 
 import skustra.focusflow.BuildConfig
 import skustra.focusflow.data.alias.Minute
+import java.time.LocalDateTime
+import java.time.ZoneOffset
 
 class SessionConfig {
     companion object {
@@ -22,6 +24,10 @@ class SessionConfig {
             for (i in 30..SESSION_MAX_DURATION_LIMIT step SESSION_DURATION_STEP) {
                 mutableList.add(i)
             }
+
+            val test : LocalDateTime = LocalDateTime.now()
+            test.atOffset(ZoneOffset.UTC)
+
             return mutableList
         }
 
