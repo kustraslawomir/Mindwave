@@ -12,13 +12,15 @@ import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import androidx.lifecycle.viewmodel.compose.viewModel
 import skustra.focusflow.ui.composables.session.arc.SessionFocusArc
 import skustra.focusflow.ui.composables.session.panel.SessionPanelComposable
+import timber.log.Timber
 
 @Composable
 fun SessionComposable(viewModel: SessionViewModel = viewModel()) {
 
     val sessionState by viewModel
         .sessionStateFlow
-        .collectAsStateWithLifecycle(initialValue = viewModel.currentSessionState)
+        .collectAsStateWithLifecycle(viewModel.currentSessionState)
+    Timber.w("Received timer state: ${sessionState.currentTimerState}")
 
     Box(
         modifier = Modifier

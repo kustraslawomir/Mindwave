@@ -8,8 +8,8 @@ import java.time.ZoneOffset
 class SessionConfig {
     companion object {
 
-        fun tickInterval(): Long {
-             return if (BuildConfig.DEBUG) 1000L else 1000L * 60L
+        fun tickInterval(debugMode : Boolean = BuildConfig.DEBUG): Long {
+             return if (debugMode) 1000L else 1000L * 60L
         }
 
         fun minimalDurationToIncludeBreaks() = 30

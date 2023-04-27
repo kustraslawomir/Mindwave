@@ -37,7 +37,7 @@ class TimerImpl : Timer {
     private fun runInterval(scope: CoroutineScope) {
         intervalJob = scope.launchPeriodicAsync {
             scope.launch {
-                if (isPaused) {
+                if (!isActive) {
                     return@launch
                 }
 
@@ -83,7 +83,7 @@ class TimerImpl : Timer {
         )
     }
 
-    override fun getCurrentTimerState(): Flow<TimerState> {
+    override fun getCurrentTimerState(): StateFlow<TimerState> {
         return timerState
     }
 

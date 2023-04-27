@@ -25,6 +25,7 @@ import androidx.compose.ui.unit.dp
 import skustra.focusflow.data.model.session.Session
 import skustra.focusflow.data.model.timer.TimerState
 import skustra.focusflow.domain.usecase.session.SessionConfig
+import kotlin.time.Duration.Companion.seconds
 
 @Composable
 fun SessionFocusArc(
@@ -40,7 +41,7 @@ fun SessionFocusArc(
 
     val animation = animateFloatAsState(
         targetValue = progress, animationSpec = tween(
-            durationMillis = SessionConfig.tickInterval().toInt()
+            durationMillis = 3000
         )
     )
 
