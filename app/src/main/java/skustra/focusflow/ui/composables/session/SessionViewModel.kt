@@ -20,14 +20,11 @@ import skustra.focusflow.ui.extensions.vibratePhone
 import timber.log.Timber
 import javax.inject.Inject
 
-const val TIMER_STATE = "timer_state"
-
 @HiltViewModel
 class SessionViewModel @Inject constructor(
     private val timer: Timer,
     val resourceManager: DrawableProvider,
-    private val application: Application,
-    private val savedStateHandle: SavedStateHandle
+    private val application: Application
 ) : ViewModel() {
 
     var currentSessionState = SessionCreator.generate()
@@ -47,14 +44,6 @@ class SessionViewModel @Inject constructor(
                 if (timerState is TimerState) {
                     updateTimerState(timerState)
                 }
-            }
-        }
-
-        viewModelScope.launch {
-            val savedTimerState: TimerState? = savedStateHandle[TIMER_STATE]
-            Timber.w("Cached timer state: $savedTimerState")
-            if (savedTimerState != null) {
-                updateTimerState(savedTimerState)
             }
         }
     }
@@ -156,10 +145,9 @@ class SessionViewModel @Inject constructor(
 
     private suspend fun emiTimerState(state: TimerState) {
         Timber.d("Emit: $state ${state is TimerState.Completed}")
-        //savedStateHandle[TIMER_STATE] = state
         _sessionMutableStateFlow.emit(currentSessionState.apply {
             currentTimerState = state
-        }.deepCopy())
+        }.copy())
     }
 
     private suspend fun emitSession(session: Session) {
