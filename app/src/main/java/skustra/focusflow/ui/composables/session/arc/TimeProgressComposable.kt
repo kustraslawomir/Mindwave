@@ -8,8 +8,8 @@ import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.unit.dp
-import skustra.focusflow.data.session.Session
-import skustra.focusflow.data.timer.TimerState
+import skustra.focusflow.data.model.session.Session
+import skustra.focusflow.data.model.timer.TimerState
 import skustra.focusflow.ui.localization.LocalizationKey
 import skustra.focusflow.ui.localization.LocalizationManager
 

@@ -2,9 +2,9 @@ package skustra.focusflow.domain.usecase.timer
 
 import kotlinx.coroutines.*
 import kotlinx.coroutines.flow.*
-import skustra.focusflow.data.alias.Minute
-import skustra.focusflow.data.timer.Progress
-import skustra.focusflow.data.timer.TimerState
+import skustra.focusflow.data.model.alias.Minute
+import skustra.focusflow.data.model.timer.Progress
+import skustra.focusflow.data.model.timer.TimerState
 import skustra.focusflow.domain.usecase.interval.launchPeriodicAsync
 
 class TimerImpl : Timer {

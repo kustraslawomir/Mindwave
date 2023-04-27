@@ -1,8 +1,8 @@
-package skustra.focusflow.data.session
+package skustra.focusflow.data.model.session
 
-import skustra.focusflow.data.alias.Minute
-import skustra.focusflow.data.exceptions.SessionAlreadyCompletedException
-import skustra.focusflow.data.timer.TimerState
+import skustra.focusflow.data.model.alias.Minute
+import skustra.focusflow.data.model.exceptions.SessionAlreadyCompletedException
+import skustra.focusflow.data.model.timer.TimerState
 import java.util.UUID
 
 data class Session(

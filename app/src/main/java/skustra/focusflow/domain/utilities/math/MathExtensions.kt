@@ -1,4 +1,4 @@
-package skustra.focusflow.domain.math
+package skustra.focusflow.domain.utilities.math
 
 infix fun Int.percentOf(value: Int): Float {
     return if (this == 0) 0f

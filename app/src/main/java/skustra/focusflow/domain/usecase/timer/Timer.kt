@@ -2,8 +2,8 @@ package skustra.focusflow.domain.usecase.timer
 
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.flow.Flow
-import skustra.focusflow.data.alias.Minute
-import skustra.focusflow.data.timer.TimerState
+import skustra.focusflow.data.model.alias.Minute
+import skustra.focusflow.data.model.timer.TimerState
 
 interface Timer {
 

@@ -1,4 +1,4 @@
-package skustra.focusflow.data.timer
+package skustra.focusflow.data.model.timer
 
 
 sealed class TimerState {

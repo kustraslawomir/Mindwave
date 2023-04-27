@@ -22,8 +22,8 @@ import androidx.compose.ui.platform.LocalConfiguration
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.unit.Dp
 import androidx.compose.ui.unit.dp
-import skustra.focusflow.data.session.Session
-import skustra.focusflow.data.timer.TimerState
+import skustra.focusflow.data.model.session.Session
+import skustra.focusflow.data.model.timer.TimerState
 import skustra.focusflow.domain.usecase.session.SessionConfig
 
 @Composable

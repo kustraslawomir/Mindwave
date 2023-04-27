@@ -1,9 +1,9 @@
 package skustra.focusflow.domain.usecase.session
 
-import skustra.focusflow.data.alias.Minute
-import skustra.focusflow.data.session.Session
-import skustra.focusflow.data.session.SessionPart
-import skustra.focusflow.data.session.SessionPartType
+import skustra.focusflow.data.model.alias.Minute
+import skustra.focusflow.data.model.session.Session
+import skustra.focusflow.data.model.session.SessionPart
+import skustra.focusflow.data.model.session.SessionPartType
 import timber.log.Timber
 
 class SessionCreator {

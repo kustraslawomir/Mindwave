@@ -1,6 +1,6 @@
-package skustra.focusflow.domain.logs
+package skustra.focusflow.domain.utilities.logs
 
-import skustra.focusflow.data.session.Session
+import skustra.focusflow.data.model.session.Session
 import timber.log.Timber
 
 object AppLog {

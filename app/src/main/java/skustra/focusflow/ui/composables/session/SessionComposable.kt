@@ -20,7 +20,6 @@ fun SessionComposable(viewModel: SessionViewModel = viewModel()) {
         .sessionStateFlow
         .collectAsStateWithLifecycle(initialValue = viewModel.currentSessionState)
 
-
     Box(
         modifier = Modifier
             .fillMaxSize()
