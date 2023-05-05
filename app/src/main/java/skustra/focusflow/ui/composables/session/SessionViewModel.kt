@@ -3,7 +3,6 @@ package skustra.focusflow.ui.composables.session
 import android.app.Application
 import android.content.Intent
 import androidx.core.content.ContextCompat
-import androidx.lifecycle.SavedStateHandle
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import dagger.hilt.android.lifecycle.HiltViewModel
@@ -19,7 +18,7 @@ import skustra.focusflow.domain.usecase.session.SessionCreator
 import skustra.focusflow.domain.usecase.timer.Timer
 import skustra.focusflow.domain.utilities.logs.AppLog
 import skustra.focusflow.ui.extensions.vibratePhone
-import skustra.focusflow.ui.service.SessionService
+import skustra.focusflow.ui.service.SessionForegroundService
 import timber.log.Timber
 import javax.inject.Inject
 
@@ -93,7 +92,7 @@ class SessionViewModel @Inject constructor(
 
             ContextCompat.startForegroundService(
                 application,
-                Intent(application, SessionService::class.java)
+                Intent(application, SessionForegroundService::class.java)
             )
         }
     }

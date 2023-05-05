@@ -28,7 +28,7 @@
             </intent-filter>
         </activity>
 
-        <service android:name=".ui.service.SessionService" />
+        <service android:name=".ui.service.SessionForegroundService" />
 
     </application>
 

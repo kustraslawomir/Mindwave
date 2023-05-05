@@ -11,7 +11,7 @@ import skustra.focusflow.ui.localization.LocalizationKey
 import skustra.focusflow.ui.localization.LocalizationManager
 import java.util.*
 
-class ServiceNotification(private val context: Context) {
+class SessionServiceNotificationManager(private val context: Context) {
 
     private val notificationManager = context
         .getSystemService(Context.NOTIFICATION_SERVICE) as NotificationManager
