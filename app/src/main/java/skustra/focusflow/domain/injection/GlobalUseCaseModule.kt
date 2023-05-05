@@ -8,9 +8,9 @@ import dagger.hilt.android.qualifiers.ApplicationContext
 import dagger.hilt.components.SingletonComponent
 import skustra.focusflow.domain.usecase.resources.DrawableProvider
 import skustra.focusflow.domain.usecase.resources.DrawableProviderImpl
-import skustra.focusflow.domain.usecase.timer.SessionStateEmitter
-import skustra.focusflow.domain.usecase.timer.SessionStateEmitterImpl
-import skustra.focusflow.ui.composables.session.SessionStateHandler
+import skustra.focusflow.domain.usecase.sessionstate.SessionStateEmitter
+import skustra.focusflow.domain.usecase.sessionstate.SessionStateEmitterImpl
+import skustra.focusflow.domain.usecase.sessionstate.SessionStateHandler
 import skustra.focusflow.ui.notification.SessionServiceNotificationManager
 import skustra.focusflow.ui.notification.SessionServiceNotificationManagerImpl
 import javax.inject.Singleton

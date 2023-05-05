@@ -11,6 +11,7 @@ import skustra.focusflow.data.model.alias.Minute
 import skustra.focusflow.domain.usecase.resources.DrawableProvider
 import skustra.focusflow.domain.usecase.session.SessionConfig
 import skustra.focusflow.domain.usecase.session.SessionCreator
+import skustra.focusflow.domain.usecase.sessionstate.SessionStateHandler
 import skustra.focusflow.ui.service.SessionForegroundService
 import skustra.focusflow.ui.service.SessionForegroundService.Companion.DURATION_CHOSEN_BY_USER
 import skustra.focusflow.ui.service.SessionForegroundService.Companion.SKIP_BREAKS

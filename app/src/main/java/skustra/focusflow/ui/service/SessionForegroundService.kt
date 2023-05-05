@@ -5,7 +5,7 @@ import android.content.Intent
 import dagger.hilt.android.AndroidEntryPoint
 import kotlinx.coroutines.*
 import skustra.focusflow.data.model.timer.TimerState
-import skustra.focusflow.ui.composables.session.SessionStateHandler
+import skustra.focusflow.domain.usecase.sessionstate.SessionStateHandler
 import skustra.focusflow.ui.notification.SessionServiceNotificationManager
 import timber.log.Timber
 import javax.inject.Inject

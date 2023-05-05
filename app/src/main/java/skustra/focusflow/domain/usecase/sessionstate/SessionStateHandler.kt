@@ -1,4 +1,4 @@
-package skustra.focusflow.ui.composables.session
+package skustra.focusflow.domain.usecase.sessionstate
 
 import android.content.Context
 import android.content.Intent
@@ -11,8 +11,6 @@ import skustra.focusflow.data.model.exceptions.SessionAlreadyCompletedException
 import skustra.focusflow.data.model.session.Session
 import skustra.focusflow.data.model.timer.TimerState
 import skustra.focusflow.domain.usecase.session.SessionCreator
-import skustra.focusflow.domain.usecase.timer.SessionStateEmitter
-import skustra.focusflow.domain.usecase.timer.SessionStateEmitterImpl
 import skustra.focusflow.domain.utilities.logs.AppLog
 import skustra.focusflow.ui.extensions.vibratePhone
 import skustra.focusflow.ui.service.SessionForegroundService
@@ -22,7 +20,7 @@ class SessionStateHandler(private val applicationContext: Context) {
 
     private val stateEmitter: SessionStateEmitter = SessionStateEmitterImpl()
 
-    var currentSessionState = SessionCreator.generate()
+    private var currentSessionState = SessionCreator.generate()
     private val _sessionMutableStateFlow = MutableStateFlow(currentSessionState)
     val sessionStateFlow: StateFlow<Session> = _sessionMutableStateFlow
 

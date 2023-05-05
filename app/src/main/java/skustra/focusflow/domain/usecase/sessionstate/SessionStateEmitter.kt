@@ -1,4 +1,4 @@
-package skustra.focusflow.domain.usecase.timer
+package skustra.focusflow.domain.usecase.sessionstate
 
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.flow.StateFlow
