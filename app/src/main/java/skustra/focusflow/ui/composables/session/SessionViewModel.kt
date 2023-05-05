@@ -1,6 +1,8 @@
 package skustra.focusflow.ui.composables.session
 
 import android.app.Application
+import android.content.Intent
+import androidx.core.content.ContextCompat
 import androidx.lifecycle.SavedStateHandle
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
@@ -17,6 +19,7 @@ import skustra.focusflow.domain.usecase.session.SessionCreator
 import skustra.focusflow.domain.usecase.timer.Timer
 import skustra.focusflow.domain.utilities.logs.AppLog
 import skustra.focusflow.ui.extensions.vibratePhone
+import skustra.focusflow.ui.service.SessionService
 import timber.log.Timber
 import javax.inject.Inject
 
@@ -82,9 +85,15 @@ class SessionViewModel @Inject constructor(
     fun startSession() {
         viewModelScope.launch {
             currentSessionState = SessionCreator.generate(durationChosenByUser, skipBreaks)
+            Timber.d("NOTIFICATION $timer")
             timer.start(
                 currentSessionState.currentSessionPart().sessionPartDuration,
                 viewModelScope
+            )
+
+            ContextCompat.startForegroundService(
+                application,
+                Intent(application, SessionService::class.java)
             )
         }
     }

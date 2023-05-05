@@ -41,6 +41,10 @@ class TimerImpl : Timer {
                     return@launch
                 }
 
+                if(isPaused){
+                    return@launch
+                }
+
                 currentProgress -= 1
                 if (sessionEnded()) {
                     cancelInterval()

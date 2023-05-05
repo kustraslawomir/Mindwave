@@ -17,7 +17,9 @@ object LocalizationManager {
             LocalizationKey.NoBreakIncluded to "Nie będziesz mieć żadnych przerw",
             LocalizationKey.SingleBreak to "Będziesz mieć 1 przerwę",
             LocalizationKey.BreakCount to "Liczba przerw:",
-            LocalizationKey.SkipBreaks to "Pomiń przerwy"
+            LocalizationKey.SkipBreaks to "Pomiń przerwy",
+            LocalizationKey.SessionInProgress to "Twoja sesja jest w toku",
+            LocalizationKey.SessionInProgressDescription to "Utrzymaj skupienie podczas pracy"
         ),
         SupportedLanguage.English to mapOf(
             LocalizationKey.Remaining to "Remaining",
@@ -31,7 +33,9 @@ object LocalizationManager {
             LocalizationKey.NoBreakIncluded to "You won't have any breaks",
             LocalizationKey.SingleBreak to "You will have 1 break",
             LocalizationKey.BreakCount to "Number of breaks:",
-            LocalizationKey.SkipBreaks to "Skip breaks"
+            LocalizationKey.SkipBreaks to "Skip breaks",
+            LocalizationKey.SessionInProgress to "Your session is in progress",
+            LocalizationKey.SessionInProgressDescription to "Stay focused while you work"
         )
     )
 

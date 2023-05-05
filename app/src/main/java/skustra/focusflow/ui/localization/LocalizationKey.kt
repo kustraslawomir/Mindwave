@@ -13,5 +13,7 @@ sealed class LocalizationKey {
    object SingleBreak : LocalizationKey()
    object BreakCount : LocalizationKey()
    object SkipBreaks : LocalizationKey()
+   object SessionInProgress : LocalizationKey()
+   object SessionInProgressDescription : LocalizationKey()
 
 }
