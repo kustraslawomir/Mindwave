@@ -18,9 +18,8 @@ import timber.log.Timber
 fun SessionComposable(viewModel: SessionViewModel = viewModel()) {
 
     val sessionState by viewModel
-        .sessionStateFlow
-        .collectAsStateWithLifecycle(viewModel.currentSessionState)
-    Timber.w("Received timer state: ${sessionState.currentTimerState}")
+        .getSessionStateFlow()
+        .collectAsStateWithLifecycle(viewModel.getCurrentSessionState())
 
     Box(
         modifier = Modifier

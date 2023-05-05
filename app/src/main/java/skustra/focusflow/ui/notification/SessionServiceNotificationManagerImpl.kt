@@ -35,7 +35,7 @@ class SessionServiceNotificationManagerImpl(
     override fun updateInPausedState() {
         notificationManager.notify(
             notificationId, getNotification(
-                LocalizationManager.getText(LocalizationKey.Break)
+                LocalizationManager.getText(LocalizationKey.SessionPaused)
             )
         )
     }

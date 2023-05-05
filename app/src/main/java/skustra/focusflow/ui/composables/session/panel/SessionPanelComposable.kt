@@ -1,5 +1,6 @@
 package skustra.focusflow.ui.composables.session.panel
 
+import android.content.Context
 import androidx.compose.foundation.background
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.*
@@ -14,6 +15,7 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.unit.dp
 import androidx.lifecycle.viewmodel.compose.viewModel
@@ -27,8 +29,9 @@ import skustra.focusflow.ui.theme.ButtonColor
 fun SessionPanelComposable(viewModel: SessionViewModel = viewModel()) {
 
     val sessionState by viewModel
-        .sessionStateFlow
-        .collectAsState(viewModel.currentSessionState)
+        .getSessionStateFlow()
+        .collectAsState(viewModel.getCurrentSessionState())
+
 
     when (sessionState.currentTimerState) {
         TimerState.Completed, TimerState.Idle -> {
@@ -51,16 +54,17 @@ fun SessionPanelComposable(viewModel: SessionViewModel = viewModel()) {
 
 @Composable
 private fun StartSessionComposable(viewModel: SessionViewModel = viewModel()) {
+    val context = LocalContext.current
     Box(
         modifier = Modifier
             .padding(horizontal = 16.dp, vertical = 8.dp)
             .height(48.dp)
             .clip(shape = RoundedCornerShape(size = 12.dp))
             .background(color = ButtonColor)
-            .clickable { viewModel.startSession() }
+            .clickable { viewModel.startSession(context) }
     ) {
         Row(verticalAlignment = Alignment.CenterVertically) {
-            IconButton(onClick = { viewModel.startSession() }) {
+            IconButton(onClick = { viewModel.startSession(context) }) {
                 Icon(
                     painter = painterResource(id = viewModel.resourceManager.getPlayIcon()),
                     contentDescription = "todo",

@@ -15,5 +15,6 @@ sealed class LocalizationKey {
    object SkipBreaks : LocalizationKey()
    object SessionInProgress : LocalizationKey()
    object SessionInProgressDescription : LocalizationKey()
+   object SessionPaused : LocalizationKey()
 
 }

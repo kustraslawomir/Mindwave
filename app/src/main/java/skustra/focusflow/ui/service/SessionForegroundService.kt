@@ -6,50 +6,73 @@ import dagger.hilt.android.AndroidEntryPoint
 import kotlinx.coroutines.MainScope
 import kotlinx.coroutines.launch
 import skustra.focusflow.data.model.timer.TimerState
-import skustra.focusflow.domain.usecase.timer.Timer
+import skustra.focusflow.ui.composables.session.TimerStateHandler
 import skustra.focusflow.ui.notification.SessionServiceNotificationManager
-import skustra.focusflow.ui.notification.SessionServiceNotificationManagerImpl
+import timber.log.Timber
 import javax.inject.Inject
 
 @AndroidEntryPoint
-class SessionForegroundService : Service() {
+class SessionForegroundService @Inject constructor() : Service() {
+
+    private val serviceScope = MainScope()
 
     @Inject
-    lateinit var timer: Timer
+    lateinit var timerStateHandler: TimerStateHandler
 
     @Inject
     lateinit var sessionServiceNotificationManager: SessionServiceNotificationManager
 
-    private val serviceScope = MainScope()
-
-    override fun onBind(intent: Intent?) = null
-
-    override fun onCreate() {
-        serviceScope.launch {
-            timer.getCurrentTimerState().collect { timerState ->
-                when (timerState) {
-                    is TimerState.InProgress -> sessionServiceNotificationManager.updateInProgressState(
-                        timerState
-                    )
-                    is TimerState.Paused -> sessionServiceNotificationManager.updateInPausedState()
-                    else -> stopForeground(STOP_FOREGROUND_REMOVE)
-                }
-            }
+    override fun onStartCommand(intent: Intent?, flags: Int, startId: Int): Int {
+        timerStateHandler.apply {
+            init(serviceScope)
+            startSession(
+                getDuration(intent), shouldSkipBreaks(intent)
+            )
         }
-
-        super.onCreate()
+        return START_STICKY
     }
 
-    override fun onStartCommand(intent: Intent?, flags: Int, startId: Int): Int {
+    override fun onCreate() {
+        super.onCreate()
+
         startForeground(
             sessionServiceNotificationManager.getNotificationId(),
             sessionServiceNotificationManager.createNotification()
         )
-        return START_STICKY
+
+        serviceScope.launch {
+            timerStateHandler.sessionStateFlow.collect { session ->
+                when (val state = session.currentTimerState) {
+                    is TimerState.InProgress -> {
+                        sessionServiceNotificationManager.updateInProgressState(state)
+                    }
+                    is TimerState.Paused -> {
+                        sessionServiceNotificationManager.updateInPausedState()
+                    }
+                    else -> {
+                        //ignore
+                    }
+                }
+            }
+        }
     }
 
+    private fun shouldSkipBreaks(intent: Intent?): Boolean {
+        return intent?.extras?.getBoolean(SKIP_BREAKS) ?: throw IllegalArgumentException()
+    }
+
+    private fun getDuration(intent: Intent?) =
+        intent?.extras?.getInt(DURATION_CHOSEN_BY_USER) ?: throw IllegalArgumentException()
+
     override fun onDestroy() {
+        Timber.e("Destroyed session service")
         super.onDestroy()
-        stopForeground(STOP_FOREGROUND_REMOVE)
+    }
+
+    override fun onBind(intent: Intent?) = null
+
+    companion object {
+        const val DURATION_CHOSEN_BY_USER = "durationChosenByUser"
+        const val SKIP_BREAKS = "skipBreaks"
     }
 }

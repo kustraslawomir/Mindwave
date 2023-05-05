@@ -19,7 +19,8 @@ object LocalizationManager {
             LocalizationKey.BreakCount to "Liczba przerw:",
             LocalizationKey.SkipBreaks to "Pomiń przerwy",
             LocalizationKey.SessionInProgress to "Twoja sesja jest w toku",
-            LocalizationKey.SessionInProgressDescription to "Utrzymaj skupienie podczas pracy"
+            LocalizationKey.SessionInProgressDescription to "Utrzymaj skupienie podczas pracy",
+            LocalizationKey.SessionPaused to "Sesja wstrzymana"
         ),
         SupportedLanguage.English to mapOf(
             LocalizationKey.Remaining to "Remaining",
@@ -35,7 +36,8 @@ object LocalizationManager {
             LocalizationKey.BreakCount to "Number of breaks:",
             LocalizationKey.SkipBreaks to "Skip breaks",
             LocalizationKey.SessionInProgress to "Your session is in progress",
-            LocalizationKey.SessionInProgressDescription to "Stay focused while you work"
+            LocalizationKey.SessionInProgressDescription to "Stay focused while you work",
+            LocalizationKey.SessionPaused to "Session paused"
         )
     )
 

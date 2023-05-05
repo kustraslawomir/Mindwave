@@ -1,13 +1,15 @@
 package skustra.focusflow.domain.usecase.timer
 
+import android.content.Intent
 import kotlinx.coroutines.*
 import kotlinx.coroutines.flow.*
 import skustra.focusflow.data.model.alias.Minute
 import skustra.focusflow.data.model.timer.Progress
 import skustra.focusflow.data.model.timer.TimerState
 import skustra.focusflow.domain.usecase.interval.launchPeriodicAsync
+import skustra.focusflow.ui.service.SessionForegroundService
 
-class TimerImpl : Timer {
+class TimerStateEmitterImpl : TimerStateEmitter {
 
     private val mutableTimerState = MutableStateFlow<TimerState>(TimerState.Idle)
     private val timerState: StateFlow<TimerState> = mutableTimerState
@@ -17,19 +19,19 @@ class TimerImpl : Timer {
     private var isPaused = false
     private var intervalJob: Deferred<Unit>? = null
 
-    override suspend fun start(sessionDuration: Minute, scope: CoroutineScope) {
+    override fun start(sessionDuration: Minute, scope: CoroutineScope) {
         this.duration = sessionDuration
         this.currentProgress = sessionDuration
-
-        mutableTimerState.emit(
-            TimerState.InProgress(
-                progress = Progress(
-                    sessionDuration = sessionDuration,
-                    minutesLeft = currentProgress
+        scope.launch {
+            mutableTimerState.emit(
+                TimerState.InProgress(
+                    progress = Progress(
+                        sessionDuration = sessionDuration,
+                        minutesLeft = currentProgress
+                    )
                 )
             )
-        )
-
+        }
         cancelInterval()
         runInterval(scope)
     }
@@ -41,7 +43,7 @@ class TimerImpl : Timer {
                     return@launch
                 }
 
-                if(isPaused){
+                if (isPaused) {
                     return@launch
                 }
 
@@ -87,7 +89,7 @@ class TimerImpl : Timer {
         )
     }
 
-    override fun getCurrentTimerState(): StateFlow<TimerState> {
+    override fun getCurrentState(): StateFlow<TimerState> {
         return timerState
     }
 
