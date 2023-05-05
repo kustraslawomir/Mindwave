@@ -3,8 +3,7 @@ package skustra.focusflow.ui.service
 import android.app.Service
 import android.content.Intent
 import dagger.hilt.android.AndroidEntryPoint
-import kotlinx.coroutines.MainScope
-import kotlinx.coroutines.launch
+import kotlinx.coroutines.*
 import skustra.focusflow.data.model.timer.TimerState
 import skustra.focusflow.ui.composables.session.TimerStateHandler
 import skustra.focusflow.ui.notification.SessionServiceNotificationManager
@@ -14,7 +13,7 @@ import javax.inject.Inject
 @AndroidEntryPoint
 class SessionForegroundService @Inject constructor() : Service() {
 
-    private val serviceScope = MainScope()
+    private val serviceScope = CoroutineScope(Job() + Dispatchers.Main)
 
     @Inject
     lateinit var timerStateHandler: TimerStateHandler
@@ -34,7 +33,7 @@ class SessionForegroundService @Inject constructor() : Service() {
 
     override fun onCreate() {
         super.onCreate()
-
+        Timber.w("On create service")
         startForeground(
             sessionServiceNotificationManager.getNotificationId(),
             sessionServiceNotificationManager.createNotification()
@@ -66,6 +65,8 @@ class SessionForegroundService @Inject constructor() : Service() {
 
     override fun onDestroy() {
         Timber.e("Destroyed session service")
+        stopForeground(STOP_FOREGROUND_REMOVE)
+        serviceScope.cancel()
         super.onDestroy()
     }
 

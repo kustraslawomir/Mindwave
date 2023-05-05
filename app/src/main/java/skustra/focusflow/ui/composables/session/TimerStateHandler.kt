@@ -5,6 +5,7 @@ import android.content.Intent
 import androidx.core.content.ContextCompat
 import dagger.hilt.EntryPoint
 import kotlinx.coroutines.CoroutineScope
+import kotlinx.coroutines.delay
 import kotlinx.coroutines.flow.*
 import kotlinx.coroutines.launch
 import skustra.focusflow.data.model.alias.Minute
@@ -70,13 +71,16 @@ class TimerStateHandler(private val applicationContext: Context) {
     }
 
     fun stopSession() {
-        applicationContext.stopService(
-            Intent(
-                applicationContext,
-                SessionForegroundService::class.java
-            )
-        )
         stateEmitter.stop()
+        sessionScope.launch {
+            delay(1000)
+            applicationContext.stopService(
+                Intent(
+                    applicationContext,
+                    SessionForegroundService::class.java
+                )
+            )
+        }
     }
 
     private suspend fun handleNewTimerState(
