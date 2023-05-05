@@ -55,11 +55,11 @@ class SessionForegroundService @Inject constructor() : Service() {
     }
 
     private fun shouldSkipBreaks(intent: Intent?): Boolean {
-        return intent?.extras?.getBoolean(SKIP_BREAKS) ?: throw IllegalArgumentException()
+        return intent?.extras?.getBoolean(SKIP_BREAKS) ?: throw NullPointerException()
     }
 
     private fun getDuration(intent: Intent?) =
-        intent?.extras?.getInt(DURATION_CHOSEN_BY_USER) ?: throw IllegalArgumentException()
+        intent?.extras?.getInt(DURATION_CHOSEN_BY_USER) ?: throw NullPointerException()
 
     override fun onDestroy() {
         Timber.e("Destroyed session service")
