@@ -8,9 +8,9 @@ import dagger.hilt.android.qualifiers.ApplicationContext
 import dagger.hilt.components.SingletonComponent
 import skustra.focusflow.domain.usecase.resources.DrawableProvider
 import skustra.focusflow.domain.usecase.resources.DrawableProviderImpl
-import skustra.focusflow.domain.usecase.timer.TimerStateEmitter
-import skustra.focusflow.domain.usecase.timer.TimerStateEmitterImpl
-import skustra.focusflow.ui.composables.session.TimerStateHandler
+import skustra.focusflow.domain.usecase.timer.SessionStateEmitter
+import skustra.focusflow.domain.usecase.timer.SessionStateEmitterImpl
+import skustra.focusflow.ui.composables.session.SessionStateHandler
 import skustra.focusflow.ui.notification.SessionServiceNotificationManager
 import skustra.focusflow.ui.notification.SessionServiceNotificationManagerImpl
 import javax.inject.Singleton
@@ -29,9 +29,9 @@ object GlobalComponent {
 
     @Provides
     @Singleton
-    fun provideTimerStateHandler(@ApplicationContext context: Context) = TimerStateHandler(context)
+    fun provideTimerStateHandler(@ApplicationContext context: Context) = SessionStateHandler(context)
 
     @Provides
     @Singleton
-    fun provideTimerStateEmitter(): TimerStateEmitter = TimerStateEmitterImpl()
+    fun provideTimerStateEmitter(): SessionStateEmitter = SessionStateEmitterImpl()
 }

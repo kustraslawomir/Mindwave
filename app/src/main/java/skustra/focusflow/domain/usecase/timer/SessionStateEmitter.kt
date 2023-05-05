@@ -5,7 +5,7 @@ import kotlinx.coroutines.flow.StateFlow
 import skustra.focusflow.data.model.alias.Minute
 import skustra.focusflow.data.model.timer.TimerState
 
-interface TimerStateEmitter {
+interface SessionStateEmitter {
 
     fun start(sessionDuration: Minute, scope: CoroutineScope)
 

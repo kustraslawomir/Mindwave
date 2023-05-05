@@ -20,7 +20,7 @@ import javax.inject.Inject
 @HiltViewModel
 class SessionViewModel @Inject constructor(
     val resourceManager: DrawableProvider,
-    private val sessionHandler: TimerStateHandler
+    private val sessionHandler: SessionStateHandler
 ) : ViewModel() {
 
     private var durationChosenByUser = SessionConfig.DEFAULT_DURATION

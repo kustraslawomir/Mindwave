@@ -1,15 +1,13 @@
 package skustra.focusflow.domain.usecase.timer
 
-import android.content.Intent
 import kotlinx.coroutines.*
 import kotlinx.coroutines.flow.*
 import skustra.focusflow.data.model.alias.Minute
 import skustra.focusflow.data.model.timer.Progress
 import skustra.focusflow.data.model.timer.TimerState
 import skustra.focusflow.domain.usecase.interval.launchPeriodicAsync
-import skustra.focusflow.ui.service.SessionForegroundService
 
-class TimerStateEmitterImpl : TimerStateEmitter {
+class SessionStateEmitterImpl : SessionStateEmitter {
 
     private val mutableTimerState = MutableStateFlow<TimerState>(TimerState.Idle)
     private val timerState: StateFlow<TimerState> = mutableTimerState

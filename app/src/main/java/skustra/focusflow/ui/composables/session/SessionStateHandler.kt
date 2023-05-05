@@ -2,8 +2,6 @@ package skustra.focusflow.ui.composables.session
 
 import android.content.Context
 import android.content.Intent
-import androidx.core.content.ContextCompat
-import dagger.hilt.EntryPoint
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.delay
 import kotlinx.coroutines.flow.*
@@ -12,19 +10,17 @@ import skustra.focusflow.data.model.alias.Minute
 import skustra.focusflow.data.model.exceptions.SessionAlreadyCompletedException
 import skustra.focusflow.data.model.session.Session
 import skustra.focusflow.data.model.timer.TimerState
-import skustra.focusflow.domain.usecase.session.SessionConfig
 import skustra.focusflow.domain.usecase.session.SessionCreator
-import skustra.focusflow.domain.usecase.timer.TimerStateEmitter
-import skustra.focusflow.domain.usecase.timer.TimerStateEmitterImpl
+import skustra.focusflow.domain.usecase.timer.SessionStateEmitter
+import skustra.focusflow.domain.usecase.timer.SessionStateEmitterImpl
 import skustra.focusflow.domain.utilities.logs.AppLog
 import skustra.focusflow.ui.extensions.vibratePhone
 import skustra.focusflow.ui.service.SessionForegroundService
 import timber.log.Timber
-import javax.inject.Inject
 
-class TimerStateHandler(private val applicationContext: Context) {
+class SessionStateHandler(private val applicationContext: Context) {
 
-    private val stateEmitter: TimerStateEmitter = TimerStateEmitterImpl()
+    private val stateEmitter: SessionStateEmitter = SessionStateEmitterImpl()
 
     var currentSessionState = SessionCreator.generate()
     private val _sessionMutableStateFlow = MutableStateFlow(currentSessionState)

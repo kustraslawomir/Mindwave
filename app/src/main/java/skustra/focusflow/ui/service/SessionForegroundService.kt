@@ -5,7 +5,7 @@ import android.content.Intent
 import dagger.hilt.android.AndroidEntryPoint
 import kotlinx.coroutines.*
 import skustra.focusflow.data.model.timer.TimerState
-import skustra.focusflow.ui.composables.session.TimerStateHandler
+import skustra.focusflow.ui.composables.session.SessionStateHandler
 import skustra.focusflow.ui.notification.SessionServiceNotificationManager
 import timber.log.Timber
 import javax.inject.Inject
@@ -16,17 +16,15 @@ class SessionForegroundService @Inject constructor() : Service() {
     private val serviceScope = CoroutineScope(Job() + Dispatchers.Main)
 
     @Inject
-    lateinit var timerStateHandler: TimerStateHandler
+    lateinit var sessionStateHandler: SessionStateHandler
 
     @Inject
     lateinit var sessionServiceNotificationManager: SessionServiceNotificationManager
 
     override fun onStartCommand(intent: Intent?, flags: Int, startId: Int): Int {
-        timerStateHandler.apply {
+        sessionStateHandler.apply {
             init(serviceScope)
-            startSession(
-                getDuration(intent), shouldSkipBreaks(intent)
-            )
+            startSession(getDuration(intent), shouldSkipBreaks(intent))
         }
         return START_STICKY
     }
@@ -40,7 +38,7 @@ class SessionForegroundService @Inject constructor() : Service() {
         )
 
         serviceScope.launch {
-            timerStateHandler.sessionStateFlow.collect { session ->
+            sessionStateHandler.sessionStateFlow.collect { session ->
                 when (val state = session.currentTimerState) {
                     is TimerState.InProgress -> {
                         sessionServiceNotificationManager.updateInProgressState(state)
