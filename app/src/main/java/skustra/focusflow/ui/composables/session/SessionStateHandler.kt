@@ -68,12 +68,15 @@ class SessionStateHandler(private val applicationContext: Context) {
 
     fun stopSession() {
         stateEmitter.stop()
-        applicationContext.stopService(
-            Intent(
-                applicationContext,
-                SessionForegroundService::class.java
+        sessionScope.launch {
+            delay(1000)
+            applicationContext.stopService(
+                Intent(
+                    applicationContext,
+                    SessionForegroundService::class.java
+                )
             )
-        )
+        }
     }
 
     private suspend fun handleNewTimerState(
