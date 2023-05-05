@@ -26,6 +26,24 @@ class SessionViewModel @Inject constructor(
     private var durationChosenByUser = SessionConfig.DEFAULT_DURATION
     private var skipBreaks = false
 
+    fun startSession(context: Context) {
+        ContextCompat.startForegroundService(
+            context,
+            Intent(context, SessionForegroundService::class.java).apply {
+                putExtra(DURATION_CHOSEN_BY_USER, durationChosenByUser)
+                putExtra(SKIP_BREAKS, skipBreaks)
+            }
+        )
+    }
+
+    fun pauseSession() = sessionHandler.pauseSession()
+
+    fun resumeSession() = sessionHandler.resumeSession()
+
+    fun stopSession()  = sessionHandler.stopSession()
+
+    fun getSessionStateFlow() = sessionHandler.sessionStateFlow
+
     fun skipBreaks(skipBreaks: Boolean) {
         this.skipBreaks = skipBreaks
 
@@ -68,26 +86,6 @@ class SessionViewModel @Inject constructor(
     fun sessionIncludesBreaks(): Boolean {
         return durationChosenByUser > SessionConfig.minimalDurationToIncludeBreaks()
     }
-
-    fun startSession(context: Context) {
-        ContextCompat.startForegroundService(
-            context,
-            Intent(context, SessionForegroundService::class.java).apply {
-                putExtra(DURATION_CHOSEN_BY_USER, durationChosenByUser)
-                putExtra(SKIP_BREAKS, skipBreaks)
-            }
-        )
-    }
-
-    fun pauseSession() = sessionHandler.pauseSession()
-
-    fun resumeSession() = sessionHandler.resumeSession()
-
-    fun stopSession()  = sessionHandler.stopSession()
-
-    fun getSessionStateFlow() = sessionHandler.sessionStateFlow
-
-    fun getCurrentSessionState() = sessionHandler.currentSessionState
 
     private fun updateDuration(durationChosenByUser: Minute) {
         this.durationChosenByUser = durationChosenByUser

@@ -39,6 +39,7 @@ class SessionForegroundService @Inject constructor() : Service() {
 
         serviceScope.launch {
             sessionStateHandler.sessionStateFlow.collect { session ->
+                Timber.d("instance session composable at service: ${sessionStateHandler.sessionStateFlow}")
                 when (val state = session.currentTimerState) {
                     is TimerState.InProgress -> {
                         sessionServiceNotificationManager.updateInProgressState(state)

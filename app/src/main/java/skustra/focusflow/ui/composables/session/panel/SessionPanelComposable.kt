@@ -1,6 +1,5 @@
 package skustra.focusflow.ui.composables.session.panel
 
-import android.content.Context
 import androidx.compose.foundation.background
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.*
@@ -9,7 +8,6 @@ import androidx.compose.material3.Icon
 import androidx.compose.material3.IconButton
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
-import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
@@ -18,6 +16,7 @@ import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.unit.dp
+import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import androidx.lifecycle.viewmodel.compose.viewModel
 import skustra.focusflow.data.model.timer.TimerState
 import skustra.focusflow.ui.composables.session.SessionViewModel
@@ -30,7 +29,7 @@ fun SessionPanelComposable(viewModel: SessionViewModel = viewModel()) {
 
     val sessionState by viewModel
         .getSessionStateFlow()
-        .collectAsState(viewModel.getCurrentSessionState())
+        .collectAsStateWithLifecycle()
 
 
     when (sessionState.currentTimerState) {
