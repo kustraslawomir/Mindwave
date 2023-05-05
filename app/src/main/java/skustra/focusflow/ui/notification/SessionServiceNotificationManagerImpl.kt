@@ -52,7 +52,10 @@ class SessionServiceNotificationManagerImpl(
             .setSmallIcon(R.mipmap.ic_launcher)
             .setContentTitle(LocalizationManager.getText(LocalizationKey.SessionInProgress))
             .setContentIntent(buildIntent())
-            .setContentText(contentText).setOngoing(true).setOnlyAlertOnce(true).build()
+            .setContentText(contentText)
+            .setOngoing(true)
+            .setOnlyAlertOnce(true)
+            .build()
     }
 
     private fun createNotificationChannel() {
@@ -60,8 +63,10 @@ class SessionServiceNotificationManagerImpl(
             NotificationChannel(
                 channelId,
                 applicationContext.getString(R.string.app_name),
-                NotificationManager.IMPORTANCE_HIGH
-            )
+                NotificationManager.IMPORTANCE_LOW
+            ).apply {
+                setShowBadge(false)
+            }
         )
     }
 

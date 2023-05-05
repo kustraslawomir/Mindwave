@@ -16,10 +16,14 @@ class SessionStateEmitterImpl : SessionStateEmitter {
     private var currentProgress: Minute = 0
     private var isPaused = false
     private var intervalJob: Deferred<Unit>? = null
+    private lateinit var scope: CoroutineScope
 
     override fun start(sessionDuration: Minute, scope: CoroutineScope) {
+
         this.duration = sessionDuration
         this.currentProgress = sessionDuration
+        this.scope = scope
+
         scope.launch {
             mutableTimerState.emit(
                 TimerState.InProgress(
@@ -63,21 +67,32 @@ class SessionStateEmitterImpl : SessionStateEmitter {
 
     override fun pause() {
         isPaused = true
-        mutableTimerState.tryEmit(
-            TimerState.Paused(
-                progress = getCurrentSessionProgress()
+        scope.launch {
+            mutableTimerState.emit(
+                TimerState.Paused(
+                    progress = getCurrentSessionProgress()
+                )
             )
-        )
+        }
     }
 
     override fun resume() {
         isPaused = false
+        scope.launch {
+            mutableTimerState.emit(
+                TimerState.InProgress(
+                    progress = getCurrentSessionProgress()
+                )
+            )
+        }
     }
 
     override fun stop() {
         cancelInterval()
         isPaused = false
-        mutableTimerState.tryEmit(TimerState.Idle)
+        scope.launch {
+            mutableTimerState.emit(TimerState.Idle)
+        }
     }
 
     private fun getCurrentSessionProgress(): Progress {

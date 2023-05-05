@@ -68,15 +68,12 @@ class SessionStateHandler(private val applicationContext: Context) {
 
     fun stopSession() {
         stateEmitter.stop()
-        sessionScope.launch {
-            delay(1000)
-            applicationContext.stopService(
-                Intent(
-                    applicationContext,
-                    SessionForegroundService::class.java
-                )
+        applicationContext.stopService(
+            Intent(
+                applicationContext,
+                SessionForegroundService::class.java
             )
-        }
+        )
     }
 
     private suspend fun handleNewTimerState(
@@ -94,7 +91,7 @@ class SessionStateHandler(private val applicationContext: Context) {
                 )
             } catch (exception: SessionAlreadyCompletedException) {
                 exception.printStackTrace()
-               stopSession()
+                stopSession()
                 return
             }
         }
