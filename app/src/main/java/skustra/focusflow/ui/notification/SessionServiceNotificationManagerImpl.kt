@@ -3,10 +3,13 @@ package skustra.focusflow.ui.notification
 import android.app.Notification
 import android.app.NotificationChannel
 import android.app.NotificationManager
+import android.app.PendingIntent
 import android.content.Context
+import android.content.Intent
 import androidx.core.app.NotificationCompat
 import skustra.focusflow.R
 import skustra.focusflow.data.model.timer.TimerState
+import skustra.focusflow.ui.activity.MainActivity
 import skustra.focusflow.ui.localization.LocalizationKey
 import skustra.focusflow.ui.localization.LocalizationManager
 import java.util.*
@@ -48,6 +51,7 @@ class SessionServiceNotificationManagerImpl(
         return NotificationCompat.Builder(applicationContext, channelId)
             .setSmallIcon(R.mipmap.ic_launcher)
             .setContentTitle(LocalizationManager.getText(LocalizationKey.SessionInProgress))
+            .setContentIntent(buildIntent())
             .setContentText(contentText).setOngoing(true).setOnlyAlertOnce(true).build()
     }
 
@@ -58,6 +62,15 @@ class SessionServiceNotificationManagerImpl(
                 applicationContext.getString(R.string.app_name),
                 NotificationManager.IMPORTANCE_HIGH
             )
+        )
+    }
+
+    private fun buildIntent(): PendingIntent? {
+        return PendingIntent.getActivity(
+            applicationContext,
+            0,
+            Intent(applicationContext, MainActivity::class.java),
+            PendingIntent.FLAG_UPDATE_CURRENT or PendingIntent.FLAG_IMMUTABLE
         )
     }
 }
