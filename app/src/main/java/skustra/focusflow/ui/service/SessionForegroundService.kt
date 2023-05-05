@@ -3,11 +3,12 @@ package skustra.focusflow.ui.service
 import android.app.Service
 import android.content.Intent
 import dagger.hilt.android.AndroidEntryPoint
-import kotlinx.coroutines.*
+import kotlinx.coroutines.MainScope
+import kotlinx.coroutines.launch
 import skustra.focusflow.data.model.timer.TimerState
 import skustra.focusflow.domain.usecase.timer.Timer
-import skustra.focusflow.domain.utilities.logs.AppLog
 import skustra.focusflow.ui.notification.SessionServiceNotificationManager
+import skustra.focusflow.ui.notification.SessionServiceNotificationManagerImpl
 import javax.inject.Inject
 
 @AndroidEntryPoint
@@ -16,18 +17,16 @@ class SessionForegroundService : Service() {
     @Inject
     lateinit var timer: Timer
 
-    private val serviceScope = MainScope()
+    @Inject
+    lateinit var sessionServiceNotificationManager: SessionServiceNotificationManager
 
-    private val sessionServiceNotificationManager by lazy {
-        SessionServiceNotificationManager(this)
-    }
+    private val serviceScope = MainScope()
 
     override fun onBind(intent: Intent?) = null
 
     override fun onCreate() {
         serviceScope.launch {
             timer.getCurrentTimerState().collect { timerState ->
-                AppLog.notificationState(timerState)
                 when (timerState) {
                     is TimerState.InProgress -> sessionServiceNotificationManager.updateInProgressState(
                         timerState
@@ -43,7 +42,7 @@ class SessionForegroundService : Service() {
 
     override fun onStartCommand(intent: Intent?, flags: Int, startId: Int): Int {
         startForeground(
-            sessionServiceNotificationManager.notificationId,
+            sessionServiceNotificationManager.getNotificationId(),
             sessionServiceNotificationManager.createNotification()
         )
         return START_STICKY
