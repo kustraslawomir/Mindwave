@@ -22,15 +22,6 @@ data class Session(
         } else throw SessionAlreadyCompletedException()
     }
 
-    fun deepCopy(): Session {
-        return Session(
-            currentTimerState = currentTimerState,
-            currentPartCounter = currentPartCounter,
-            parts = parts,
-            duration = duration
-        )
-    }
-
     fun sessionDuration(): Int {
         return duration
     }

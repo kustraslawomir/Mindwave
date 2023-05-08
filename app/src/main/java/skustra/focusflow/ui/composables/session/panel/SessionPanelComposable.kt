@@ -27,41 +27,39 @@ import skustra.focusflow.ui.theme.ButtonColor
 @Composable
 fun SessionPanelComposable(viewModel: SessionViewModel = viewModel()) {
 
-    val sessionState by viewModel
-        .getSessionStateFlow()
-        .collectAsStateWithLifecycle()
-
-
+    val sessionState by viewModel.getSessionStateFlow().collectAsStateWithLifecycle()
     when (sessionState.currentTimerState) {
-        TimerState.Completed, TimerState.Idle -> {
-
-            Column(
-                horizontalAlignment = Alignment.CenterHorizontally
-
-            ) {
-                if (viewModel.sessionIncludesBreaks()) {
-                    SkipBreaksComposable()
-                }
-                StartSessionComposable()
-            }
-        }
-
+        TimerState.Idle -> IdleSessionComposable(viewModel)
         is TimerState.InProgress -> PauseSessionComposable()
         is TimerState.Paused -> ResumeSessionGroupComposable()
+        is TimerState.Completed -> {
+            //ignore
+        }
+    }
+}
+
+@Composable
+private fun IdleSessionComposable(viewModel: SessionViewModel) {
+    Column(
+        horizontalAlignment = Alignment.CenterHorizontally
+
+    ) {
+        if (viewModel.sessionIncludesBreaks()) {
+            SkipBreaksComposable()
+        }
+        StartSessionComposable()
     }
 }
 
 @Composable
 private fun StartSessionComposable(viewModel: SessionViewModel = viewModel()) {
     val context = LocalContext.current
-    Box(
-        modifier = Modifier
-            .padding(horizontal = 16.dp, vertical = 8.dp)
-            .height(48.dp)
-            .clip(shape = RoundedCornerShape(size = 12.dp))
-            .background(color = ButtonColor)
-            .clickable { viewModel.startSession(context) }
-    ) {
+    Box(modifier = Modifier
+        .padding(horizontal = 16.dp, vertical = 8.dp)
+        .height(48.dp)
+        .clip(shape = RoundedCornerShape(size = 12.dp))
+        .background(color = ButtonColor)
+        .clickable { viewModel.startSession(context) }) {
         Row(verticalAlignment = Alignment.CenterVertically) {
             IconButton(onClick = { viewModel.startSession(context) }) {
                 Icon(
@@ -84,16 +82,14 @@ private fun PauseSessionComposable(viewModel: SessionViewModel = viewModel()) {
     CircleButton(
         onClick = {
             viewModel.pauseSession()
-        },
-        icon = viewModel.resourceManager.getPauseIcon()
+        }, icon = viewModel.resourceManager.getPauseIcon()
     )
 }
 
 @Composable
 private fun ResumeSessionGroupComposable() {
     Row(
-        Modifier.fillMaxWidth(),
-        horizontalArrangement = Arrangement.Center
+        Modifier.fillMaxWidth(), horizontalArrangement = Arrangement.Center
     ) {
         StopSessionComposable()
         Spacer(modifier = Modifier.width(16.dp))
@@ -106,8 +102,7 @@ private fun ResumeSessionComposable(viewModel: SessionViewModel = viewModel()) {
     CircleButton(
         onClick = {
             viewModel.resumeSession()
-        },
-        icon = viewModel.resourceManager.getResumeIcon()
+        }, icon = viewModel.resourceManager.getResumeIcon()
     )
 }
 
@@ -116,9 +111,7 @@ private fun StopSessionComposable(viewModel: SessionViewModel = viewModel()) {
     CircleButton(
         onClick = {
             viewModel.stopSession()
-        },
-        icon = viewModel.resourceManager.getStopIcon(),
-        color = Color.White
+        }, icon = viewModel.resourceManager.getStopIcon(), color = Color.White
     )
 }
 

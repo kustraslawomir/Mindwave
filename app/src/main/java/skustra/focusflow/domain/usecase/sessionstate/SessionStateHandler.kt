@@ -4,32 +4,42 @@ import android.content.Context
 import android.content.Intent
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.delay
-import kotlinx.coroutines.flow.*
+import kotlinx.coroutines.flow.MutableStateFlow
+import kotlinx.coroutines.flow.SharingStarted
+import kotlinx.coroutines.flow.StateFlow
+import kotlinx.coroutines.flow.stateIn
 import kotlinx.coroutines.launch
 import skustra.focusflow.data.model.alias.Minute
 import skustra.focusflow.data.model.exceptions.SessionAlreadyCompletedException
 import skustra.focusflow.data.model.session.Session
+import skustra.focusflow.data.model.session.SessionPartType
 import skustra.focusflow.data.model.timer.TimerState
 import skustra.focusflow.domain.usecase.session.SessionCreator
+import skustra.focusflow.domain.usecase.statenotification.BreakCompletedNotification
+import skustra.focusflow.domain.usecase.statenotification.SessionCompletedNotification
+import skustra.focusflow.domain.usecase.statenotification.WorkCompletedNotification
 import skustra.focusflow.domain.utilities.logs.AppLog
-import skustra.focusflow.ui.extensions.vibratePhone
 import skustra.focusflow.ui.service.SessionForegroundService
 import timber.log.Timber
 
-class SessionStateHandler(private val applicationContext: Context) {
-
-    private val stateEmitter: SessionStateEmitter = SessionStateEmitterImpl()
-
-    private var currentSessionState = SessionCreator.generate()
-    private val _sessionMutableStateFlow = MutableStateFlow(currentSessionState)
-    val sessionStateFlow: StateFlow<Session> = _sessionMutableStateFlow
+class SessionStateHandler(
+    private val applicationContext: Context,
+    private val workCompletedNotification: WorkCompletedNotification,
+    private val breakCompletedNotification: BreakCompletedNotification,
+    private val sessionCompletedNotification: SessionCompletedNotification,
+    private val sessionStateEmitter: SessionStateEmitter
+) {
 
     private lateinit var sessionScope: CoroutineScope
+    private var currentSessionState = SessionCreator.generate()
+    private val _sessionMutableStateFlow = MutableStateFlow(currentSessionState)
+
+    val sessionStateFlow: StateFlow<Session> = _sessionMutableStateFlow
 
     fun init(scope: CoroutineScope) {
         this.sessionScope = scope
         sessionScope.launch {
-            stateEmitter.getCurrentState().stateIn(
+            sessionStateEmitter.getCurrentState().stateIn(
                 scope = sessionScope,
                 initialValue = currentSessionState,
                 started = SharingStarted.WhileSubscribed(5000)
@@ -44,34 +54,31 @@ class SessionStateHandler(private val applicationContext: Context) {
     fun startSession(durationChosenByUser: Minute, skipBreaks: Boolean) {
         sessionScope.launch {
             currentSessionState = SessionCreator.generate(durationChosenByUser, skipBreaks)
-            Timber.d("NOTIFICATION $stateEmitter")
-            stateEmitter.start(
-                currentSessionState.currentSessionPart().sessionPartDuration,
-                sessionScope
+            sessionStateEmitter.start(
+                sessionPart = currentSessionState.currentSessionPart(), scope = sessionScope
             )
         }
     }
 
     suspend fun emitSession(session: Session) {
-        _sessionMutableStateFlow.emit(session.deepCopy())
+        _sessionMutableStateFlow.emit(session.copy())
     }
 
     fun pauseSession() {
-        stateEmitter.pause()
+        sessionStateEmitter.pause()
     }
 
     fun resumeSession() {
-        stateEmitter.resume()
+        sessionStateEmitter.resume()
     }
 
     fun stopSession() {
-        stateEmitter.stop()
+        sessionStateEmitter.stop()
         sessionScope.launch {
             delay(1000)
             applicationContext.stopService(
                 Intent(
-                    applicationContext,
-                    SessionForegroundService::class.java
+                    applicationContext, SessionForegroundService::class.java
                 )
             )
         }
@@ -80,17 +87,18 @@ class SessionStateHandler(private val applicationContext: Context) {
     private suspend fun handleNewTimerState(
         timerState: TimerState
     ) {
-        if (timerState == TimerState.Completed) {
+        if (timerState is TimerState.Completed) {
             try {
-                applicationContext.vibratePhone()
                 currentSessionState.activateTheNextPartOfTheSession()
-                stateEmitter.start(
-                    sessionDuration = currentSessionState
-                        .currentSessionPart()
-                        .sessionPartDuration,
-                    scope = sessionScope
+                sessionStateEmitter.start(
+                    sessionPart = currentSessionState.currentSessionPart(), scope = sessionScope
                 )
+                when (timerState.type) {
+                    SessionPartType.Break -> breakCompletedNotification.notifyUser()
+                    SessionPartType.Work -> workCompletedNotification.notifyUser()
+                }
             } catch (exception: SessionAlreadyCompletedException) {
+                sessionCompletedNotification.notifyUser()
                 exception.printStackTrace()
                 stopSession()
                 return
@@ -98,7 +106,7 @@ class SessionStateHandler(private val applicationContext: Context) {
         }
 
         emiTimerState(timerState)
-        AppLog.debugSession(currentSessionState.deepCopy())
+        AppLog.debugSession(currentSessionState)
     }
 
     private suspend fun emiTimerState(state: TimerState) {
@@ -107,5 +115,4 @@ class SessionStateHandler(private val applicationContext: Context) {
             currentTimerState = state
         }.copy())
     }
-
 }

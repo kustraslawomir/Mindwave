@@ -3,6 +3,7 @@ package skustra.focusflow.domain.usecase.sessionstate
 import kotlinx.coroutines.*
 import kotlinx.coroutines.flow.*
 import skustra.focusflow.data.model.alias.Minute
+import skustra.focusflow.data.model.session.SessionPart
 import skustra.focusflow.data.model.timer.Progress
 import skustra.focusflow.data.model.timer.TimerState
 import skustra.focusflow.domain.usecase.interval.launchPeriodicAsync
@@ -12,23 +13,22 @@ class SessionStateEmitterImpl : SessionStateEmitter {
     private val mutableTimerState = MutableStateFlow<TimerState>(TimerState.Idle)
     private val timerState: StateFlow<TimerState> = mutableTimerState
 
-    private var duration: Minute = 0
+    private lateinit var sessionPart: SessionPart
     private var currentProgress: Minute = 0
     private var isPaused = false
     private var intervalJob: Deferred<Unit>? = null
     private lateinit var scope: CoroutineScope
 
-    override fun start(sessionDuration: Minute, scope: CoroutineScope) {
-
-        this.duration = sessionDuration
-        this.currentProgress = sessionDuration
+    override fun start(sessionPart: SessionPart, scope: CoroutineScope) {
+        this.sessionPart = sessionPart
+        this.currentProgress = sessionPart.sessionPartDuration
         this.scope = scope
 
         scope.launch {
             mutableTimerState.emit(
                 TimerState.InProgress(
                     progress = Progress(
-                        sessionDuration = sessionDuration,
+                        sessionDuration = sessionPart.sessionPartDuration,
                         minutesLeft = currentProgress
                     )
                 )
@@ -52,7 +52,7 @@ class SessionStateEmitterImpl : SessionStateEmitter {
                 currentProgress -= 1
                 if (sessionEnded()) {
                     cancelInterval()
-                    mutableTimerState.emit(TimerState.Completed)
+                    mutableTimerState.emit(TimerState.Completed(sessionPart.type))
                     return@launch
                 }
 
@@ -98,7 +98,7 @@ class SessionStateEmitterImpl : SessionStateEmitter {
     private fun getCurrentSessionProgress(): Progress {
         return Progress(
             minutesLeft = currentProgress,
-            sessionDuration = duration
+            sessionDuration = sessionPart.sessionPartDuration
         )
     }
 
