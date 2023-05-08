@@ -45,7 +45,7 @@ private fun IdleSessionComposable(viewModel: SessionViewModel) {
 
     ) {
         if (viewModel.sessionIncludesBreaks()) {
-            SkipBreaksComposable()
+            SkipBreaksComposable(skipBreaks = viewModel.shouldSkipTheBreaks)
         }
         StartSessionComposable()
     }

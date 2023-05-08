@@ -12,6 +12,6 @@ class SessionCompletedNotification @Inject constructor(
 
     override fun notifyUser() {
         vibrationUseCase.vibrate()
-        playSoundUseCase.play(R.raw.session_ended_sound)
+        playSoundUseCase.play(R.raw.success)
     }
 }

@@ -12,6 +12,6 @@ class BreakCompletedNotification @Inject constructor(
 
     override fun notifyUser() {
         vibrationUseCase.vibrate()
-        playSoundUseCase.play(R.raw.session_ended_sound)
+        playSoundUseCase.play(R.raw.break_ends)
     }
 }

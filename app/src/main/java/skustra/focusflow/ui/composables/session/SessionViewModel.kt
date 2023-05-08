@@ -24,15 +24,16 @@ class SessionViewModel @Inject constructor(
     private val sessionHandler: SessionStateHandler
 ) : ViewModel() {
 
+    var shouldSkipTheBreaks = false
+
     private var durationChosenByUser = SessionConfig.DEFAULT_DURATION
-    private var skipBreaks = false
 
     fun startSession(context: Context) {
         ContextCompat.startForegroundService(
             context,
             Intent(context, SessionForegroundService::class.java).apply {
                 putExtra(DURATION_CHOSEN_BY_USER, durationChosenByUser)
-                putExtra(SKIP_BREAKS, skipBreaks)
+                putExtra(SKIP_BREAKS, shouldSkipTheBreaks)
             }
         )
     }
@@ -46,7 +47,7 @@ class SessionViewModel @Inject constructor(
     fun getSessionStateFlow() = sessionHandler.sessionStateFlow
 
     fun skipBreaks(skipBreaks: Boolean) {
-        this.skipBreaks = skipBreaks
+        this.shouldSkipTheBreaks = skipBreaks
 
         viewModelScope.launch {
             sessionHandler.emitSession(SessionCreator.generate(durationChosenByUser, skipBreaks))
@@ -85,13 +86,13 @@ class SessionViewModel @Inject constructor(
     }
 
     fun sessionIncludesBreaks(): Boolean {
-        return durationChosenByUser > SessionConfig.minimalDurationToIncludeBreaks()
+        return durationChosenByUser >= SessionConfig.minimalDurationToIncludeBreaks()
     }
 
     private fun updateDuration(durationChosenByUser: Minute) {
         this.durationChosenByUser = durationChosenByUser
         viewModelScope.launch {
-            sessionHandler.emitSession(SessionCreator.generate(durationChosenByUser, skipBreaks))
+            sessionHandler.emitSession(SessionCreator.generate(durationChosenByUser, shouldSkipTheBreaks))
         }
     }
 }

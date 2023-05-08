@@ -15,10 +15,9 @@ import skustra.focusflow.ui.extensions.noRippleClickable
 import skustra.focusflow.ui.localization.LocalizationKey
 import skustra.focusflow.ui.localization.LocalizationManager
 
-@Preview
 @Composable
-fun SkipBreaksComposable(viewModel: SessionViewModel = viewModel()) {
-    val checkedState = remember { mutableStateOf(false) }
+fun SkipBreaksComposable(viewModel: SessionViewModel = viewModel(), skipBreaks : Boolean) {
+    val checkedState = remember { mutableStateOf(skipBreaks) }
     Row(
         modifier = Modifier.noRippleClickable{
             checkedState.value = !checkedState.value
