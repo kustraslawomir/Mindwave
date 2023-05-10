@@ -1,11 +1,11 @@
 package skustra.focusflow.data.model.session
 
 import skustra.focusflow.data.model.alias.Minute
-import skustra.focusflow.data.model.exceptions.SessionAlreadyCompletedException
 import skustra.focusflow.data.model.timer.TimerState
 import java.util.UUID
 
 data class Session(
+    val sessionId: String = UUID.randomUUID().toString(),
     var currentTimerState: TimerState = TimerState.Idle,
     var currentPartCounter: Int = 0,
     var duration: Minute,
@@ -15,11 +15,16 @@ data class Session(
         return parts[currentPartCounter]
     }
 
-    @Throws(SessionAlreadyCompletedException::class)
-    fun activateTheNextPartOfTheSession() {
+    fun activateTheNextPartOfTheSession(
+        onCurrentSessionPartIncremented: () -> Unit,
+        onSessionCompleted: () -> Unit
+    ) {
         if (currentPartCounter < parts.size - 1) {
             currentPartCounter += 1
-        } else throw SessionAlreadyCompletedException()
+            onCurrentSessionPartIncremented()
+        } else {
+            onSessionCompleted()
+        }
     }
 
     fun sessionDuration(): Int {

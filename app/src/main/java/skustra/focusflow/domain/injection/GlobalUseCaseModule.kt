@@ -6,6 +6,8 @@ import dagger.Provides
 import dagger.hilt.InstallIn
 import dagger.hilt.android.qualifiers.ApplicationContext
 import dagger.hilt.components.SingletonComponent
+import skustra.focusflow.data.database.dao.SessionArchiveDao
+import skustra.focusflow.data.repository.SessionArchiveRepository
 import skustra.focusflow.domain.usecase.playsound.PlaySoundUseCase
 import skustra.focusflow.domain.usecase.resources.DrawableProvider
 import skustra.focusflow.domain.usecase.resources.DrawableProviderImpl
@@ -38,14 +40,16 @@ object GlobalComponent {
         @ApplicationContext context: Context, workCompletedNotification: WorkCompletedNotification,
         breakCompletedNotification: BreakCompletedNotification,
         sessionCompletedNotification: SessionCompletedNotification,
-        sessionStateEmitter : SessionStateEmitter
+        sessionStateEmitter: SessionStateEmitter,
+        sessionArchiveRepository: SessionArchiveRepository
     ) =
         SessionStateHandler(
             context,
             workCompletedNotification,
             breakCompletedNotification,
             sessionCompletedNotification,
-            sessionStateEmitter
+            sessionStateEmitter,
+            sessionArchiveRepository
         )
 
     @Provides
@@ -60,4 +64,9 @@ object GlobalComponent {
     @Singleton
     fun provideSingleVibrationUseCase(@ApplicationContext context: Context) =
         SingleVibrationUseCase(context)
+
+    @Provides
+    @Singleton
+    fun provideSessionArchiveRepository(sessionArchiveDao: SessionArchiveDao) =
+        SessionArchiveRepository(sessionArchiveDao)
 }

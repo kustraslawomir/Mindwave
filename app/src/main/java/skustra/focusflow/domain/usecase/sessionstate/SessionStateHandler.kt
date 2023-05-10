@@ -9,11 +9,12 @@ import kotlinx.coroutines.flow.SharingStarted
 import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.flow.stateIn
 import kotlinx.coroutines.launch
+import skustra.focusflow.data.database.entity.SessionArchiveEntity
 import skustra.focusflow.data.model.alias.Minute
-import skustra.focusflow.data.model.exceptions.SessionAlreadyCompletedException
 import skustra.focusflow.data.model.session.Session
 import skustra.focusflow.data.model.session.SessionPartType
 import skustra.focusflow.data.model.timer.TimerState
+import skustra.focusflow.data.repository.SessionArchiveRepository
 import skustra.focusflow.domain.usecase.session.SessionCreator
 import skustra.focusflow.domain.usecase.statenotification.BreakCompletedNotification
 import skustra.focusflow.domain.usecase.statenotification.SessionCompletedNotification
@@ -27,7 +28,8 @@ class SessionStateHandler(
     private val workCompletedNotification: WorkCompletedNotification,
     private val breakCompletedNotification: BreakCompletedNotification,
     private val sessionCompletedNotification: SessionCompletedNotification,
-    private val sessionStateEmitter: SessionStateEmitter
+    private val sessionStateEmitter: SessionStateEmitter,
+    private val sessionArchiveRepository: SessionArchiveRepository
 ) {
 
     private lateinit var sessionScope: CoroutineScope
@@ -84,25 +86,23 @@ class SessionStateHandler(
         }
     }
 
-    private suspend fun handleNewTimerState(
-        timerState: TimerState
-    ) {
+    private suspend fun handleNewTimerState(timerState: TimerState) {
         if (timerState is TimerState.Completed) {
-            try {
-                currentSessionState.activateTheNextPartOfTheSession()
-                sessionStateEmitter.start(
-                    sessionPart = currentSessionState.currentSessionPart(), scope = sessionScope
-                )
-                when (timerState.type) {
-                    SessionPartType.Break -> breakCompletedNotification.notifyUser()
-                    SessionPartType.Work -> workCompletedNotification.notifyUser()
-                }
-            } catch (exception: SessionAlreadyCompletedException) {
-                sessionCompletedNotification.notifyUser()
-                exception.printStackTrace()
-                stopSession()
-                return
-            }
+            currentSessionState.activateTheNextPartOfTheSession(
+                onCurrentSessionPartIncremented = {
+                    sessionStateEmitter.start(
+                        sessionPart = currentSessionState.currentSessionPart(),
+                        scope = sessionScope
+                    )
+                    when (timerState.type) {
+                        SessionPartType.Break -> breakCompletedNotification.notifyUser()
+                        SessionPartType.Work -> workCompletedNotification.notifyUser()
+                    }
+                }, onSessionCompleted = {
+                    sessionArchiveRepository.insert(SessionArchiveEntity.create(_sessionMutableStateFlow.value))
+                    sessionCompletedNotification.notifyUser()
+                    stopSession()
+                })
         }
 
         emiTimerState(timerState)
