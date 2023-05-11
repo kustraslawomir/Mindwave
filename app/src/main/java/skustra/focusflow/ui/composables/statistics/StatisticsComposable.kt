@@ -1,7 +1,6 @@
 package skustra.focusflow.ui.composables.statistics
 
 import android.graphics.Typeface
-import android.text.format.DateUtils
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.remember
 import androidx.compose.ui.graphics.Color
@@ -11,7 +10,6 @@ import com.patrykandpatrick.vico.compose.axis.horizontal.bottomAxis
 import com.patrykandpatrick.vico.compose.axis.vertical.startAxis
 import com.patrykandpatrick.vico.compose.chart.Chart
 import com.patrykandpatrick.vico.compose.chart.column.columnChart
-import com.patrykandpatrick.vico.compose.chart.line.lineChart
 import com.patrykandpatrick.vico.compose.component.shapeComponent
 import com.patrykandpatrick.vico.compose.component.textComponent
 import com.patrykandpatrick.vico.compose.dimensions.dimensionsOf
@@ -19,43 +17,12 @@ import com.patrykandpatrick.vico.compose.style.ProvideChartStyle
 import com.patrykandpatrick.vico.compose.style.currentChartStyle
 import com.patrykandpatrick.vico.core.axis.AxisPosition
 import com.patrykandpatrick.vico.core.axis.formatter.AxisValueFormatter
-import com.patrykandpatrick.vico.core.axis.formatter.PercentageFormatAxisValueFormatter
-import com.patrykandpatrick.vico.core.axis.horizontal.HorizontalAxis
 import com.patrykandpatrick.vico.core.chart.decoration.ThresholdLine
-import com.patrykandpatrick.vico.core.chart.values.AxisValuesOverrider
 import com.patrykandpatrick.vico.core.component.shape.LineComponent
 import com.patrykandpatrick.vico.core.component.shape.Shapes
-import com.patrykandpatrick.vico.core.entry.ChartEntry
-import skustra.focusflow.data.database.entity.SessionArchiveEntity
-import skustra.focusflow.domain.utilities.dates.StatisticDateUtils
 import skustra.focusflow.ui.extensions.toDisplayFormat
 import skustra.focusflow.ui.theme.ChartItemColor
 import skustra.focusflow.ui.theme.GoalColor
-import timber.log.Timber
-import java.time.LocalDate
-import java.util.Date
-
-
-val horizontalAxisValueFormatter =
-    AxisValueFormatter<AxisPosition.Horizontal.Bottom> { value, chartValues ->
-        (chartValues.chartEntryModel.entries.firstOrNull()
-            ?.getOrNull(value.toInt()) as? SessionArchiveEntry)
-            ?.sessionArchiveEntryDataModel?.date
-            ?.run { this }
-            .orEmpty()
-    }
-
-val verticalAxisValueFormatter =
-    AxisValueFormatter<AxisPosition.Vertical.Start> { value, chartValues ->
-        Timber.d("hmm $value ${(chartValues.chartEntryModel.entries.size)}")
-        Timber.d("${(chartValues.chartEntryModel.entries.firstOrNull()
-            ?.firstOrNull())}")
-        (chartValues.chartEntryModel.entries.firstOrNull()
-            ?.firstOrNull() as? SessionArchiveEntry)
-            ?.sessionArchiveEntryDataModel?.summedDayDuration
-            ?.run { value.toDisplayFormat() }
-            .orEmpty()
-    }
 
 @Composable
 fun StatisticsComposable(viewModel: StatisticsViewModel = viewModel()) {
@@ -118,3 +85,21 @@ private val thresholdLineLabelPadding = dimensionsOf(
     thresholdLineLabelVerticalPaddingValue
 )
 private val thresholdLineLabelMargins = dimensionsOf(thresholdLineLabelMarginValue)
+
+val horizontalAxisValueFormatter =
+    AxisValueFormatter<AxisPosition.Horizontal.Bottom> { value, chartValues ->
+        (chartValues.chartEntryModel.entries.firstOrNull()
+            ?.getOrNull(value.toInt()) as? SessionArchiveEntry)
+            ?.sessionArchiveEntryDataModel?.date
+            ?.run { this }
+            .orEmpty()
+    }
+
+val verticalAxisValueFormatter =
+    AxisValueFormatter<AxisPosition.Vertical.Start> { value, chartValues ->
+        (chartValues.chartEntryModel.entries.firstOrNull()
+            ?.firstOrNull() as? SessionArchiveEntry)
+            ?.sessionArchiveEntryDataModel?.summedDayDuration
+            ?.run { value.toDisplayFormat() }
+            .orEmpty()
+    }

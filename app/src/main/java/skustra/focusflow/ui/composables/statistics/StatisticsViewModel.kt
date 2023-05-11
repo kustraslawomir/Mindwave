@@ -12,7 +12,6 @@ import skustra.focusflow.domain.usecase.session.SessionConfig
 import skustra.focusflow.domain.utilities.dates.StatisticDateUtils
 import skustra.focusflow.domain.utilities.dates.StatisticDateUtils.generateDates
 import timber.log.Timber
-import java.util.Calendar
 import java.util.UUID
 import javax.inject.Inject
 import kotlin.random.Random
@@ -45,8 +44,7 @@ class StatisticsViewModel @Inject constructor(
                 SessionArchiveEntity(
                     formattedDate = StatisticDateUtils.format(dayInterval),
                     sessionId = UUID.randomUUID().toString(),
-               //     minutes = if (BuildConfig.DEBUG) randomDuration else 0,
-                    minutes = 0,
+                    minutes = if (BuildConfig.DEBUG) randomDuration else 0,
                     dateMs = dayInterval.time
                 )
             }
