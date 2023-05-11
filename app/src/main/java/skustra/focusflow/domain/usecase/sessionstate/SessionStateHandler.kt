@@ -99,7 +99,9 @@ class SessionStateHandler(
                         SessionPartType.Work -> workCompletedNotification.notifyUser()
                     }
                 }, onSessionCompleted = {
-                    sessionArchiveRepository.insert(SessionArchiveEntity.create(_sessionMutableStateFlow.value))
+                    val data = SessionArchiveEntity.create(_sessionMutableStateFlow.value)
+                    sessionArchiveRepository.insert(data)
+                    Timber.d("Insert: ${data.formattedDate} ${data.minutes}")
                     sessionCompletedNotification.notifyUser()
                     stopSession()
                 })

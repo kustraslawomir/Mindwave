@@ -6,21 +6,25 @@ import androidx.room.PrimaryKey
 import skustra.focusflow.data.database.Table.SESSION_ARCHIVE
 import skustra.focusflow.data.model.exceptions.toMs
 import skustra.focusflow.data.model.session.Session
+import skustra.focusflow.domain.utilities.dates.StatisticDateUtils
+import java.util.Date
 
 @Entity(tableName = SESSION_ARCHIVE)
 class SessionArchiveEntity(
     @PrimaryKey val sessionId: String,
-    @ColumnInfo(name = "date") val date: Long,
-    @ColumnInfo(name = "duration_ms") val durationMs: Long
+    @ColumnInfo(name = "date_ms") val dateMs: Long,
+    @ColumnInfo(name = "formatted_date") val formattedDate: String,
+    @ColumnInfo(name = "minutes") val minutes: Int
 ) {
     companion object {
         fun create(session: Session): SessionArchiveEntity {
+            val dateMs = System.currentTimeMillis()
             return SessionArchiveEntity(
                 sessionId = session.sessionId,
-                date = System.currentTimeMillis(),
-                durationMs = session.duration.toMs()
+                minutes = session.sessionDuration(),
+                formattedDate = StatisticDateUtils.format(Date(dateMs)),
+                dateMs = dateMs
             )
         }
     }
 }
-

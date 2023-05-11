@@ -9,6 +9,7 @@ import dagger.hilt.android.qualifiers.ApplicationContext
 import dagger.hilt.components.SingletonComponent
 import skustra.focusflow.data.database.AppDatabase
 import skustra.focusflow.data.database.Constants.DATABASE
+import skustra.focusflow.data.database.DateConverter
 import javax.inject.Singleton
 
 @Module

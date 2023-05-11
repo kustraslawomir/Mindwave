@@ -20,7 +20,15 @@ object LocalizationManager {
             LocalizationKey.SkipBreaks to "Pomiń przerwy",
             LocalizationKey.SessionInProgress to "Twoja sesja jest w toku",
             LocalizationKey.SessionInProgressDescription to "Utrzymaj skupienie podczas pracy",
-            LocalizationKey.SessionPaused to "Sesja wstrzymana"
+            LocalizationKey.SessionPaused to "Sesja wstrzymana",
+            LocalizationKey.Mon to "Pon",
+            LocalizationKey.Tue to "Wt",
+            LocalizationKey.Wed to "Śr",
+            LocalizationKey.Thu to "Czw",
+            LocalizationKey.Fri to "Pt",
+            LocalizationKey.Sat to "Sob",
+            LocalizationKey.Sun to "Ndz"
+
         ),
         SupportedLanguage.English to mapOf(
             LocalizationKey.Remaining to "Remaining",
@@ -37,7 +45,14 @@ object LocalizationManager {
             LocalizationKey.SkipBreaks to "Skip breaks",
             LocalizationKey.SessionInProgress to "Your session is in progress",
             LocalizationKey.SessionInProgressDescription to "Stay focused while you work",
-            LocalizationKey.SessionPaused to "Session paused"
+            LocalizationKey.SessionPaused to "Session paused",
+            LocalizationKey.Mon to "Mon",
+            LocalizationKey.Tue to "Tue",
+            LocalizationKey.Wed to "Wed",
+            LocalizationKey.Thu to "Thu",
+            LocalizationKey.Fri to "Fri",
+            LocalizationKey.Sat to "Sat",
+            LocalizationKey.Sun to "Sun"
         )
     )
 
