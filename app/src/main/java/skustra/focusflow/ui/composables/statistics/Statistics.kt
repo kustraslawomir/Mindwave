@@ -47,9 +47,11 @@ val horizontalAxisValueFormatter =
 
 val verticalAxisValueFormatter =
     AxisValueFormatter<AxisPosition.Vertical.Start> { value, chartValues ->
-        Timber.d("$value")
+        Timber.d("hmm $value ${(chartValues.chartEntryModel.entries.size)}")
+        Timber.d("${(chartValues.chartEntryModel.entries.firstOrNull()
+            ?.firstOrNull())}")
         (chartValues.chartEntryModel.entries.firstOrNull()
-            ?.getOrNull(value.toInt()) as? SessionArchiveEntry)
+            ?.firstOrNull() as? SessionArchiveEntry)
             ?.sessionArchiveEntryDataModel?.summedDayDuration
             ?.run { value.toDisplayFormat() }
             .orEmpty()

@@ -19,7 +19,7 @@ import kotlin.random.Random
 
 @HiltViewModel
 class StatisticsViewModel @Inject constructor(
-    private val repository: SessionArchiveRepository
+    private val sessionArchiveRepository: SessionArchiveRepository
 ) : ViewModel() {
 
     private val entryProducer = ChartEntryModelProducer()
@@ -29,8 +29,34 @@ class StatisticsViewModel @Inject constructor(
     }
 
     init {
+        createEmptyStatistics()
+        listenToStatisticsChange()
+    }
+
+    private fun createEmptyStatistics() {
         viewModelScope.launch {
-            repository.getAllAsFlow().collect { data ->
+            if (!sessionArchiveRepository.isEmpty()) {
+                return@launch
+            }
+
+            val durations = SessionConfig.availableDurations()
+            val dates = generateDates().map { dayInterval ->
+                val randomDuration = durations[Random.nextInt(0, durations.size - 1)]
+                SessionArchiveEntity(
+                    formattedDate = StatisticDateUtils.format(dayInterval),
+                    sessionId = UUID.randomUUID().toString(),
+               //     minutes = if (BuildConfig.DEBUG) randomDuration else 0,
+                    minutes = 0,
+                    dateMs = dayInterval.time
+                )
+            }
+            sessionArchiveRepository.insert(dates)
+        }
+    }
+
+    private fun listenToStatisticsChange() {
+        viewModelScope.launch {
+            sessionArchiveRepository.getAllAsFlow().collect { data ->
                 Timber.d("Statistics size: ${data.size}")
                 val producer = data
                     .groupBy { it.formattedDate }
@@ -48,27 +74,6 @@ class StatisticsViewModel @Inject constructor(
 
                 entryProducer.setEntries(producer)
             }
-        }
-
-        if (BuildConfig.DEBUG && repository.getAll().isEmpty()) {
-            fakeAppData()
-        }
-    }
-
-    private fun fakeAppData() {
-        viewModelScope.launch {
-            repository.clearTable()
-            val durations = SessionConfig.availableDurations()
-            val mockData = generateDates(Calendar.getInstance()).map { mockDate ->
-                val randomDuration = durations[Random.nextInt(0, durations.size - 1)]
-                SessionArchiveEntity(
-                    formattedDate = StatisticDateUtils.format(mockDate),
-                    sessionId = UUID.randomUUID().toString(),
-                    minutes = randomDuration,
-                    dateMs = mockDate.time
-                )
-            }
-            repository.insert(mockData)
         }
     }
 }

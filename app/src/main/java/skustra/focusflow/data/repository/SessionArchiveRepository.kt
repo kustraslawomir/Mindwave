@@ -9,8 +9,9 @@ class SessionArchiveRepository @Inject constructor(private val archiveDao: Sessi
 
     fun getAll(): List<SessionArchiveEntity> = archiveDao.getAll()
     fun getAllAsFlow(): Flow<List<SessionArchiveEntity>> = archiveDao.getAllAsFlow()
-    fun getLastEntity() : SessionArchiveEntity? = archiveDao.getLastEntity()
+    fun getLastEntity(): SessionArchiveEntity? = archiveDao.getLastEntity()
     fun insert(archiveEntity: SessionArchiveEntity) = archiveDao.insert(archiveEntity)
     fun insert(archiveEntities: List<SessionArchiveEntity>) = archiveDao.insert(archiveEntities)
     fun clearTable() = archiveDao.clearTable()
+    fun isEmpty() = archiveDao.countEntries() == 0
 }

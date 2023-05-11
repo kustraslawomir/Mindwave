@@ -12,6 +12,24 @@ object StatisticDateUtils {
 
     private var xAxisDateFormat = SimpleDateFormat("MM-dd", Locale.getDefault())
 
+    fun format(date: Date): String = xAxisDateFormat.format(date)
+
+    fun generateDates(): List<Date> {
+        val fromDate = Calendar.getInstance()
+        val dates = mutableListOf<Date>()
+
+        val toDate = Calendar.getInstance().apply {
+            time = fromDate.time
+            add(Calendar.MONTH, -1)
+        }
+
+        while (toDate.time.before(fromDate.time)) {
+            toDate.add(Calendar.DATE, 1)
+            dates.add(toDate.time)
+        }
+        return dates
+    }
+
     val daysOfWeek = listOf(
         LocalizationManager.getText(LocalizationKey.Mon),
         LocalizationManager.getText(LocalizationKey.Tue),
@@ -21,24 +39,4 @@ object StatisticDateUtils {
         LocalizationManager.getText(LocalizationKey.Sat),
         LocalizationManager.getText(LocalizationKey.Sun)
     )
-
-    fun format(date : Date) : String {
-        return xAxisDateFormat.format(date)
-    }
-
-    fun generateDates(fromDate: Calendar): List<Date> {
-        val dates = mutableListOf<Date>()
-
-        val toDate = Calendar.getInstance().apply {
-            time = fromDate.time
-            add(Calendar.YEAR, 1)
-        }
-
-        while (fromDate.time.before(toDate.time)) {
-            fromDate.add(Calendar.DATE, 1)
-            dates.add(fromDate.time)
-            Timber.d("${dates.size}")
-        }
-        return dates
-    }
 }

@@ -18,7 +18,7 @@ interface SessionArchiveDao {
     fun getAllAsFlow(): Flow<List<SessionArchiveEntity>>
 
     @Query("SELECT * FROM $SESSION_ARCHIVE ORDER BY date_ms DESC LIMIT 1")
-    fun getLastEntity() : SessionArchiveEntity?
+    fun getLastEntity(): SessionArchiveEntity?
 
     @Insert(onConflict = OnConflictStrategy.REPLACE)
     fun insert(archiveEntity: SessionArchiveEntity)
@@ -28,5 +28,8 @@ interface SessionArchiveDao {
 
     @Query("DELETE FROM $SESSION_ARCHIVE")
     fun clearTable()
+
+    @Query("SELECT COUNT(*) FROM $SESSION_ARCHIVE")
+    fun countEntries(): Int
 
 }
