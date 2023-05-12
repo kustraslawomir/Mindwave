@@ -56,18 +56,21 @@ class StatisticsViewModel @Inject constructor(
         viewModelScope.launch {
             sessionArchiveRepository.getAllAsFlow().collect { data ->
                 Timber.d("Statistics size: ${data.size}")
+                var entryXIndex = 0f
                 val producer = data
                     .groupBy { it.formattedDate }
                     .map { item ->
                         val durationSum = item.value.sumOf { it.minutes }
-                        SessionArchiveEntry(
+                        val entry = SessionArchiveEntry(
                             sessionArchiveEntryDataModel = SessionArchiveEntryDataModel(
                                 summedDayDuration = durationSum,
                                 date = item.key
                             ),
+                            x = entryXIndex,
                             y = durationSum.toFloat(),
-                            x = data.indexOf(item.value.first()).toFloat(),
                         )
+                        entryXIndex = entryXIndex + 1f
+                        entry
                     }
 
                 entryProducer.setEntries(producer)
