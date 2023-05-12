@@ -52,50 +52,54 @@ fun SessionFocusArc(
     val primaryColor = MaterialTheme.colorScheme.primary
     val backgroundColor = MaterialTheme.colorScheme.background
     val shadowColor = if (isSystemInDarkTheme()) Color.White else Color.Black
-    val configuration = LocalConfiguration.current
     val composableSize = with(LocalContext.current.resources.displayMetrics) {
-        configuration.screenWidthDp.dp.minus(80.dp)
+        LocalConfiguration.current
+            .screenWidthDp.dp.minus(80.dp)
     }
-    Box(
-        modifier = Modifier.size(composableSize), contentAlignment = Alignment.Center
+    Canvas(
+        modifier = Modifier.size(composableSize)
     ) {
-        Canvas(
-            modifier = Modifier.size(composableSize)
-        ) {
 
-            drawOutlineIndicator(animation, primaryColor, indicatorThickness, composableSize)
-            drawShadow(shadowColor)
-            drawShadowForeground(composableSize, indicatorThickness, backgroundColor)
-        }
+        drawOutlineIndicator(animation, primaryColor, indicatorThickness, composableSize)
+        drawShadow(shadowColor)
+        drawShadowForeground(composableSize, indicatorThickness, backgroundColor)
+    }
 
-        Column(
-            modifier = Modifier.fillMaxSize(),
-            verticalArrangement = Arrangement.Center,
-            horizontalAlignment = Alignment.CenterHorizontally
-        ) {
-            TimeProgress(sessionState = sessionState)
-            CurrentSessionCounter(sessionState = sessionState)
-            BreaksCount(sessionState = sessionState)
-            ChangeSessionDurationComposable(sessionState = sessionState)
-        }
+    Column(
+        modifier = Modifier.fillMaxSize(),
+        verticalArrangement = Arrangement.Center,
+        horizontalAlignment = Alignment.CenterHorizontally
+    ) {
+        TimeProgress(sessionState = sessionState)
+        CurrentSessionCounter(sessionState = sessionState)
+        BreaksCount(sessionState = sessionState)
+        ChangeSessionDurationComposable(sessionState = sessionState)
     }
 }
 
 private fun DrawScope.drawOutlineIndicator(
-    animation: State<Float>, foregroundIndicatorColor: Color, indicatorThickness: Dp, size: Dp
+    animation: State<Float>,
+    foregroundIndicatorColor: Color,
+    indicatorThickness: Dp,
+    size: Dp
 ) {
     val sweepAngle = (animation.value) * 360 / 100
     drawArc(
         color = foregroundIndicatorColor,
-        startAngle = -50f,
+        startAngle = -90f,
         sweepAngle = sweepAngle,
         useCenter = false,
-        style = Stroke(width = indicatorThickness.toPx(), cap = StrokeCap.Round),
+        style = Stroke(
+            width = indicatorThickness.toPx(),
+            cap = StrokeCap.Round
+        ),
         size = Size(
-            width = (size - indicatorThickness).toPx(), height = (size - indicatorThickness).toPx()
+            width = (size - indicatorThickness).toPx(),
+            height = (size - indicatorThickness).toPx()
         ),
         topLeft = Offset(
-            x = (indicatorThickness / 2).toPx(), y = (indicatorThickness / 2).toPx()
+            x = (indicatorThickness / 2).toPx(),
+            y = (indicatorThickness / 2).toPx()
         )
     )
 }

@@ -9,4 +9,8 @@ interface DrawableProvider {
     fun getPlayIcon(): Int
 
     fun getStopIcon(): Int
+
+    fun getStatisticsIcon(): Int
+
+    fun getChevronUpIcon(): Int
 }

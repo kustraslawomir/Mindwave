@@ -21,19 +21,21 @@ fun SessionComposable(viewModel: SessionViewModel = viewModel()) {
         .getSessionStateFlow()
         .collectAsStateWithLifecycle()
 
-    Timber.d("instance session composable: ${viewModel
-        .getSessionStateFlow()}")
+    Timber.d(
+        "instance session composable: ${
+            viewModel
+                .getSessionStateFlow()
+        }"
+    )
 
     Timber.d("instance session composable sessionState: $sessionState")
     Box(
         modifier = Modifier
             .fillMaxSize()
-            .padding(bottom = 60.dp)
+            .padding(bottom = 80.dp)
     ) {
-        Box(
-            contentAlignment = Alignment.Center,
-            modifier = Modifier.fillMaxSize()
-        ) {
+
+        Box(contentAlignment = Alignment.Center) {
             SessionFocusArc(
                 sessionState = sessionState
             )
