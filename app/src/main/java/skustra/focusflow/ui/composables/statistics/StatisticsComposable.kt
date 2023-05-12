@@ -16,6 +16,7 @@ import com.patrykandpatrick.vico.compose.axis.horizontal.bottomAxis
 import com.patrykandpatrick.vico.compose.axis.vertical.startAxis
 import com.patrykandpatrick.vico.compose.chart.Chart
 import com.patrykandpatrick.vico.compose.chart.column.columnChart
+import com.patrykandpatrick.vico.compose.chart.line.lineChart
 import com.patrykandpatrick.vico.compose.component.shapeComponent
 import com.patrykandpatrick.vico.compose.component.textComponent
 import com.patrykandpatrick.vico.compose.dimensions.dimensionsOf
@@ -23,6 +24,9 @@ import com.patrykandpatrick.vico.compose.style.ProvideChartStyle
 import com.patrykandpatrick.vico.compose.style.currentChartStyle
 import com.patrykandpatrick.vico.core.axis.AxisPosition
 import com.patrykandpatrick.vico.core.axis.formatter.AxisValueFormatter
+import com.patrykandpatrick.vico.core.chart.DefaultPointConnector
+import com.patrykandpatrick.vico.core.chart.composed.plus
+import com.patrykandpatrick.vico.core.chart.copy
 import com.patrykandpatrick.vico.core.chart.decoration.ThresholdLine
 import com.patrykandpatrick.vico.core.component.shape.LineComponent
 import com.patrykandpatrick.vico.core.component.shape.Shapes
@@ -46,15 +50,19 @@ private fun Chart(viewModel: StatisticsViewModel) {
     val thresholdLine = rememberThresholdLine()
     ProvideChartStyle(rememberChartStyle(chartColors)) {
         val defaultColumns = currentChartStyle.columnChart.columns
+        val columnChart = columnChart(
+            columns = remember(defaultColumns) {
+                defaultColumns.map { defaultColumn ->
+                    LineComponent(defaultColumn.color, COLUMN_WIDTH_DP, defaultColumn.shape)
+                }
+            },
+            decorations = remember(thresholdLine) { listOf(thresholdLine) },
+        )
+        val lineChart = lineChart(
+            targetVerticalAxisPosition = AxisPosition.Vertical.End,
+            decorations = remember(thresholdLine) { listOf(thresholdLine) })
         Chart(
-            chart = columnChart(
-                columns = remember(defaultColumns) {
-                    defaultColumns.map { defaultColumn ->
-                        LineComponent(defaultColumn.color, COLUMN_WIDTH_DP, defaultColumn.shape)
-                    }
-                },
-                decorations = remember(thresholdLine) { listOf(thresholdLine) },
-            ),
+            chart = remember(lineChart) { lineChart },
             chartModelProducer = viewModel.getEntryProducer(),
             startAxis = startAxis(
                 valueFormatter = verticalAxisValueFormatter,
@@ -65,6 +73,7 @@ private fun Chart(viewModel: StatisticsViewModel) {
                 valueFormatter = horizontalAxisValueFormatter
             ),
             marker = rememberMarker(),
+            // legend = rememberLegend(),
         )
     }
 }
@@ -120,3 +129,4 @@ val verticalAxisValueFormatter =
             ?.run { value.toDisplayFormat() }
             .orEmpty()
     }
+private val pointConnector = DefaultPointConnector(cubicStrength = 0f)

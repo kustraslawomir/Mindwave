@@ -69,7 +69,7 @@ class StatisticsViewModel @Inject constructor(
                             x = entryXIndex,
                             y = durationSum.toFloat(),
                         )
-                        entryXIndex = entryXIndex + 1f
+                        entryXIndex += 1f
                         entry
                     }
 
