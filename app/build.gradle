@@ -5,12 +5,17 @@ plugins {
     id 'com.google.dagger.hilt.android'
 }
 
+ext {
+    APP_NAME = "Focus"
+    APP_NAME_DEBUG = "Focus.debug"
+}
+
 android {
     namespace 'skustra.focusflow'
     compileSdk 33
 
     defaultConfig {
-        applicationId "skustra.focusflow"
+        applicationId "skustra.focus"
         minSdk 26
         targetSdk 33
         versionCode 1
@@ -26,6 +31,24 @@ android {
         release {
             minifyEnabled false
             proguardFiles getDefaultProguardFile('proguard-android-optimize.txt'), 'proguard-rules.pro'
+            manifestPlaceholders = [appName: APP_NAME]
+        }
+        debug {
+            applicationIdSuffix ".debug"
+            manifestPlaceholders = [appName: APP_NAME_DEBUG]
+        }
+
+        applicationVariants.all { variant ->
+            variant.outputs.each { output ->
+                def SEP = "_"
+                def version = variant.versionName
+                def date = new Date()
+                def formattedDate = date.format('dd-MM-yy HH-mm')
+
+                def newApkName = "v" + version + SEP + formattedDate + ".apk"
+
+                output.outputFileName = newApkName
+            }
         }
     }
     compileOptions {

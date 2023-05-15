@@ -72,7 +72,6 @@ class SessionViewModel @Inject constructor(
         val currentDurationIndex = SessionConfig.availableDurations().indexOf(durationChosenByUser)
         durationChosenByUser = SessionConfig.availableDurations()[currentDurationIndex - 1]
         updateDuration(durationChosenByUser)
-
     }
 
     fun isAvailableToIncrease(): Boolean {

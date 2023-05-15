@@ -1,4 +1,6 @@
 package skustra.focusflow.ui.composables.statistics
+
+import android.app.LocaleManager
 import android.graphics.Typeface
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.graphics.Color
@@ -9,37 +11,37 @@ import com.patrykandpatrick.vico.compose.component.textComponent
 import com.patrykandpatrick.vico.compose.dimensions.dimensionsOf
 import com.patrykandpatrick.vico.compose.legend.verticalLegend
 import com.patrykandpatrick.vico.compose.legend.verticalLegendItem
+import com.patrykandpatrick.vico.compose.style.ChartStyle
 import com.patrykandpatrick.vico.compose.style.currentChartStyle
 import com.patrykandpatrick.vico.core.component.shape.Shapes
+import skustra.focusflow.ui.localization.LocalizationKey
+import skustra.focusflow.ui.localization.LocalizationManager
+import skustra.focusflow.ui.theme.ChartItemColor
+import skustra.focusflow.ui.theme.GoalColor
 
 @Composable
 fun rememberLegend() = verticalLegend(
-    items = chartColors.mapIndexed { index, chartColor ->
-        verticalLegendItem(
-            icon = shapeComponent(Shapes.pillShape, chartColor),
-            label = textComponent(
-                color = currentChartStyle.axis.axisLabelColor,
-                textSize = legendItemLabelTextSize,
-                typeface = Typeface.MONOSPACE,
-            ),
-            labelText = "Test $index",
-        )
-    },
+    items = listOf(
+        item(LocalizationManager.getText(LocalizationKey.YourProgress), ChartItemColor),
+        item(LocalizationManager.getText(LocalizationKey.DailyGoal), GoalColor)
+    ),
     iconSize = legendItemIconSize,
     iconPadding = legendItemIconPaddingValue,
     spacing = legendItemSpacing,
     padding = legendPadding,
 )
 
-private const val COLOR_1_CODE = 0xffb983ff
-private const val COLOR_2_CODE = 0xff91b1fd
-private const val COLOR_3_CODE = 0xff8fdaff
-private const val COLOR_4_CODE = 0xfffab94d
+@Composable
+private fun item(labelText: String, labelColor: Color) = verticalLegendItem(
+    icon = shapeComponent(Shapes.pillShape, labelColor),
+    label = textComponent(
+        color = currentChartStyle.axis.axisLabelColor,
+        textSize = legendItemLabelTextSize,
+        typeface = Typeface.MONOSPACE,
+    ),
+    labelText = labelText,
+)
 
-private val color1 = Color(COLOR_1_CODE)
-private val color2 = Color(COLOR_2_CODE)
-private val color3 = Color(COLOR_3_CODE)
-private val chartColors = listOf(color1, color2, color3)
 private val legendItemLabelTextSize = 12.sp
 private val legendItemIconSize = 8.dp
 private val legendItemIconPaddingValue = 10.dp

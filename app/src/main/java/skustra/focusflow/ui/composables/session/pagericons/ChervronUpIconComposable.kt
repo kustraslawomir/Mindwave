@@ -28,8 +28,8 @@ fun ChevronUpComposable(
     Box(
         modifier = Modifier
             .fillMaxSize()
-            .padding(end = 16.dp, top = 40.dp),
-        contentAlignment = Alignment.TopEnd,
+            .padding(end = 18.dp, bottom = 70.dp),
+        contentAlignment = Alignment.BottomEnd,
     ) {
         IconButton(onClick = {
             scope.launch {

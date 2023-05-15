@@ -7,6 +7,7 @@ import android.app.PendingIntent
 import android.content.Context
 import android.content.Intent
 import androidx.core.app.NotificationCompat
+import skustra.focusflow.BuildConfig
 import skustra.focusflow.R
 import skustra.focusflow.data.model.timer.TimerState
 import skustra.focusflow.ui.activity.MainActivity
@@ -62,7 +63,7 @@ class SessionServiceNotificationManagerImpl(
         return notificationManager.createNotificationChannel(
             NotificationChannel(
                 channelId,
-                applicationContext.getString(R.string.app_name),
+                BuildConfig.APPLICATION_ID,
                 NotificationManager.IMPORTANCE_LOW
             ).apply {
                 setShowBadge(false)

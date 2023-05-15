@@ -27,10 +27,10 @@ class SessionConfig {
 
         val DEFAULT_DURATION: Minute = availableDurations()[3]
 
-        const val WORK_DURATION: Minute = 25
+        const val WORK_DURATION: Minute = 30
         const val BREAK_DURATION: Minute = 5
 
         private const val SESSION_DURATION_STEP: Minute = 15
-        private const val SESSION_MAX_DURATION_LIMIT: Minute = 240
+        const val SESSION_MAX_DURATION_LIMIT: Minute = 240
     }
 }

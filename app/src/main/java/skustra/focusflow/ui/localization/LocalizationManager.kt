@@ -27,9 +27,11 @@ object LocalizationManager {
             LocalizationKey.Thu to "Czw",
             LocalizationKey.Fri to "Pt",
             LocalizationKey.Sat to "Sob",
-            LocalizationKey.Sun to "Ndz"
-
+            LocalizationKey.Sun to "Ndz",
+            LocalizationKey.DailyGoal to "Cel",
+            LocalizationKey.YourProgress to "Twój postęp",
         ),
+
         SupportedLanguage.English to mapOf(
             LocalizationKey.Remaining to "Remaining",
             LocalizationKey.Start to "Start",
@@ -52,7 +54,10 @@ object LocalizationManager {
             LocalizationKey.Thu to "Thu",
             LocalizationKey.Fri to "Fri",
             LocalizationKey.Sat to "Sat",
-            LocalizationKey.Sun to "Sun"
+            LocalizationKey.Sun to "Sun",
+            LocalizationKey.DailyGoal to "Daily goal",
+            LocalizationKey.YourProgress to "Your progress",
+
         )
     )
 

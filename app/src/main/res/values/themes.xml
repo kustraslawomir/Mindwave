@@ -4,6 +4,6 @@
     <style name="Theme.FocusFlow" parent="android:Theme.Material.Light.NoActionBar">
         <item name="android:windowTranslucentStatus">true</item>
         <item name="android:statusBarColor">@android:color/transparent</item>
-
+        <item name="android:windowBackground">@color/black</item>
     </style>
 </resources>

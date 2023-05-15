@@ -38,13 +38,11 @@ class StatisticsViewModel @Inject constructor(
                 return@launch
             }
 
-            val durations = SessionConfig.availableDurations()
             val dates = generateDates().map { dayInterval ->
-                val randomDuration = durations[Random.nextInt(0, durations.size - 1)]
                 SessionArchiveEntity(
                     formattedDate = StatisticDateUtils.format(dayInterval),
                     sessionId = UUID.randomUUID().toString(),
-                    minutes = if (BuildConfig.DEBUG) randomDuration else 0,
+                    minutes = 0,
                     dateMs = dayInterval.time
                 )
             }

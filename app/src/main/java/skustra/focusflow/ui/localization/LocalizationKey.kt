@@ -23,5 +23,7 @@ sealed class LocalizationKey {
     object Fri : LocalizationKey()
     object Sat : LocalizationKey()
     object Sun : LocalizationKey()
+    object DailyGoal : LocalizationKey()
+    object YourProgress : LocalizationKey()
 
 }

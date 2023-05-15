@@ -28,8 +28,10 @@ import com.patrykandpatrick.vico.core.chart.DefaultPointConnector
 import com.patrykandpatrick.vico.core.chart.composed.plus
 import com.patrykandpatrick.vico.core.chart.copy
 import com.patrykandpatrick.vico.core.chart.decoration.ThresholdLine
+import com.patrykandpatrick.vico.core.chart.values.AxisValuesOverrider
 import com.patrykandpatrick.vico.core.component.shape.LineComponent
 import com.patrykandpatrick.vico.core.component.shape.Shapes
+import skustra.focusflow.domain.usecase.session.SessionConfig
 import skustra.focusflow.ui.extensions.toDisplayFormat
 import skustra.focusflow.ui.theme.ChartItemColor
 import skustra.focusflow.ui.theme.GoalColor
@@ -49,31 +51,26 @@ fun StatisticsComposable(viewModel: StatisticsViewModel = viewModel()) {
 private fun Chart(viewModel: StatisticsViewModel) {
     val thresholdLine = rememberThresholdLine()
     ProvideChartStyle(rememberChartStyle(chartColors)) {
-        val defaultColumns = currentChartStyle.columnChart.columns
-        val columnChart = columnChart(
-            columns = remember(defaultColumns) {
-                defaultColumns.map { defaultColumn ->
-                    LineComponent(defaultColumn.color, COLUMN_WIDTH_DP, defaultColumn.shape)
-                }
-            },
-            decorations = remember(thresholdLine) { listOf(thresholdLine) },
-        )
         val lineChart = lineChart(
             targetVerticalAxisPosition = AxisPosition.Vertical.End,
-            decorations = remember(thresholdLine) { listOf(thresholdLine) })
+            axisValuesOverrider = axisValueOverrider,
+            decorations = remember(thresholdLine) {
+                listOf(thresholdLine)
+            })
         Chart(
-            chart = remember(lineChart) { lineChart },
             chartModelProducer = viewModel.getEntryProducer(),
+            chart = remember(lineChart) { lineChart },
             startAxis = startAxis(
                 valueFormatter = verticalAxisValueFormatter,
-                maxLabelCount = START_AXIS_LABEL_COUNT
-            ),
+                maxLabelCount = START_AXIS_LABEL_COUNT,
+
+                ),
             bottomAxis = bottomAxis(
                 labelRotationDegrees = dateRotation,
                 valueFormatter = horizontalAxisValueFormatter
             ),
             marker = rememberMarker(),
-            // legend = rememberLegend(),
+            legend = rememberLegend(),
         )
     }
 }
@@ -99,7 +96,6 @@ private fun rememberThresholdLine(): ThresholdLine {
 
 private const val THRESHOLD_LINE_VALUE = 90f
 private const val dateRotation = 280f
-private const val COLUMN_WIDTH_DP = 8f
 private const val START_AXIS_LABEL_COUNT = 10
 private val chartColors = listOf(ChartItemColor, GoalColor)
 private val thresholdLineLabelMarginValue = 2.dp
@@ -129,4 +125,6 @@ val verticalAxisValueFormatter =
             ?.run { value.toDisplayFormat() }
             .orEmpty()
     }
-private val pointConnector = DefaultPointConnector(cubicStrength = 0f)
+
+private val axisValueOverrider = AxisValuesOverrider
+    .fixed(maxY = SessionConfig.SESSION_MAX_DURATION_LIMIT.toFloat())
