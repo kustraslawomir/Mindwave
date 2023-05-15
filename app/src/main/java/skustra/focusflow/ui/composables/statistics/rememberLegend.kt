@@ -22,8 +22,8 @@ import skustra.focusflow.ui.theme.GoalColor
 @Composable
 fun rememberLegend() = verticalLegend(
     items = listOf(
-        item(LocalizationManager.getText(LocalizationKey.YourProgress), ChartItemColor),
-        item(LocalizationManager.getText(LocalizationKey.DailyGoal), GoalColor)
+        item(LocalizationManager.getText(LocalizationKey.DailyGoal), GoalColor),
+        item(LocalizationManager.getText(LocalizationKey.YourProgress), ChartItemColor)
     ),
     iconSize = legendItemIconSize,
     iconPadding = legendItemIconPaddingValue,

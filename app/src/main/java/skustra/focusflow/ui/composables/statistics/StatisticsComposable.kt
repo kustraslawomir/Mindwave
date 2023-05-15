@@ -2,14 +2,20 @@ package skustra.focusflow.ui.composables.statistics
 
 import android.graphics.Typeface
 import androidx.compose.foundation.background
+import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
+import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.padding
+import androidx.compose.material.Text
+import androidx.compose.material3.MaterialTheme
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.remember
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.geometry.Size
 import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
 import androidx.lifecycle.viewmodel.compose.viewModel
 import com.patrykandpatrick.vico.compose.axis.horizontal.bottomAxis
@@ -33,6 +39,8 @@ import com.patrykandpatrick.vico.core.component.shape.LineComponent
 import com.patrykandpatrick.vico.core.component.shape.Shapes
 import skustra.focusflow.domain.usecase.session.SessionConfig
 import skustra.focusflow.ui.extensions.toDisplayFormat
+import skustra.focusflow.ui.localization.LocalizationKey
+import skustra.focusflow.ui.localization.LocalizationManager
 import skustra.focusflow.ui.theme.ChartItemColor
 import skustra.focusflow.ui.theme.GoalColor
 
@@ -43,7 +51,20 @@ fun StatisticsComposable(viewModel: StatisticsViewModel = viewModel()) {
         modifier = Modifier
             .fillMaxSize()
     ) {
-        Chart(viewModel)
+        Column(
+            modifier = Modifier.fillMaxSize(),
+            verticalArrangement = Arrangement.Center,
+            horizontalAlignment = Alignment.CenterHorizontally
+        ) {
+            Chart(viewModel)
+            Text(
+                LocalizationManager.getText(LocalizationKey.ChartDescription),
+                modifier = Modifier.padding(top = 100.dp, start = 24.dp, end = 24.dp),
+                style = MaterialTheme.typography.bodySmall,
+                color = Color.Gray,
+                textAlign = TextAlign.Center
+            )
+        }
     }
 }
 

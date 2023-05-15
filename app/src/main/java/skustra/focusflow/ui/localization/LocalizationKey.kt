@@ -25,5 +25,6 @@ sealed class LocalizationKey {
     object Sun : LocalizationKey()
     object DailyGoal : LocalizationKey()
     object YourProgress : LocalizationKey()
+    object ChartDescription : LocalizationKey()
 
 }
