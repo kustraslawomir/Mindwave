@@ -31,5 +31,4 @@ interface SessionArchiveDao {
 
     @Query("SELECT COUNT(*) FROM $SESSION_ARCHIVE")
     fun countEntries(): Int
-
 }

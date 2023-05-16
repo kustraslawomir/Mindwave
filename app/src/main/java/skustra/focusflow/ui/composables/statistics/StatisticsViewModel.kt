@@ -5,16 +5,13 @@ import androidx.lifecycle.viewModelScope
 import com.patrykandpatrick.vico.core.entry.ChartEntryModelProducer
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.launch
-import skustra.focusflow.BuildConfig
 import skustra.focusflow.data.database.entity.SessionArchiveEntity
 import skustra.focusflow.data.repository.SessionArchiveRepository
-import skustra.focusflow.domain.usecase.session.SessionConfig
 import skustra.focusflow.domain.utilities.dates.StatisticDateUtils
 import skustra.focusflow.domain.utilities.dates.StatisticDateUtils.generateDates
 import timber.log.Timber
 import java.util.UUID
 import javax.inject.Inject
-import kotlin.random.Random
 
 @HiltViewModel
 class StatisticsViewModel @Inject constructor(
@@ -74,5 +71,11 @@ class StatisticsViewModel @Inject constructor(
                 entryProducer.setEntries(producer)
             }
         }
+    }
+
+    fun getAxisValueMaxY(): Float {
+       val axisValueMaxY = sessionArchiveRepository.getLongestDurationSessionArchive()
+        Timber.w("Axis max y: $axisValueMaxY")
+        return axisValueMaxY
     }
 }

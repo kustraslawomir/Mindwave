@@ -13,6 +13,7 @@ import androidx.compose.runtime.Composable
 import androidx.compose.runtime.remember
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.draw.alpha
 import androidx.compose.ui.geometry.Size
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.text.style.TextAlign
@@ -37,7 +38,9 @@ import com.patrykandpatrick.vico.core.chart.decoration.ThresholdLine
 import com.patrykandpatrick.vico.core.chart.values.AxisValuesOverrider
 import com.patrykandpatrick.vico.core.component.shape.LineComponent
 import com.patrykandpatrick.vico.core.component.shape.Shapes
+import com.patrykandpatrick.vico.core.entry.ChartEntryModel
 import skustra.focusflow.domain.usecase.session.SessionConfig
+import skustra.focusflow.domain.usecase.session.SessionConfig.Companion.SESSION_MAX_DURATION_LIMIT
 import skustra.focusflow.ui.extensions.toDisplayFormat
 import skustra.focusflow.ui.localization.LocalizationKey
 import skustra.focusflow.ui.localization.LocalizationManager
@@ -59,9 +62,11 @@ fun StatisticsComposable(viewModel: StatisticsViewModel = viewModel()) {
             Chart(viewModel)
             Text(
                 LocalizationManager.getText(LocalizationKey.ChartDescription),
-                modifier = Modifier.padding(top = 100.dp, start = 24.dp, end = 24.dp),
+                modifier = Modifier
+                    .padding(top = 50.dp, start = 16.dp, end = 16.dp)
+                    .alpha(0.7f),
                 style = MaterialTheme.typography.bodySmall,
-                color = Color.Gray,
+                color = Color.White,
                 textAlign = TextAlign.Center
             )
         }
@@ -74,7 +79,7 @@ private fun Chart(viewModel: StatisticsViewModel) {
     ProvideChartStyle(rememberChartStyle(chartColors)) {
         val lineChart = lineChart(
             targetVerticalAxisPosition = AxisPosition.Vertical.End,
-            axisValuesOverrider = axisValueOverrider,
+            axisValuesOverrider = getAxisValueOverrider(viewModel),
             decorations = remember(thresholdLine) {
                 listOf(thresholdLine)
             })
@@ -147,5 +152,10 @@ val verticalAxisValueFormatter =
             .orEmpty()
     }
 
-private val axisValueOverrider = AxisValuesOverrider
-    .fixed(maxY = SessionConfig.SESSION_MAX_DURATION_LIMIT.toFloat())
+fun getAxisValueOverrider(viewModel: StatisticsViewModel): AxisValuesOverrider<ChartEntryModel> {
+    return AxisValuesOverrider
+        .fixed(
+            minY = 0f,
+            maxY = viewModel.getAxisValueMaxY()
+        )
+}

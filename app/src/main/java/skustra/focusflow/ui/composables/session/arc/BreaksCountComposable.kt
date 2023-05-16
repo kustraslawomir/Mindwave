@@ -25,6 +25,6 @@ fun BreaksCount(sessionState: Session) {
     }
 
     Text(
-        text = breaksCountText, style = MaterialTheme.typography.bodySmall
+        text = breaksCountText, style = MaterialTheme.typography.bodyMedium
     )
 }

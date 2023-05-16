@@ -85,7 +85,7 @@ class SessionViewModel @Inject constructor(
     }
 
     fun sessionIncludesBreaks(): Boolean {
-        return durationChosenByUser >= SessionConfig.minimalDurationToIncludeBreaks()
+        return durationChosenByUser > SessionConfig.minimalDurationToIncludeBreaks()
     }
 
     private fun updateDuration(durationChosenByUser: Minute) {

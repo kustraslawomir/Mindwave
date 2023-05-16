@@ -30,7 +30,7 @@ object LocalizationManager {
             LocalizationKey.Sun to "Ndz",
             LocalizationKey.DailyGoal to "Cel",
             LocalizationKey.YourProgress to "Postęp",
-            LocalizationKey.ChartDescription to "Wykres służy jako motywujące narzędzie, pozwalające obserwować Twój wzrost i rozwój w czasie, oraz podjąć świadome decyzje dotyczące zarządzania czasem.\n\nPamiętaj, że Twoje zaangażowanie i systematyczność mają bezpośredni wpływ na osiąganie sukcesów, a aplikacja jest tu, aby Ci w tym pomóc."
+            LocalizationKey.ChartDescription to "Wykres przedstawia Twój rozwój w czasie, pomagając świadomie podejmować decyzje dotyczące zarządzania czasem. Możesz również porównywać swój czas pracy w różnych okresach, co pomoże Ci w identyfikacji trendów i wykrywaniu ewentualnych nieefektywności.\n\nPamiętaj, że Twoje zaangażowanie i systematyczność mają bezpośredni wpływ na osiąganie sukcesów, a aplikacja jest tu, aby Ci w tym pomóc."
         ),
 
         SupportedLanguage.English to mapOf(
@@ -58,7 +58,7 @@ object LocalizationManager {
             LocalizationKey.Sun to "Sun",
             LocalizationKey.DailyGoal to "Daily goal",
             LocalizationKey.YourProgress to "Your progress",
-            LocalizationKey.ChartDescription to "Your commitment drives success, and the app is here to assist you."
+            LocalizationKey.ChartDescription to "The chart represents your growth over time, helping you make conscious decisions regarding time management. You can also compare your work time across different periods, which will aid in identifying trends and detecting potential inefficiencies.\n\nRemember that your commitment and consistency directly impact your success, and the application is here to assist you in achieving that."
 
         )
     )

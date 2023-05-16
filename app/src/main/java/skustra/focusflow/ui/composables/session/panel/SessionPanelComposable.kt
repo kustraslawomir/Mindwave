@@ -64,7 +64,7 @@ private fun StartSessionComposable(viewModel: SessionViewModel = viewModel()) {
             IconButton(onClick = { viewModel.startSession(context) }) {
                 Icon(
                     painter = painterResource(id = viewModel.resourceManager.getPlayIcon()),
-                    contentDescription = "todo",
+                    contentDescription = "",
                     tint = Color.Black
                 )
             }
