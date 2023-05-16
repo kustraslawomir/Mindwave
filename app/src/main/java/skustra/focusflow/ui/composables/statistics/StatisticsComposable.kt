@@ -64,7 +64,7 @@ fun StatisticsComposable(viewModel: StatisticsViewModel = viewModel()) {
                 LocalizationManager.getText(LocalizationKey.ChartDescription),
                 modifier = Modifier
                     .padding(top = 50.dp, start = 16.dp, end = 16.dp)
-                    .alpha(0.7f),
+                    .alpha(0.5f),
                 style = MaterialTheme.typography.bodySmall,
                 color = Color.White,
                 textAlign = TextAlign.Center

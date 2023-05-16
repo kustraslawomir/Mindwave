@@ -1,6 +1,7 @@
 package skustra.focusflow.ui.composables.session
 
 import androidx.compose.foundation.layout.Box
+import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.padding
 import androidx.compose.runtime.Composable
@@ -11,8 +12,8 @@ import androidx.compose.ui.unit.dp
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import androidx.lifecycle.viewmodel.compose.viewModel
 import skustra.focusflow.ui.composables.session.arc.SessionFocusArc
+import skustra.focusflow.ui.composables.session.description.SessionDescriptionComposable
 import skustra.focusflow.ui.composables.session.panel.SessionPanelComposable
-import timber.log.Timber
 
 @Composable
 fun SessionComposable(viewModel: SessionViewModel = viewModel()) {
@@ -21,28 +22,36 @@ fun SessionComposable(viewModel: SessionViewModel = viewModel()) {
         .getSessionStateFlow()
         .collectAsStateWithLifecycle()
 
-    Timber.d(
-        "instance session composable: ${
-            viewModel
-                .getSessionStateFlow()
-        }"
-    )
-
-    Timber.d("instance session composable sessionState: $sessionState")
-    Box(
+    Column(
         modifier = Modifier
             .fillMaxSize()
-            .padding(bottom = 80.dp)
+            .padding(bottom = 80.dp),
     ) {
 
-        Box(contentAlignment = Alignment.Center) {
+        Box(
+            modifier = Modifier
+                .weight(1f)
+                .fillMaxSize(),
+            contentAlignment = Alignment.BottomCenter
+
+        ) {
+            SessionDescriptionComposable()
+        }
+        Box(
+            modifier = Modifier
+                .weight(2f)
+                .fillMaxSize(),
+            contentAlignment = Alignment.Center
+        ) {
             SessionFocusArc(
                 sessionState = sessionState
             )
         }
         Box(
-            contentAlignment = Alignment.BottomCenter,
-            modifier = Modifier.fillMaxSize()
+            modifier = Modifier
+                .weight(0.5f)
+                .fillMaxSize(),
+            contentAlignment = Alignment.BottomCenter
         ) {
             SessionPanelComposable()
         }

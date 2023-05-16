@@ -30,8 +30,17 @@ object LocalizationManager {
             LocalizationKey.Sun to "Ndz",
             LocalizationKey.DailyGoal to "Cel",
             LocalizationKey.YourProgress to "Postęp",
-            LocalizationKey.ChartDescription to "Wykres przedstawia Twój rozwój w czasie, pomagając świadomie podejmować decyzje dotyczące zarządzania czasem. Możesz również porównywać swój czas pracy w różnych okresach, co pomoże Ci w identyfikacji trendów i wykrywaniu ewentualnych nieefektywności.\n\nPamiętaj, że Twoje zaangażowanie i systematyczność mają bezpośredni wpływ na osiąganie sukcesów, a aplikacja jest tu, aby Ci w tym pomóc."
-        ),
+            LocalizationKey.ChartDescription to "Wykres przedstawia Twój rozwój w czasie, pomagając świadomie podejmować decyzje dotyczące zarządzania czasem. Możesz również porównywać swój czas pracy w różnych okresach, co pomoże Ci w identyfikacji trendów i wykrywaniu ewentualnych nieefektywności.\n\nPamiętaj, że Twoje zaangażowanie i systematyczność mają bezpośredni wpływ na osiąganie sukcesów, a aplikacja jest tu, aby Ci w tym pomóc.",
+            LocalizationKey.SessionIdleTitle to "Przygotuj się do sesji koncentracji",
+            LocalizationKey.SessionIdleDescription to "Daj sobie czas i przestrzeń do skupienia, a z pewnością osiągniesz swoje cele. Powodzenia!",
+            LocalizationKey.SessionPauseTitle to "Sesja wstrzymana",
+            LocalizationKey.SessionPauseDescription to "Gdy tylko poczujesz się gotowy, wróć do sesji",
+            LocalizationKey.SessionInProgressTitle to "Skup się",
+            LocalizationKey.SessionBreakTitle to "Odpocznij",
+            LocalizationKey.SessionBreakDescription to "Skorzystaj z przerwy na relaks, aby zregenerować umysł i ciało, angażując się w medytację, krótką przechadzkę lub głębokie oddychanie",
+
+
+            ),
 
         SupportedLanguage.English to mapOf(
             LocalizationKey.Remaining to "Remaining",
@@ -58,7 +67,15 @@ object LocalizationManager {
             LocalizationKey.Sun to "Sun",
             LocalizationKey.DailyGoal to "Daily goal",
             LocalizationKey.YourProgress to "Your progress",
-            LocalizationKey.ChartDescription to "The chart represents your growth over time, helping you make conscious decisions regarding time management. You can also compare your work time across different periods, which will aid in identifying trends and detecting potential inefficiencies.\n\nRemember that your commitment and consistency directly impact your success, and the application is here to assist you in achieving that."
+            LocalizationKey.ChartDescription to "The chart represents your growth over time, helping you make conscious decisions regarding time management. You can also compare your work time across different periods, which will aid in identifying trends and detecting potential inefficiencies.\n\nRemember that your commitment and consistency directly impact your success, and the application is here to assist you in achieving that.",
+            LocalizationKey.SessionIdleTitle to "Get ready for a concentration session",
+            LocalizationKey.SessionIdleDescription to "Give yourself time and space to focus, and you will undoubtedly achieve your goals. Best of luck!",
+            LocalizationKey.SessionPauseTitle to "Session paused",
+            LocalizationKey.SessionPauseDescription to "Return to the session as soon as you are ready",
+            LocalizationKey.SessionInProgressTitle to "Focus",
+            LocalizationKey.SessionBreakTitle to "Rest",
+            LocalizationKey.SessionBreakDescription to "Take this time to relax your mind and body, engage in activities such as meditation, a short walk, or deep breathing",
+
 
         )
     )

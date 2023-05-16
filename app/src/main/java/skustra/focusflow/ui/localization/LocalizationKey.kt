@@ -26,5 +26,12 @@ sealed class LocalizationKey {
     object DailyGoal : LocalizationKey()
     object YourProgress : LocalizationKey()
     object ChartDescription : LocalizationKey()
+    object SessionIdleTitle : LocalizationKey()
+    object SessionIdleDescription : LocalizationKey()
+    object SessionPauseTitle : LocalizationKey()
+    object SessionPauseDescription : LocalizationKey()
+    object SessionInProgressTitle : LocalizationKey()
+    object SessionBreakTitle : LocalizationKey()
+    object SessionBreakDescription : LocalizationKey()
 
 }

@@ -42,7 +42,6 @@ fun SessionPanelComposable(viewModel: SessionViewModel = viewModel()) {
 private fun IdleSessionComposable(viewModel: SessionViewModel) {
     Column(
         horizontalAlignment = Alignment.CenterHorizontally
-
     ) {
         if (viewModel.sessionIncludesBreaks()) {
             SkipBreaksComposable(skipBreaks = viewModel.shouldSkipTheBreaks)
@@ -55,8 +54,6 @@ private fun IdleSessionComposable(viewModel: SessionViewModel) {
 private fun StartSessionComposable(viewModel: SessionViewModel = viewModel()) {
     val context = LocalContext.current
     Box(modifier = Modifier
-        .padding(horizontal = 16.dp, vertical = 8.dp)
-        .height(48.dp)
         .clip(shape = RoundedCornerShape(size = 12.dp))
         .background(color = ButtonColor)
         .clickable { viewModel.startSession(context) }) {

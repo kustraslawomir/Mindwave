@@ -30,7 +30,7 @@ import kotlin.time.Duration.Companion.seconds
 @Composable
 fun SessionFocusArc(
     sessionState: Session,
-    indicatorThickness: Dp = 7.dp
+    indicatorThickness: Dp = 6.dp
 ) {
 
     val progress = when (val currentTimerState = sessionState.currentTimerState) {
