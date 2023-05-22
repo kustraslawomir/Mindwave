@@ -67,6 +67,7 @@ class SessionServiceNotificationManagerImpl(
                 NotificationManager.IMPORTANCE_LOW
             ).apply {
                 setShowBadge(false)
+                lockscreenVisibility = Notification.VISIBILITY_PUBLIC
             }
         )
     }

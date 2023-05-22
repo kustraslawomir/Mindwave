@@ -12,6 +12,8 @@ import skustra.focusflow.domain.usecase.session.SessionConfig
 import skustra.focusflow.domain.utilities.dates.StatisticDateUtils
 import skustra.focusflow.domain.utilities.dates.StatisticDateUtils.generateDates
 import timber.log.Timber
+import java.util.Calendar
+import java.util.Date
 import java.util.UUID
 import javax.inject.Inject
 import kotlin.random.Random
@@ -29,6 +31,7 @@ class StatisticsViewModel @Inject constructor(
 
     init {
         createEmptyStatistics()
+        fillStatisticsDateGap()
         listenToStatisticsChange()
     }
 
@@ -39,12 +42,41 @@ class StatisticsViewModel @Inject constructor(
             }
 
             val durations = SessionConfig.availableDurations()
-            val dates = generateDates().map { dayInterval ->
+            val fromDate = Calendar.getInstance()
+            val dates = generateDates(
+                fromDate = fromDate,
+                toDate = Calendar.getInstance().apply {
+                    time = fromDate.time
+                    add(Calendar.MONTH, -1)
+                }
+            ).map { dayInterval ->
                 val randomDuration = durations[Random.nextInt(0, durations.size - 1)]
                 SessionArchiveEntity(
                     formattedDate = StatisticDateUtils.format(dayInterval),
                     sessionId = UUID.randomUUID().toString(),
                     minutes = if (BuildConfig.DEBUG) randomDuration else 0,
+                    dateMs = dayInterval.time
+                )
+            }
+            sessionArchiveRepository.insert(dates)
+        }
+    }
+
+    private fun fillStatisticsDateGap() {
+        viewModelScope.launch {
+            val dates = generateDates(
+                fromDate = Calendar.getInstance(),
+                toDate = Calendar.getInstance().apply {
+                    val lastEntityTime = sessionArchiveRepository.getLastEntity()?.dateMs
+                    if (lastEntityTime != null) {
+                        time = Date(lastEntityTime)
+                    }
+                }
+            ).map { dayInterval ->
+                SessionArchiveEntity(
+                    formattedDate = StatisticDateUtils.format(dayInterval),
+                    sessionId = UUID.randomUUID().toString(),
+                    minutes = 0,
                     dateMs = dayInterval.time
                 )
             }

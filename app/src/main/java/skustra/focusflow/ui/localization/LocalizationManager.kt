@@ -38,6 +38,9 @@ object LocalizationManager {
             LocalizationKey.SessionInProgressTitle to "Skup się",
             LocalizationKey.SessionBreakTitle to "Odpocznij",
             LocalizationKey.SessionBreakDescription to "Skorzystaj z przerwy na relaks, aby zregenerować umysł i ciało, angażując się w medytację, krótką przechadzkę lub głębokie oddychanie",
+            LocalizationKey.PostPermissionNeedMessage to "Pozwolenie na powiadomienia pomoże Ci śledzić postęp zadań za pośrednictwem paska powiadomień.",
+            LocalizationKey.PostPermissionNeedMessageRationale to "Pozwolenie na powiadomienia pomoże Ci śledzić postęp zadań za pośrednictwem paska powiadomień. Jeśli chcesz udzielić pozwolenia na powiadomienia, prosimy o kliknięcie w odpowiednią opcję w ustawieniach aplikacji.",
+            LocalizationKey.Allow to "Zezwól",
 
 
             ),
@@ -75,9 +78,12 @@ object LocalizationManager {
             LocalizationKey.SessionInProgressTitle to "Focus",
             LocalizationKey.SessionBreakTitle to "Rest",
             LocalizationKey.SessionBreakDescription to "Take this time to relax your mind and body, engage in activities such as meditation, a short walk, or deep breathing",
+            LocalizationKey.PostPermissionNeedMessage to "Granting permission for notifications will help you track the progress of your tasks through the notification bar.",
+            LocalizationKey.PostPermissionNeedMessageRationale to "Granting permission for notifications will help you track the progress of your tasks through the notification bar. Thank you in advance for your consent. If you would like to grant permission for notifications, please click on the appropriate option in the application settings.",
+            LocalizationKey.Allow to "Allow",
 
 
-        )
+            )
     )
 
     fun getText(key: LocalizationKey): String {

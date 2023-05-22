@@ -33,5 +33,8 @@ sealed class LocalizationKey {
     object SessionInProgressTitle : LocalizationKey()
     object SessionBreakTitle : LocalizationKey()
     object SessionBreakDescription : LocalizationKey()
+    object PostPermissionNeedMessage : LocalizationKey()
+    object PostPermissionNeedMessageRationale : LocalizationKey()
+    object Allow : LocalizationKey()
 
 }

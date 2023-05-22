@@ -15,4 +15,6 @@ class DrawableProviderImpl : DrawableProvider {
     override fun getStatisticsIcon() = R.drawable.ic_statistics
 
     override fun getChevronUpIcon() = R.drawable.ic_chevron_up
+
+    override fun getNotificationIcon() = R.drawable.ic_notification_permission
 }

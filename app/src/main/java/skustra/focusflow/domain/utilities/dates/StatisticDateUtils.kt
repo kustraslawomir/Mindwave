@@ -14,15 +14,9 @@ object StatisticDateUtils {
 
     fun format(date: Date): String = xAxisDateFormat.format(date)
 
-    fun generateDates(): List<Date> {
-        val fromDate = Calendar.getInstance()
+    fun generateDates(fromDate : Calendar, toDate: Calendar): List<Date> {
+        Timber.d("Generate dates between: ${fromDate.time} - ${toDate.time}")
         val dates = mutableListOf<Date>()
-
-        val toDate = Calendar.getInstance().apply {
-            time = fromDate.time
-            add(Calendar.MONTH, -1)
-        }
-
         while (toDate.time.before(fromDate.time)) {
             toDate.add(Calendar.DATE, 1)
             dates.add(toDate.time)

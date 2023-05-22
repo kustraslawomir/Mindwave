@@ -13,4 +13,6 @@ interface DrawableProvider {
     fun getStatisticsIcon(): Int
 
     fun getChevronUpIcon(): Int
+
+    fun getNotificationIcon(): Int
 }

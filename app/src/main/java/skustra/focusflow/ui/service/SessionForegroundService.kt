@@ -21,6 +21,7 @@ class SessionForegroundService @Inject constructor() : Service() {
     @Inject
     lateinit var sessionServiceNotificationManager: SessionServiceNotificationManager
 
+
     override fun onStartCommand(intent: Intent?, flags: Int, startId: Int): Int {
         sessionStateHandler.apply {
             init(serviceScope)
