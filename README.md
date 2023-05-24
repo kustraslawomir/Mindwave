@@ -1,4 +1,4 @@
-# App Name
+# Focus
 <p float="left">
   <img src="screenshots/Hotpot_0.png" width="150" />
   <img src="screenshots/Hotpot_1.png" width="150" />
