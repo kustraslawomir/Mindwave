@@ -1,14 +1,14 @@
 # App Name
 <p float="left">
-  <img src="screenshots/Hotpot_0.png" width="200" />
-  <img src="screenshots/Hotpot_1.png" width="200" />
-  <img src="screenshots/Hotpot_2.png" width="200" /> 
-  <img src="screenshots/Hotpot_3.png" width="200" />
-  <img src="screenshots/Hotpot_4.png" width="200" />
+  <img src="screenshots/Hotpot_0.png" width="150" />
+  <img src="screenshots/Hotpot_1.png" width="150" />
+  <img src="screenshots/Hotpot_2.png" width="150" /> 
+  <img src="screenshots/Hotpot_3.png" width="150" />
+  <img src="screenshots/Hotpot_4.png" width="150" />
 </p>
 
 ## Description
-Our native Android application is a powerful tool for increasing productivity and efficiency at work. It allows for personalized work sessions, breaks, and progress tracking.
+Our native Android application, built using Jetpack Compose, is a powerful tool for increasing productivity and efficiency at work. It allows for personalized work sessions, breaks, and progress tracking.
 
 ## Features
 
