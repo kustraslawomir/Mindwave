@@ -7,6 +7,10 @@
   <img src="screenshots/Hotpot_4.png" width="150" />
 </p>
 
+## Download
+
+You can download the app from [Google Play Store](https://play.google.com/store/apps/details?id=skustra.focus).
+
 ## Description
 Our native Android application, built using Jetpack Compose, is a powerful tool for increasing productivity and efficiency at work. It allows for personalized work sessions, breaks, and progress tracking.
 
