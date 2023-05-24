@@ -13,7 +13,6 @@ import skustra.focusflow.domain.utilities.dates.StatisticDateUtils
 import skustra.focusflow.domain.utilities.dates.StatisticDateUtils.generateDates
 import skustra.focusflow.ui.composables.statistics.chart.SessionArchiveEntry
 import skustra.focusflow.ui.composables.statistics.chart.SessionArchiveEntryDataModel
-import timber.log.Timber
 import java.util.Calendar
 import java.util.Date
 import java.util.UUID
@@ -67,7 +66,9 @@ class StatisticsViewModel @Inject constructor(
     private fun fillStatisticsDateGap() {
         viewModelScope.launch {
             val dates = generateDates(
-                fromDate = Calendar.getInstance(),
+                fromDate = Calendar.getInstance().apply {
+                    add(Calendar.DATE, -1)
+                },
                 toDate = Calendar.getInstance().apply {
                     val lastEntityTime = sessionArchiveRepository.getLastEntity()?.dateMs
                     if (lastEntityTime != null) {
@@ -89,7 +90,6 @@ class StatisticsViewModel @Inject constructor(
     private fun listenToStatisticsChange() {
         viewModelScope.launch {
             sessionArchiveRepository.getAllAsFlow().collect { data ->
-                Timber.d("Statistics size: ${data.size}")
                 var entryXIndex = 0f
                 val producer = data
                     .groupBy { it.formattedDate }

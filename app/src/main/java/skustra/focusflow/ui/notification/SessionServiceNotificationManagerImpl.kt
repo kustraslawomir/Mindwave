@@ -50,7 +50,8 @@ class SessionServiceNotificationManagerImpl(
 
     private fun getNotification(contentText: String): Notification {
         return NotificationCompat.Builder(applicationContext, channelId)
-            .setSmallIcon(R.mipmap.ic_launcher)
+            .setSmallIcon(R.drawable.ic_notification)
+            .setColor(applicationContext.getColor(R.color.colorAccent))
             .setContentTitle(LocalizationManager.getText(LocalizationKey.SessionInProgress))
             .setContentIntent(buildIntent())
             .setContentText(contentText)
