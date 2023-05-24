@@ -1,10 +1,10 @@
 # App Name
 <p float="left">
+  <img src="screenshots/Hotpot_0.png" width="200" />
   <img src="screenshots/Hotpot_1.png" width="200" />
   <img src="screenshots/Hotpot_2.png" width="200" /> 
   <img src="screenshots/Hotpot_3.png" width="200" />
   <img src="screenshots/Hotpot_4.png" width="200" />
-  <img src="screenshots/Hotpot_5.png" width="200" />
 </p>
 
 ## Description
@@ -25,15 +25,6 @@ Our native Android application is a powerful tool for increasing productivity an
 ## Installation
 
 1. Clone the repository: `git clone https://github.com/username/repo.git`
-2. Navigate to the project directory: `cd repo`
-3. Install dependencies: `npm install`
-4. Run the app: `npm start`
-
-## System Requirements
-
-- Operating System Version: Android 7.0 or higher
-- RAM: Minimum 2 GB
-- Available Disk Space: Minimum 100 MB
 
 ## Contribution
 
@@ -41,7 +32,7 @@ We welcome contributions to the development of the application. If you have any 
 
 ## Contact
 
-For any questions, suggestions, or assistance, please contact our team at support@yourapp.com.
+For any questions, suggestions, or assistance, please contact our team at kustraslawomir@gmail.com
 
 Thank you for using our application!
 
