@@ -1,7 +1,6 @@
 package skustra.focusflow.ui.composables.statistics
 
 import android.graphics.Typeface
-import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
@@ -14,7 +13,6 @@ import androidx.compose.runtime.remember
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.alpha
-import androidx.compose.ui.geometry.Size
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
@@ -22,25 +20,21 @@ import androidx.lifecycle.viewmodel.compose.viewModel
 import com.patrykandpatrick.vico.compose.axis.horizontal.bottomAxis
 import com.patrykandpatrick.vico.compose.axis.vertical.startAxis
 import com.patrykandpatrick.vico.compose.chart.Chart
-import com.patrykandpatrick.vico.compose.chart.column.columnChart
 import com.patrykandpatrick.vico.compose.chart.line.lineChart
 import com.patrykandpatrick.vico.compose.component.shapeComponent
 import com.patrykandpatrick.vico.compose.component.textComponent
 import com.patrykandpatrick.vico.compose.dimensions.dimensionsOf
 import com.patrykandpatrick.vico.compose.style.ProvideChartStyle
-import com.patrykandpatrick.vico.compose.style.currentChartStyle
 import com.patrykandpatrick.vico.core.axis.AxisPosition
 import com.patrykandpatrick.vico.core.axis.formatter.AxisValueFormatter
-import com.patrykandpatrick.vico.core.chart.DefaultPointConnector
-import com.patrykandpatrick.vico.core.chart.composed.plus
-import com.patrykandpatrick.vico.core.chart.copy
 import com.patrykandpatrick.vico.core.chart.decoration.ThresholdLine
 import com.patrykandpatrick.vico.core.chart.values.AxisValuesOverrider
-import com.patrykandpatrick.vico.core.component.shape.LineComponent
 import com.patrykandpatrick.vico.core.component.shape.Shapes
 import com.patrykandpatrick.vico.core.entry.ChartEntryModel
-import skustra.focusflow.domain.usecase.session.SessionConfig
-import skustra.focusflow.domain.usecase.session.SessionConfig.Companion.SESSION_MAX_DURATION_LIMIT
+import skustra.focusflow.ui.composables.statistics.chart.RememberLegend
+import skustra.focusflow.ui.composables.statistics.chart.SessionArchiveEntry
+import skustra.focusflow.ui.composables.statistics.chart.rememberChartStyle
+import skustra.focusflow.ui.composables.statistics.chart.rememberMarker
 import skustra.focusflow.ui.extensions.toDisplayFormat
 import skustra.focusflow.ui.localization.LocalizationKey
 import skustra.focusflow.ui.localization.LocalizationManager
@@ -51,8 +45,7 @@ import skustra.focusflow.ui.theme.GoalColor
 fun StatisticsComposable(viewModel: StatisticsViewModel = viewModel()) {
     Box(
         contentAlignment = Alignment.Center,
-        modifier = Modifier
-            .fillMaxSize()
+        modifier = Modifier.fillMaxSize()
     ) {
         Column(
             modifier = Modifier.fillMaxSize(),
@@ -96,7 +89,7 @@ private fun Chart(viewModel: StatisticsViewModel) {
                 valueFormatter = horizontalAxisValueFormatter
             ),
             marker = rememberMarker(),
-            legend = rememberLegend(),
+            legend = RememberLegend(),
         )
     }
 }

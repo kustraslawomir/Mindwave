@@ -1,4 +1,4 @@
-package skustra.focusflow.ui.composables.statistics
+package skustra.focusflow.ui.composables.statistics.chart
 import androidx.compose.foundation.isSystemInDarkTheme
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.remember

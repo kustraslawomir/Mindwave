@@ -11,6 +11,8 @@ import skustra.focusflow.data.repository.SessionArchiveRepository
 import skustra.focusflow.domain.usecase.session.SessionConfig
 import skustra.focusflow.domain.utilities.dates.StatisticDateUtils
 import skustra.focusflow.domain.utilities.dates.StatisticDateUtils.generateDates
+import skustra.focusflow.ui.composables.statistics.chart.SessionArchiveEntry
+import skustra.focusflow.ui.composables.statistics.chart.SessionArchiveEntryDataModel
 import timber.log.Timber
 import java.util.Calendar
 import java.util.Date

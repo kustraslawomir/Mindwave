@@ -1,4 +1,4 @@
-package skustra.focusflow.ui.composables.statistics
+package skustra.focusflow.ui.composables.statistics.chart
 
 import com.patrykandpatrick.vico.core.entry.ChartEntry
 import skustra.focusflow.data.model.alias.Minute

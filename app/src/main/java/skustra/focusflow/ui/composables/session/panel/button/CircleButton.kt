@@ -1,4 +1,4 @@
-package skustra.focusflow.ui.composables.session.panel
+package skustra.focusflow.ui.composables.session.panel.button
 
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.padding

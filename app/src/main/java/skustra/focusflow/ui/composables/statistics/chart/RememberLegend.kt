@@ -1,6 +1,5 @@
-package skustra.focusflow.ui.composables.statistics
+package skustra.focusflow.ui.composables.statistics.chart
 
-import android.app.LocaleManager
 import android.graphics.Typeface
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.graphics.Color
@@ -11,7 +10,6 @@ import com.patrykandpatrick.vico.compose.component.textComponent
 import com.patrykandpatrick.vico.compose.dimensions.dimensionsOf
 import com.patrykandpatrick.vico.compose.legend.verticalLegend
 import com.patrykandpatrick.vico.compose.legend.verticalLegendItem
-import com.patrykandpatrick.vico.compose.style.ChartStyle
 import com.patrykandpatrick.vico.compose.style.currentChartStyle
 import com.patrykandpatrick.vico.core.component.shape.Shapes
 import skustra.focusflow.ui.localization.LocalizationKey
@@ -20,7 +18,7 @@ import skustra.focusflow.ui.theme.ChartItemColor
 import skustra.focusflow.ui.theme.GoalColor
 
 @Composable
-fun rememberLegend() = verticalLegend(
+fun RememberLegend() = verticalLegend(
     items = listOf(
         item(LocalizationManager.getText(LocalizationKey.DailyGoal), GoalColor),
         item(LocalizationManager.getText(LocalizationKey.YourProgress), ChartItemColor)
