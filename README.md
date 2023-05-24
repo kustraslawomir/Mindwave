@@ -1,6 +1,11 @@
 # App Name
-
-![Screenshot 1](screenshots/Hotpot_0.png) ![Screenshot 2](screenshots/Hotpot_1.png) ![Screenshot 3](screenshots/Hotpot_2.png) ![Screenshot 4](screenshots/Hotpot_3.png) ![Screenshot 5](screenshots/Hotpot_4.png)
+<p float="left">
+  <img src="screenshots/Hotpot_1.png" width="200" />
+  <img src="screenshots/Hotpot_2.png" width="200" /> 
+  <img src="screenshots/Hotpot_3.png" width="200" />
+  <img src="screenshots/Hotpot_4.png" width="200" />
+  <img src="screenshots/Hotpot_5.png" width="200" />
+</p>
 
 ## Description
 Our native Android application is a powerful tool for increasing productivity and efficiency at work. It allows for personalized work sessions, breaks, and progress tracking.
