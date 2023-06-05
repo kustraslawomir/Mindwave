@@ -41,7 +41,7 @@ interface SessionArchiveDao {
     @Query("SELECT SUM(minutes) FROM $SESSION_ARCHIVE WHERE date_ms BETWEEN :betweenDateMs AND :andDateMs")
     fun sumDurationBetween(betweenDateMs: Long, andDateMs: Long): Int
 
-    @Query("SELECT * FROM $SESSION_ARCHIVE WHERE date_ms BETWEEN :betweenDateMs AND :andDateMs")
+    @Query("SELECT * FROM $SESSION_ARCHIVE WHERE date_ms BETWEEN :betweenDateMs AND :andDateMs ORDER BY date_ms DESC")
     fun getBetween(betweenDateMs: Long, andDateMs: Long): List<SessionArchiveEntity>
 
 }

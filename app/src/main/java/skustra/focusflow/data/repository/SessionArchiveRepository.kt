@@ -92,24 +92,60 @@ class SessionArchiveRepository @Inject constructor(private val archiveDao: Sessi
     }
 
     fun countLongestStrike(): Int {
-        val lastEntityWithNonEmptyDuration = archiveDao
-            .getOldestEntityWithNonEmptyDuration() ?: return 0
+        val durationGroupedByDay = getDurationsGroupedByDay()
+        if (durationGroupedByDay.isEmpty()) {
+            return 0
+        }
+        var strikeCount = 0
+        var maxStrike = 0
+        durationGroupedByDay.forEach { duration ->
+            if (duration > 0) {
+                strikeCount += 1
+                if (strikeCount > maxStrike) {
+                    maxStrike = strikeCount
+                }
+            } else {
+                strikeCount = 0
+            }
+        }
 
-        return 0
+        return maxStrike
     }
 
     fun getCurrentStrike(): Int {
-        val lastEntityWithNonEmptyDuration = archiveDao
-            .getOldestEntityWithNonEmptyDuration() ?: return 0
+        val durationGroupedByDay = getDurationsGroupedByDay()
+        if (durationGroupedByDay.isEmpty()) {
+            return 0
+        }
+        var strikeCount = 0
+        durationGroupedByDay.forEach { duration ->
+
+            Timber.d(duration.toString())
+            if (duration > 0) {
+                strikeCount += 1
+            } else {
+                return strikeCount
+            }
+        }
 
         return 0
     }
 
     fun countDurationAvg(): Minute {
+        val durationGroupedByDay = getDurationsGroupedByDay()
+        if (durationGroupedByDay.isEmpty()) {
+            return 0
+        }
+        return durationGroupedByDay
+            .average()
+            .toInt()
+    }
+
+    private fun getDurationsGroupedByDay(): MutableList<Int> {
+        val durationGroupedByDay = mutableListOf<Int>()
 
         val lastEntityWithNonEmptyDuration = archiveDao
-            .getOldestEntityWithNonEmptyDuration() ?: return 0
-        val durationGroupedByDay = mutableListOf<Int>()
+            .getOldestEntityWithNonEmptyDuration() ?: return durationGroupedByDay
 
         archiveDao.getBetween(
             betweenDateMs = lastEntityWithNonEmptyDuration.dateMs,
@@ -119,10 +155,7 @@ class SessionArchiveRepository @Inject constructor(private val archiveDao: Sessi
         }.forEach { (_, group) ->
             durationGroupedByDay.add(group.sumOf { entity -> entity.minutes })
         }
-        
         return durationGroupedByDay
-            .average()
-            .toInt()
     }
 
     private fun sumDurationBetween(

@@ -36,13 +36,13 @@ class StatisticsViewModel @Inject constructor(
         fillStatisticsDateGap()
         listenToStatisticsChange()
 
-        Timber.d("Total duration sum: ${sessionArchiveRepository.totalDurationSum()}")
-        Timber.d("Current week duration sum: ${sessionArchiveRepository.currentWeekDurationSum()}")
-        Timber.d("Current month duration sum: ${sessionArchiveRepository.currentMonthDurationSum()}")
-        Timber.d("Last 30 days duration sum: ${sessionArchiveRepository.last30DaysDurationSum()}")
-        Timber.d("Average duration: ${sessionArchiveRepository.countDurationAvg()}")
-        Timber.d("Longest strike: ${sessionArchiveRepository.countLongestStrike()}")
-        Timber.d("Current strike: ${sessionArchiveRepository.getCurrentStrike()}")
+        Timber.d("[STATISTICS] Total duration sum: ${sessionArchiveRepository.totalDurationSum()}")
+        Timber.d("[STATISTICS] Current week duration sum: ${sessionArchiveRepository.currentWeekDurationSum()}")
+        Timber.d("[STATISTICS] Current month duration sum: ${sessionArchiveRepository.currentMonthDurationSum()}")
+        Timber.d("[STATISTICS] Last 30 days duration sum: ${sessionArchiveRepository.last30DaysDurationSum()}")
+        Timber.d("[STATISTICS] Average duration: ${sessionArchiveRepository.countDurationAvg()}")
+        Timber.d("[STATISTICS] Longest strike: ${sessionArchiveRepository.countLongestStrike()}")
+        Timber.d("[STATISTICS] Current strike: ${sessionArchiveRepository.getCurrentStrike()}")
     }
 
     private fun createEmptyStatistics() {
