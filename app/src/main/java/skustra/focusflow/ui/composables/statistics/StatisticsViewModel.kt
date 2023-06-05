@@ -13,6 +13,7 @@ import skustra.focusflow.domain.utilities.dates.StatisticDateUtils
 import skustra.focusflow.domain.utilities.dates.StatisticDateUtils.generateDates
 import skustra.focusflow.ui.composables.statistics.chart.SessionArchiveEntry
 import skustra.focusflow.ui.composables.statistics.chart.SessionArchiveEntryDataModel
+import timber.log.Timber
 import java.util.Calendar
 import java.util.Date
 import java.util.UUID
@@ -34,6 +35,11 @@ class StatisticsViewModel @Inject constructor(
         createEmptyStatistics()
         fillStatisticsDateGap()
         listenToStatisticsChange()
+
+        Timber.d("Total duration sum: ${sessionArchiveRepository.totalDurationSum()}")
+        Timber.d("Current week duration sum: ${sessionArchiveRepository.currentWeekDurationSum()}")
+        Timber.d("Current month duration sum: ${sessionArchiveRepository.currentMonthDurationSum()}")
+        Timber.d("Last 30 days duration sum: ${sessionArchiveRepository.last30DaysDurationSum()}")
     }
 
     private fun createEmptyStatistics() {

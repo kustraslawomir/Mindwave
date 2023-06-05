@@ -31,4 +31,11 @@ interface SessionArchiveDao {
 
     @Query("SELECT COUNT(*) FROM $SESSION_ARCHIVE")
     fun countEntries(): Int
+
+    @Query("SELECT SUM(minutes) FROM $SESSION_ARCHIVE")
+    fun totalDurationSum() : Int
+
+    @Query("SELECT SUM(minutes) FROM $SESSION_ARCHIVE WHERE date_ms BETWEEN :betweenDateMs AND :andDateMs")
+    fun sumDurationBetween(betweenDateMs : Long, andDateMs : Long) : Int
+
 }

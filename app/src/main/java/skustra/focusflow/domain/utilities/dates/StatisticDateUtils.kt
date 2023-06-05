@@ -1,15 +1,16 @@
 package skustra.focusflow.domain.utilities.dates
 
-import skustra.focusflow.ui.localization.LocalizationKey
-import skustra.focusflow.ui.localization.LocalizationManager
 import timber.log.Timber
 import java.text.SimpleDateFormat
+import java.time.LocalDate
+import java.time.OffsetDateTime
 import java.util.Calendar
 import java.util.Date
 import java.util.Locale
 
 object StatisticDateUtils {
 
+    private var regularDateFormat = SimpleDateFormat("yyyy-MM-dd hh:mm:ss", Locale.getDefault())
     private var xAxisDateFormat = SimpleDateFormat("MM-dd", Locale.getDefault())
 
     fun format(date: Date): String = xAxisDateFormat.format(date)
@@ -24,13 +25,21 @@ object StatisticDateUtils {
         return dates
     }
 
-    val daysOfWeek = listOf(
-        LocalizationManager.getText(LocalizationKey.Mon),
-        LocalizationManager.getText(LocalizationKey.Tue),
-        LocalizationManager.getText(LocalizationKey.Wed),
-        LocalizationManager.getText(LocalizationKey.Thu),
-        LocalizationManager.getText(LocalizationKey.Fri),
-        LocalizationManager.getText(LocalizationKey.Sat),
-        LocalizationManager.getText(LocalizationKey.Sun)
-    )
+    fun getDateMsWithoutTime(): Long {
+        val localDate: LocalDate = LocalDate.now()
+        return localDate
+            .atStartOfDay()
+            .toInstant(
+                OffsetDateTime
+                    .now()
+                    .offset
+            )
+            .toEpochMilli()
+    }
+
+    fun formatDateMsToReadableDate(dateMs : Long): String {
+        val calendar = Calendar.getInstance()
+        calendar.timeInMillis = dateMs
+        return regularDateFormat.format(calendar.time)
+    }
 }

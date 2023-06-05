@@ -1,12 +1,10 @@
-package skustra.focusflow.ui.composables.postnotificationpermission
+package skustra.focusflow.ui.composables.permission
 
 import androidx.activity.compose.ManagedActivityResultLauncher
 import androidx.compose.runtime.Composable
 import com.google.accompanist.permissions.ExperimentalPermissionsApi
 import com.google.accompanist.permissions.PermissionState
 import com.google.accompanist.permissions.PermissionStatus
-import skustra.focusflow.ui.composables.postnotificationpermission.PostNotificationPermissionDialog
-import skustra.focusflow.ui.composables.postnotificationpermission.PostNotificationPermissionRationaleDialog
 
 
 @Composable

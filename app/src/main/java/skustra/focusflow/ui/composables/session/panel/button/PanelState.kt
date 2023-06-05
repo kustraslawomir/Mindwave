@@ -33,7 +33,7 @@ import androidx.compose.ui.window.Dialog
 import com.google.accompanist.permissions.ExperimentalPermissionsApi
 import com.google.accompanist.permissions.PermissionStatus
 import com.google.accompanist.permissions.rememberPermissionState
-import skustra.focusflow.ui.composables.postnotificationpermission.GrantPostNotificationPermission
+import skustra.focusflow.ui.composables.permission.GrantPostNotificationPermission
 import skustra.focusflow.ui.composables.session.SessionViewModel
 import skustra.focusflow.ui.composables.session.panel.SkipBreaksComposable
 import skustra.focusflow.ui.localization.LocalizationKey
@@ -49,7 +49,7 @@ object PanelState {
             horizontalAlignment = Alignment.CenterHorizontally
         ) {
             if (viewModel.sessionIncludesBreaks()) {
-                SkipBreaksComposable(skipBreaks = viewModel.shouldSkipTheBreaks)
+                SkipBreaksComposable(skipBreaks = viewModel.skipTheBreaks())
             }
             Start(viewModel)
         }

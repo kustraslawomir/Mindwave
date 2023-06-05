@@ -1,8 +1,8 @@
-package skustra.focusflow.ui.composables.postnotificationpermission
+package skustra.focusflow.ui.composables.permission
 
-import android.Manifest
-import android.os.Build
-import androidx.activity.compose.ManagedActivityResultLauncher
+import android.content.Intent
+import android.net.Uri
+import android.provider.Settings
 import androidx.compose.foundation.background
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Box
@@ -22,6 +22,7 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.draw.shadow
 import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
@@ -31,11 +32,11 @@ import skustra.focusflow.ui.localization.LocalizationManager
 import skustra.focusflow.ui.theme.ButtonColor
 
 @Composable
-fun PostNotificationPermissionDialog(
+fun PostNotificationPermissionRationaleDialog(
     viewModel: SessionViewModel = androidx.lifecycle.viewmodel.compose.viewModel(),
-    launcher: ManagedActivityResultLauncher<String, Boolean>,
     onClick: () -> Unit
 ) {
+    val context = LocalContext.current
     Box(
         modifier = Modifier
             .fillMaxWidth()
@@ -51,7 +52,7 @@ fun PostNotificationPermissionDialog(
             horizontalAlignment = Alignment.CenterHorizontally
         ) {
             Text(
-                text = LocalizationManager.getText(LocalizationKey.PostPermissionNeedMessage),
+                text = LocalizationManager.getText(LocalizationKey.PostPermissionNeedMessageRationale),
                 textAlign = TextAlign.Center,
                 color = Color.White,
             )
@@ -60,9 +61,12 @@ fun PostNotificationPermissionDialog(
                 .clip(shape = RoundedCornerShape(size = 12.dp))
                 .background(color = ButtonColor)
                 .clickable {
-                    if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.TIRAMISU) {
-                        launcher.launch(Manifest.permission.POST_NOTIFICATIONS)
-                    }
+                    context.startActivity(
+                        Intent(
+                            Settings.ACTION_APPLICATION_DETAILS_SETTINGS,
+                            Uri.fromParts("package", context.packageName, null)
+                        )
+                    )
                 }) {
                 Row(verticalAlignment = Alignment.CenterVertically) {
                     IconButton(onClick = {}) {
@@ -82,3 +86,4 @@ fun PostNotificationPermissionDialog(
         }
     }
 }
+

@@ -28,26 +28,29 @@ android {
     }
 
     signingConfigs {
+
         def PROPERTIES_PATH = 'C:\\Users\\s.kustra\\Documents\\Focus\\signing.properites'
         def JKS_PATH = 'C:\\Users\\s.kustra\\Documents\\Focus\\focus_key.jks'
+
         Properties properties = new Properties()
-        properties.load(project.rootProject.file(PROPERTIES_PATH).newDataInputStream())
-        def RELEASE_KEYSTORE_ALIAS = properties.getProperty('RELEASE_KEYSTORE_ALIAS')
-        def RELEASE_KEYSTORE_PASSWORD = properties.getProperty('RELEASE_KEYSTORE_PASSWORD')
+        properties.load(project.rootProject
+                .file(PROPERTIES_PATH)
+                .newDataInputStream())
+
         release {
             storeFile file(new File(JKS_PATH))
-            storePassword RELEASE_KEYSTORE_PASSWORD
-            keyAlias RELEASE_KEYSTORE_ALIAS
-            keyPassword RELEASE_KEYSTORE_PASSWORD
+            storePassword properties.getProperty('RELEASE_KEYSTORE_PASSWORD')
+            keyAlias properties.getProperty('RELEASE_KEYSTORE_ALIAS')
+            keyPassword properties.getProperty('RELEASE_KEYSTORE_PASSWORD')
         }
     }
 
     buildTypes {
         release {
+            signingConfig signingConfigs.release
+            manifestPlaceholders = [appName: APP_NAME]
             minifyEnabled false
             proguardFiles getDefaultProguardFile('proguard-android-optimize.txt'), 'proguard-rules.pro'
-            manifestPlaceholders = [appName: APP_NAME]
-            signingConfig signingConfigs.release
         }
         debug {
             applicationIdSuffix ".debug"
