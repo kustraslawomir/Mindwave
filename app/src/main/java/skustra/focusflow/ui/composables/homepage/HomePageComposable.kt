@@ -2,6 +2,7 @@ package skustra.focusflow.ui.composables.homepage
 
 import androidx.compose.foundation.ExperimentalFoundationApi
 import androidx.compose.foundation.layout.Box
+import androidx.compose.foundation.pager.PagerState
 import androidx.compose.foundation.pager.VerticalPager
 import androidx.compose.foundation.pager.rememberPagerState
 import androidx.compose.runtime.Composable
@@ -14,9 +15,14 @@ import skustra.focusflow.ui.composables.statistics.StatisticsComposable
 @OptIn(ExperimentalFoundationApi::class)
 @Composable
 fun HomePageComposable() {
-    val pagerState = rememberPagerState()
+    val pagerState: PagerState = rememberPagerState(
+        initialPage = 0,
+        initialPageOffsetFraction = 0f
+    ) {
+        homePages.size
+    }
+
     VerticalPager(
-        pageCount = homePages.size,
         state = pagerState
     ) { index ->
         when (homePages[index]) {
@@ -27,7 +33,7 @@ fun HomePageComposable() {
 
             PageType.Statistics -> Box {
                 StatisticsComposable()
-                ChevronUpComposable(pagerState= pagerState)
+                ChevronUpComposable(pagerState = pagerState)
             }
         }
     }

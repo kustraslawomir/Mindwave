@@ -1,4 +1,4 @@
-package skustra.focusflow.ui.composables.permission
+package skustra.focusflow.ui.composables.postnotificationpermission
 
 import androidx.activity.compose.ManagedActivityResultLauncher
 import androidx.compose.runtime.Composable
