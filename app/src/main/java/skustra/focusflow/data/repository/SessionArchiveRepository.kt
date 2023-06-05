@@ -91,6 +91,40 @@ class SessionArchiveRepository @Inject constructor(private val archiveDao: Sessi
         )
     }
 
+    fun countLongestStrike(): Int {
+        val lastEntityWithNonEmptyDuration = archiveDao
+            .getOldestEntityWithNonEmptyDuration() ?: return 0
+
+        return 0
+    }
+
+    fun getCurrentStrike(): Int {
+        val lastEntityWithNonEmptyDuration = archiveDao
+            .getOldestEntityWithNonEmptyDuration() ?: return 0
+
+        return 0
+    }
+
+    fun countDurationAvg(): Minute {
+
+        val lastEntityWithNonEmptyDuration = archiveDao
+            .getOldestEntityWithNonEmptyDuration() ?: return 0
+        val durationGroupedByDay = mutableListOf<Int>()
+
+        archiveDao.getBetween(
+            betweenDateMs = lastEntityWithNonEmptyDuration.dateMs,
+            andDateMs = System.currentTimeMillis()
+        ).groupBy { entity ->
+            entity.formattedDate
+        }.forEach { (_, group) ->
+            durationGroupedByDay.add(group.sumOf { entity -> entity.minutes })
+        }
+        
+        return durationGroupedByDay
+            .average()
+            .toInt()
+    }
+
     private fun sumDurationBetween(
         betweenDateMs: Long,
         andDateMs: Long

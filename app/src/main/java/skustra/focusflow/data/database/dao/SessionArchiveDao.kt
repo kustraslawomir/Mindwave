@@ -20,6 +20,9 @@ interface SessionArchiveDao {
     @Query("SELECT * FROM $SESSION_ARCHIVE ORDER BY date_ms DESC LIMIT 1")
     fun getLastEntity(): SessionArchiveEntity?
 
+    @Query("SELECT * FROM $SESSION_ARCHIVE WHERE minutes !=0 ORDER BY date_ms ASC LIMIT 1 ")
+    fun getOldestEntityWithNonEmptyDuration(): SessionArchiveEntity?
+
     @Insert(onConflict = OnConflictStrategy.REPLACE)
     fun insert(archiveEntity: SessionArchiveEntity)
 
@@ -33,9 +36,12 @@ interface SessionArchiveDao {
     fun countEntries(): Int
 
     @Query("SELECT SUM(minutes) FROM $SESSION_ARCHIVE")
-    fun totalDurationSum() : Int
+    fun totalDurationSum(): Int
 
     @Query("SELECT SUM(minutes) FROM $SESSION_ARCHIVE WHERE date_ms BETWEEN :betweenDateMs AND :andDateMs")
-    fun sumDurationBetween(betweenDateMs : Long, andDateMs : Long) : Int
+    fun sumDurationBetween(betweenDateMs: Long, andDateMs: Long): Int
+
+    @Query("SELECT * FROM $SESSION_ARCHIVE WHERE date_ms BETWEEN :betweenDateMs AND :andDateMs")
+    fun getBetween(betweenDateMs: Long, andDateMs: Long): List<SessionArchiveEntity>
 
 }

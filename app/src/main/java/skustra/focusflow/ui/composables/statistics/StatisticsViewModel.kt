@@ -40,6 +40,9 @@ class StatisticsViewModel @Inject constructor(
         Timber.d("Current week duration sum: ${sessionArchiveRepository.currentWeekDurationSum()}")
         Timber.d("Current month duration sum: ${sessionArchiveRepository.currentMonthDurationSum()}")
         Timber.d("Last 30 days duration sum: ${sessionArchiveRepository.last30DaysDurationSum()}")
+        Timber.d("Average duration: ${sessionArchiveRepository.countDurationAvg()}")
+        Timber.d("Longest strike: ${sessionArchiveRepository.countLongestStrike()}")
+        Timber.d("Current strike: ${sessionArchiveRepository.getCurrentStrike()}")
     }
 
     private fun createEmptyStatistics() {
