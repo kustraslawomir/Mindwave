@@ -41,7 +41,13 @@ object LocalizationManager {
             LocalizationKey.PostPermissionNeedMessage to "Pozwolenie na powiadomienia pomoże Ci śledzić postęp zadań za pośrednictwem paska powiadomień.",
             LocalizationKey.PostPermissionNeedMessageRationale to "Pozwolenie na powiadomienia pomoże Ci śledzić postęp zadań za pośrednictwem paska powiadomień. Jeśli chcesz udzielić pozwolenia na powiadomienia, prosimy o kliknięcie w odpowiednią opcję w ustawieniach aplikacji.",
             LocalizationKey.Allow to "Zezwól",
-
+            LocalizationKey.SetSessionCategory to "Wybierz kategorię",
+            LocalizationKey.CurrentWeekDurationSum to "Ten tydzień",
+            LocalizationKey.Last30DaysDuration to "Ostatnie 30 dni",
+            LocalizationKey.TotalDuration to "Łączny czas",
+            LocalizationKey.CurrentStrike to "Seria",
+            LocalizationKey.LongestStrike to "Rekordowa seria",
+            LocalizationKey.AverageDuration to "Średnia dzienna",
 
             ),
 
@@ -81,8 +87,13 @@ object LocalizationManager {
             LocalizationKey.PostPermissionNeedMessage to "Granting permission for notifications will help you track the progress of your tasks through the notification bar.",
             LocalizationKey.PostPermissionNeedMessageRationale to "Granting permission for notifications will help you track the progress of your tasks through the notification bar. Thank you in advance for your consent. If you would like to grant permission for notifications, please click on the appropriate option in the application settings.",
             LocalizationKey.Allow to "Allow",
-
-
+            LocalizationKey.SetSessionCategory to "Select a category",
+            LocalizationKey.CurrentWeekDurationSum to "This week",
+            LocalizationKey.Last30DaysDuration to "Last 30 days",
+            LocalizationKey.TotalDuration to "Total time",
+            LocalizationKey.CurrentStrike to "Current strike",
+            LocalizationKey.LongestStrike to "Record strike",
+            LocalizationKey.AverageDuration to "Daily average",
             )
     )
 

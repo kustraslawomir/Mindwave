@@ -1,20 +1,12 @@
-package skustra.focusflow.ui.composables.statistics
+package skustra.focusflow.ui.composables.statistics.chart
 
 import android.graphics.Typeface
-import androidx.compose.foundation.layout.Arrangement
-import androidx.compose.foundation.layout.Box
-import androidx.compose.foundation.layout.Column
-import androidx.compose.foundation.layout.fillMaxSize
-import androidx.compose.foundation.layout.padding
-import androidx.compose.material.Text
-import androidx.compose.material3.MaterialTheme
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.LaunchedEffect
+import androidx.compose.runtime.getValue
+import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
-import androidx.compose.ui.Alignment
-import androidx.compose.ui.Modifier
-import androidx.compose.ui.draw.alpha
 import androidx.compose.ui.graphics.Color
-import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
 import androidx.lifecycle.viewmodel.compose.viewModel
 import com.patrykandpatrick.vico.compose.axis.horizontal.bottomAxis
@@ -31,48 +23,33 @@ import com.patrykandpatrick.vico.core.chart.decoration.ThresholdLine
 import com.patrykandpatrick.vico.core.chart.values.AxisValuesOverrider
 import com.patrykandpatrick.vico.core.component.shape.Shapes
 import com.patrykandpatrick.vico.core.entry.ChartEntryModel
-import skustra.focusflow.ui.composables.statistics.chart.RememberLegend
-import skustra.focusflow.ui.composables.statistics.chart.SessionArchiveEntry
-import skustra.focusflow.ui.composables.statistics.chart.rememberChartStyle
-import skustra.focusflow.ui.composables.statistics.chart.rememberMarker
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.launch
+import skustra.focusflow.ui.composables.statistics.StatisticsViewModel
 import skustra.focusflow.ui.extensions.toDisplayFormat
-import skustra.focusflow.ui.localization.LocalizationKey
-import skustra.focusflow.ui.localization.LocalizationManager
 import skustra.focusflow.ui.theme.ChartItemColor
 import skustra.focusflow.ui.theme.GoalColor
+import androidx.compose.runtime.mutableStateOf
+import androidx.compose.runtime.remember
+import androidx.compose.runtime.rememberCoroutineScope
+import androidx.compose.runtime.setValue
+import skustra.focusflow.data.model.statistics.DurationStatistics
 
 @Composable
-fun StatisticsComposable(viewModel: StatisticsViewModel = viewModel()) {
-    Box(
-        contentAlignment = Alignment.Center,
-        modifier = Modifier.fillMaxSize()
-    ) {
-        Column(
-            modifier = Modifier.fillMaxSize(),
-            verticalArrangement = Arrangement.Center,
-            horizontalAlignment = Alignment.CenterHorizontally
-        ) {
-            Chart(viewModel)
-            Text(
-                LocalizationManager.getText(LocalizationKey.ChartDescription),
-                modifier = Modifier
-                    .padding(top = 50.dp, start = 16.dp, end = 16.dp)
-                    .alpha(0.5f),
-                style = MaterialTheme.typography.bodySmall,
-                color = Color.White,
-                textAlign = TextAlign.Center
-            )
-        }
-    }
-}
-
-@Composable
-private fun Chart(viewModel: StatisticsViewModel) {
+fun StatisticsChartComposable(viewModel: StatisticsViewModel = viewModel()) {
     val thresholdLine = rememberThresholdLine()
+
+    var axisValuesOverrider by remember { mutableStateOf<AxisValuesOverrider<ChartEntryModel>?>(null) }
+    LaunchedEffect(key1 = Unit, block = {
+        launch(Dispatchers.IO) {
+            axisValuesOverrider = getAxisValueOverrider(viewModel.getAxisValueMaxY())
+        }
+    })
+
     ProvideChartStyle(rememberChartStyle(chartColors)) {
         val lineChart = lineChart(
             targetVerticalAxisPosition = AxisPosition.Vertical.End,
-            axisValuesOverrider = getAxisValueOverrider(viewModel),
+            axisValuesOverrider = axisValuesOverrider,
             decorations = remember(thresholdLine) {
                 listOf(thresholdLine)
             })
@@ -145,10 +122,10 @@ val verticalAxisValueFormatter =
             .orEmpty()
     }
 
-fun getAxisValueOverrider(viewModel: StatisticsViewModel): AxisValuesOverrider<ChartEntryModel> {
+suspend fun getAxisValueOverrider(maxY: Float): AxisValuesOverrider<ChartEntryModel> {
     return AxisValuesOverrider
         .fixed(
             minY = 0f,
-            maxY = viewModel.getAxisValueMaxY()
+            maxY = maxY
         )
 }

@@ -17,11 +17,10 @@ import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.unit.dp
 import androidx.lifecycle.viewmodel.compose.viewModel
 import kotlinx.coroutines.launch
-import skustra.focusflow.ui.composables.homepage.PageType
 
 @OptIn(ExperimentalFoundationApi::class)
 @Composable
-fun ChevronUpComposable(
+fun NavigateUpIcon(
     viewModel: PagerIconsViewModel = viewModel(), pagerState: PagerState
 ) {
     val scope = rememberCoroutineScope()

@@ -1,24 +1,40 @@
 package skustra.focusflow.ui.composables.statistics
 
+import androidx.annotation.WorkerThread
+import androidx.compose.ui.graphics.Color
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.patrykandpatrick.vico.core.entry.ChartEntryModelProducer
 import dagger.hilt.android.lifecycle.HiltViewModel
+import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
+import kotlinx.coroutines.withContext
 import skustra.focusflow.BuildConfig
 import skustra.focusflow.data.database.entity.SessionArchiveEntity
+import skustra.focusflow.data.database.entity.SessionCategoryEntity
+import skustra.focusflow.data.model.statistics.DurationUiModel
 import skustra.focusflow.data.repository.SessionArchiveRepository
 import skustra.focusflow.domain.usecase.session.SessionConfig
 import skustra.focusflow.domain.utilities.dates.StatisticDateUtils
 import skustra.focusflow.domain.utilities.dates.StatisticDateUtils.generateDates
+import skustra.focusflow.domain.utilities.time.TimeUtils
 import skustra.focusflow.ui.composables.statistics.chart.SessionArchiveEntry
 import skustra.focusflow.ui.composables.statistics.chart.SessionArchiveEntryDataModel
-import timber.log.Timber
+import skustra.focusflow.ui.localization.LocalizationKey
+import skustra.focusflow.ui.localization.LocalizationManager
+import skustra.focusflow.ui.theme.CandyPink
+import skustra.focusflow.ui.theme.Lavender
+import skustra.focusflow.ui.theme.Lilac
+import skustra.focusflow.ui.theme.PaleSeaBlue
+import skustra.focusflow.ui.theme.PastelPink
+import skustra.focusflow.ui.theme.ThisWeekCardColor
+import skustra.focusflow.ui.theme.ThistlePink
 import java.util.Calendar
 import java.util.Date
 import java.util.UUID
 import javax.inject.Inject
 import kotlin.random.Random
+
 
 @HiltViewModel
 class StatisticsViewModel @Inject constructor(
@@ -27,26 +43,64 @@ class StatisticsViewModel @Inject constructor(
 
     private val entryProducer = ChartEntryModelProducer()
 
-    fun getEntryProducer(): ChartEntryModelProducer {
-        return entryProducer
-    }
-
     init {
         createEmptyStatistics()
         fillStatisticsDateGap()
         listenToStatisticsChange()
+    }
 
-        Timber.d("[STATISTICS] Total duration sum: ${sessionArchiveRepository.totalDurationSum()}")
-        Timber.d("[STATISTICS] Current week duration sum: ${sessionArchiveRepository.currentWeekDurationSum()}")
-        Timber.d("[STATISTICS] Current month duration sum: ${sessionArchiveRepository.currentMonthDurationSum()}")
-        Timber.d("[STATISTICS] Last 30 days duration sum: ${sessionArchiveRepository.last30DaysDurationSum()}")
-        Timber.d("[STATISTICS] Average duration: ${sessionArchiveRepository.countDurationAvg()}")
-        Timber.d("[STATISTICS] Longest strike: ${sessionArchiveRepository.countLongestStrike()}")
-        Timber.d("[STATISTICS] Current strike: ${sessionArchiveRepository.getCurrentStrike()}")
+    fun getEntryProducer(): ChartEntryModelProducer {
+        return entryProducer
+    }
+
+    fun getEmptyDurationUiModelList(): List<DurationUiModel> {
+        return emptyList()
+    }
+
+    @WorkerThread
+    fun getDurationStatistics(): List<DurationUiModel> {
+        val statistics = sessionArchiveRepository.getDurationStatistics()
+        return listOf(
+            DurationUiModel(
+                name = LocalizationManager.getText(LocalizationKey.CurrentWeekDurationSum),
+                value = TimeUtils.formatMinutes(statistics.currentWeekDurationSum),
+                color = ThisWeekCardColor
+            ),
+            DurationUiModel(
+                name = LocalizationManager.getText(LocalizationKey.Last30DaysDuration),
+                value = TimeUtils.formatMinutes(statistics.last30DaysDurationSum),
+                color = Color.Black
+            ),
+            DurationUiModel(
+                name = LocalizationManager.getText(LocalizationKey.TotalDuration),
+                value = TimeUtils.formatMinutes(statistics.totalDuration),
+                color = Color.Black
+            ),
+            DurationUiModel(
+                name = LocalizationManager.getText(LocalizationKey.AverageDuration),
+                value = TimeUtils.formatMinutes(statistics.countDurationAvg),
+                color = Color.Black
+            ),
+            DurationUiModel(
+                name = LocalizationManager.getText(LocalizationKey.CurrentStrike),
+                value = statistics.currentStrike.toString(),
+                color = Color.Black
+            ),
+            DurationUiModel(
+                name = LocalizationManager.getText(LocalizationKey.LongestStrike),
+                value = statistics.countLongestStrike.toString(),
+                color = Color.Black
+            ),
+        )
+    }
+
+    @WorkerThread
+    suspend fun getAxisValueMaxY(): Float {
+        return withContext(viewModelScope.coroutineContext + Dispatchers.IO) { sessionArchiveRepository.getLongestDurationSessionArchive() }
     }
 
     private fun createEmptyStatistics() {
-        viewModelScope.launch {
+        viewModelScope.launch(Dispatchers.IO) {
             if (!sessionArchiveRepository.isEmpty()) {
                 return@launch
             }
@@ -65,7 +119,8 @@ class StatisticsViewModel @Inject constructor(
                     formattedDate = StatisticDateUtils.format(dayInterval),
                     sessionId = UUID.randomUUID().toString(),
                     minutes = if (BuildConfig.DEBUG) randomDuration else 0,
-                    dateMs = dayInterval.time
+                    dateMs = dayInterval.time,
+                    categoryId = SessionCategoryEntity.UnknownId
                 )
             }
             sessionArchiveRepository.insert(dates)
@@ -73,7 +128,7 @@ class StatisticsViewModel @Inject constructor(
     }
 
     private fun fillStatisticsDateGap() {
-        viewModelScope.launch {
+        viewModelScope.launch(Dispatchers.IO) {
             val dates = generateDates(
                 fromDate = Calendar.getInstance().apply {
                     add(Calendar.DATE, -1)
@@ -89,7 +144,8 @@ class StatisticsViewModel @Inject constructor(
                     formattedDate = StatisticDateUtils.format(dayInterval),
                     sessionId = UUID.randomUUID().toString(),
                     minutes = 0,
-                    dateMs = dayInterval.time
+                    dateMs = dayInterval.time,
+                    categoryId = SessionCategoryEntity.UnknownId
                 )
             }
             sessionArchiveRepository.insert(dates)
@@ -97,7 +153,7 @@ class StatisticsViewModel @Inject constructor(
     }
 
     private fun listenToStatisticsChange() {
-        viewModelScope.launch {
+        viewModelScope.launch(Dispatchers.IO) {
             sessionArchiveRepository.getAllAsFlow().collect { data ->
                 var entryXIndex = 0f
                 val producer = data
@@ -120,8 +176,5 @@ class StatisticsViewModel @Inject constructor(
             }
         }
     }
-
-    fun getAxisValueMaxY(): Float {
-        return sessionArchiveRepository.getLongestDurationSessionArchive()
-    }
 }
+

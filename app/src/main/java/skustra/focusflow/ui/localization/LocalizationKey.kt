@@ -36,5 +36,12 @@ sealed class LocalizationKey {
     object PostPermissionNeedMessage : LocalizationKey()
     object PostPermissionNeedMessageRationale : LocalizationKey()
     object Allow : LocalizationKey()
+    object SetSessionCategory : LocalizationKey()
+    object TotalDuration : LocalizationKey()
+    object Last30DaysDuration : LocalizationKey()
+    object CurrentWeekDurationSum : LocalizationKey()
+    object CurrentStrike : LocalizationKey()
+    object LongestStrike : LocalizationKey()
+    object AverageDuration : LocalizationKey()
 
 }

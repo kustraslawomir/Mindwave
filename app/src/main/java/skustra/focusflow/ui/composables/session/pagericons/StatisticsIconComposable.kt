@@ -20,7 +20,7 @@ import kotlinx.coroutines.launch
 
 @OptIn(ExperimentalFoundationApi::class)
 @Composable
-fun StatisticsIconComposable(
+fun StatisticsIcon(
     viewModel: PagerIconsViewModel = viewModel(),
     pagerState: PagerState
 ) {

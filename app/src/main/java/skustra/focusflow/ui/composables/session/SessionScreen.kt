@@ -16,7 +16,7 @@ import skustra.focusflow.ui.composables.session.description.SessionDescriptionCo
 import skustra.focusflow.ui.composables.session.panel.SessionPanelComposable
 
 @Composable
-fun SessionComposable(viewModel: SessionViewModel = viewModel()) {
+fun SessionScreen(viewModel: SessionViewModel = viewModel()) {
 
     val sessionState by viewModel
         .getSessionStateFlow()
@@ -44,7 +44,7 @@ fun SessionComposable(viewModel: SessionViewModel = viewModel()) {
             contentAlignment = Alignment.Center
         ) {
             SessionFocusArc(
-                sessionState = sessionState
+                session = sessionState
             )
         }
         Box(

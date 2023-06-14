@@ -3,6 +3,7 @@ package skustra.focusflow.domain.usecase.sessionstate
 import android.content.Context
 import android.content.Intent
 import kotlinx.coroutines.CoroutineScope
+import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.delay
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.SharingStarted
@@ -100,8 +101,7 @@ class SessionStateHandler(
                     }
                 }, onSessionCompleted = {
                     val data = SessionArchiveEntity.create(_sessionMutableStateFlow.value)
-                    sessionArchiveRepository.insert(data)
-                    Timber.d("Insert: ${data.formattedDate} ${data.minutes}")
+                    storeSession(data)
                     sessionCompletedNotification.notifyUser()
                     stopSession()
                 })
@@ -109,6 +109,13 @@ class SessionStateHandler(
 
         emiTimerState(timerState)
         AppLog.debugSession(currentSessionState)
+    }
+
+    private fun storeSession(data: SessionArchiveEntity) {
+        sessionScope.launch(Dispatchers.IO) {
+            Timber.d("Insert: ${data.formattedDate} ${data.minutes}")
+            sessionArchiveRepository.insert(data)
+        }
     }
 
     private suspend fun emiTimerState(state: TimerState) {

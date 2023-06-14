@@ -45,9 +45,11 @@ class SessionForegroundService @Inject constructor() : Service() {
                     is TimerState.InProgress -> {
                         sessionServiceNotificationManager.updateInProgressState(state)
                     }
+
                     is TimerState.Paused -> {
                         sessionServiceNotificationManager.updateInPausedState()
                     }
+
                     else -> {
                         //ignore
                     }

@@ -9,12 +9,12 @@ import skustra.focusflow.ui.localization.LocalizationKey
 import skustra.focusflow.ui.localization.LocalizationManager
 
 @Composable
-fun BreaksCount(sessionState: Session) {
-    if (sessionState.currentTimerState != TimerState.Idle) {
+fun BreaksCount(session: Session) {
+    if (session.currentTimerState != TimerState.Idle) {
         return
     }
 
-    val breaksCount = sessionState.parts.count { sessionPart ->
+    val breaksCount = session.parts.count { sessionPart ->
         sessionPart.type == SessionPartType.Break
     }
 

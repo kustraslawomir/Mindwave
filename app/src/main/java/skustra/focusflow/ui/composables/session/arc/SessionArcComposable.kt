@@ -24,16 +24,14 @@ import androidx.compose.ui.unit.Dp
 import androidx.compose.ui.unit.dp
 import skustra.focusflow.data.model.session.Session
 import skustra.focusflow.data.model.timer.TimerState
-import skustra.focusflow.domain.usecase.session.SessionConfig
-import kotlin.time.Duration.Companion.seconds
 
 @Composable
 fun SessionFocusArc(
-    sessionState: Session,
+    session: Session,
     indicatorThickness: Dp = 6.dp
 ) {
 
-    val progress = when (val currentTimerState = sessionState.currentTimerState) {
+    val progress = when (val currentTimerState = session.currentTimerState) {
         is TimerState.InProgress -> currentTimerState.progress.percentageProgress()
         is TimerState.Paused -> currentTimerState.progress.percentageProgress()
         else -> 100f
@@ -70,10 +68,16 @@ fun SessionFocusArc(
         verticalArrangement = Arrangement.Center,
         horizontalAlignment = Alignment.CenterHorizontally
     ) {
-        TimeProgress(sessionState = sessionState)
-        CurrentSessionCounter(sessionState = sessionState)
-        BreaksCount(sessionState = sessionState)
-        ChangeSessionDurationComposable(sessionState = sessionState)
+        Row{
+            TimeProgress(session = session)
+            Box(modifier = Modifier.padding(start = 16.dp))
+            ChangeSessionDurationComposable(session = session)
+        }
+        CurrentSessionCounter(session = session)
+        BreaksCount(session = session)
+        Box(modifier = Modifier.padding(top = 24.dp)) {
+            Category(session = session)
+        }
     }
 }
 

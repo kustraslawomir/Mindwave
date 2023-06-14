@@ -4,9 +4,7 @@ import skustra.focusflow.data.model.alias.Minute
 
 class TimeUtils {
     companion object {
-
-
-        fun toTimeFormat(totalMinutes: Int): String {
+        fun formatMinutes(totalMinutes: Minute): String {
             var minutes = (totalMinutes % 60).toString()
             minutes = if (minutes.length == 1) "0$minutes" else minutes
             if (totalMinutes < 60) {
@@ -15,7 +13,7 @@ class TimeUtils {
             if (minutes == "00") {
                 return (totalMinutes / 60).toString() + "h"
             }
-            return (totalMinutes / 60).toString() + "h" + minutes + "m"
+            return (totalMinutes / 60).toString() + "h" + " " + minutes + "m"
         }
     }
 }

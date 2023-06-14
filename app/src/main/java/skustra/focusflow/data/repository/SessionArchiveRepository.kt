@@ -1,9 +1,11 @@
 package skustra.focusflow.data.repository
 
+import androidx.annotation.WorkerThread
 import kotlinx.coroutines.flow.Flow
 import skustra.focusflow.data.database.dao.SessionArchiveDao
 import skustra.focusflow.data.database.entity.SessionArchiveEntity
 import skustra.focusflow.data.model.alias.Minute
+import skustra.focusflow.data.model.statistics.DurationStatistics
 import skustra.focusflow.domain.usecase.session.SessionConfig
 import skustra.focusflow.domain.utilities.dates.StatisticDateUtils.formatDateMsToReadableDate
 import skustra.focusflow.domain.utilities.dates.StatisticDateUtils.getDateMsWithoutTime
@@ -14,23 +16,28 @@ import javax.inject.Inject
 
 class SessionArchiveRepository @Inject constructor(private val archiveDao: SessionArchiveDao) {
 
-
+    @WorkerThread
     fun getAll(): List<SessionArchiveEntity> = archiveDao.getAll()
 
+    @WorkerThread
     fun getAllAsFlow(): Flow<List<SessionArchiveEntity>> = archiveDao.getAllAsFlow()
 
+    @WorkerThread
     fun getLastEntity(): SessionArchiveEntity? = archiveDao.getLastEntity()
 
+    @WorkerThread
     fun insert(archiveEntity: SessionArchiveEntity) = archiveDao.insert(archiveEntity)
 
+    @WorkerThread
     fun insert(archiveEntities: List<SessionArchiveEntity>) = archiveDao.insert(archiveEntities)
 
+    @WorkerThread
     fun clearTable() = archiveDao.clearTable()
 
+    @WorkerThread
     fun isEmpty() = archiveDao.countEntries() == 0
 
-    fun totalDurationSum(): Minute = archiveDao.totalDurationSum()
-
+    @WorkerThread
     fun getLongestDurationSessionArchive(): Float {
         val entities = archiveDao.getAll()
         if (entities.isEmpty()) {
@@ -51,8 +58,22 @@ class SessionArchiveRepository @Inject constructor(private val archiveDao: Sessi
         return SessionConfig.SESSION_MAX_DURATION_LIMIT.toFloat()
     }
 
+    @WorkerThread
+    fun getDurationStatistics(): DurationStatistics {
+        return DurationStatistics(
+            currentWeekDurationSum = currentWeekDurationSum(),
+            currentMonthDurationSum = currentMonthDurationSum(),
+            totalDuration = totalDurationSum(),
+            last30DaysDurationSum = last30DaysDurationSum(),
+            countDurationAvg = countDurationAvg(),
+            countLongestStrike = countLongestStrike(),
+            currentStrike = getCurrentStrike()
+        )
+    }
 
-    fun currentWeekDurationSum(): Minute {
+    private fun totalDurationSum(): Minute = archiveDao.totalDurationSum()
+
+    private fun currentWeekDurationSum(): Minute {
         val calendar = Calendar.getInstance().apply {
             clear()
             timeInMillis = getDateMsWithoutTime()
@@ -67,7 +88,7 @@ class SessionArchiveRepository @Inject constructor(private val archiveDao: Sessi
         )
     }
 
-    fun currentMonthDurationSum(): Minute {
+    private fun currentMonthDurationSum(): Minute {
         val calendar = Calendar.getInstance().apply {
             clear()
             timeInMillis = getDateMsWithoutTime()
@@ -82,7 +103,7 @@ class SessionArchiveRepository @Inject constructor(private val archiveDao: Sessi
         )
     }
 
-    fun last30DaysDurationSum(): Minute {
+    private fun last30DaysDurationSum(): Minute {
         val calendar = Calendar.getInstance()
         calendar.add(Calendar.DATE, -30)
         return sumDurationBetween(
@@ -91,7 +112,17 @@ class SessionArchiveRepository @Inject constructor(private val archiveDao: Sessi
         )
     }
 
-    fun countLongestStrike(): Int {
+    private fun countDurationAvg(): Minute {
+        val durationGroupedByDay = getDurationsGroupedByDay()
+        if (durationGroupedByDay.isEmpty()) {
+            return 0
+        }
+        return durationGroupedByDay
+            .average()
+            .toInt()
+    }
+
+    private fun countLongestStrike(): Int {
         val durationGroupedByDay = getDurationsGroupedByDay()
         if (durationGroupedByDay.isEmpty()) {
             return 0
@@ -112,15 +143,14 @@ class SessionArchiveRepository @Inject constructor(private val archiveDao: Sessi
         return maxStrike
     }
 
-    fun getCurrentStrike(): Int {
+    private fun getCurrentStrike(): Int {
         val durationGroupedByDay = getDurationsGroupedByDay()
         if (durationGroupedByDay.isEmpty()) {
             return 0
         }
         var strikeCount = 0
         durationGroupedByDay.forEach { duration ->
-
-            Timber.d(duration.toString())
+            Timber.d("current strike? $duration")
             if (duration > 0) {
                 strikeCount += 1
             } else {
@@ -128,17 +158,7 @@ class SessionArchiveRepository @Inject constructor(private val archiveDao: Sessi
             }
         }
 
-        return 0
-    }
-
-    fun countDurationAvg(): Minute {
-        val durationGroupedByDay = getDurationsGroupedByDay()
-        if (durationGroupedByDay.isEmpty()) {
-            return 0
-        }
-        return durationGroupedByDay
-            .average()
-            .toInt()
+        return strikeCount
     }
 
     private fun getDurationsGroupedByDay(): MutableList<Int> {

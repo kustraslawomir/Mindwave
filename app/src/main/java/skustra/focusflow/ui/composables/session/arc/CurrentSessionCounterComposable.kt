@@ -9,19 +9,19 @@ import skustra.focusflow.ui.localization.LocalizationKey
 import skustra.focusflow.ui.localization.LocalizationManager
 
 @Composable
-fun CurrentSessionCounter(sessionState: Session) {
-    if (sessionState.currentTimerState !is TimerState.InProgress) {
+fun CurrentSessionCounter(session: Session) {
+    if (session.currentTimerState !is TimerState.InProgress) {
         return
     }
 
-    val sessionStateStatusText = when (sessionState.currentSessionPart().type) {
+    val sessionStateStatusText = when (session.currentSessionPart().type) {
         SessionPartType.Work -> {
-            val workParts = sessionState.parts.filter { sessionPart ->
+            val workParts = session.parts.filter { sessionPart ->
                 sessionPart.type == SessionPartType.Work
             }
 
             val currentWorkIndex = workParts.indexOfFirst { sessionPart ->
-                sessionPart.id == sessionState.currentSessionPart().id
+                sessionPart.id == session.currentSessionPart().id
             } + 1
 
             "$currentWorkIndex/${workParts.size}"

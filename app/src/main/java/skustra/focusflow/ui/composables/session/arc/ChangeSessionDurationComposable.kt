@@ -10,6 +10,7 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.alpha
 import androidx.compose.ui.unit.dp
 import androidx.lifecycle.viewmodel.compose.viewModel
+import skustra.focusflow.data.database.Constants
 import skustra.focusflow.data.model.session.Session
 import skustra.focusflow.data.model.timer.TimerState
 import skustra.focusflow.ui.composables.session.SessionViewModel
@@ -18,9 +19,9 @@ import skustra.focusflow.ui.theme.SessionDurationChangeButtonStyle
 
 @Composable
 fun ChangeSessionDurationComposable(
-    sessionState: Session, viewModel: SessionViewModel = viewModel()
+    session: Session, viewModel: SessionViewModel = viewModel()
 ) {
-    if (sessionState.currentTimerState != TimerState.Idle) {
+    if (session.currentTimerState != TimerState.Idle) {
         return
     }
 
@@ -29,7 +30,7 @@ fun ChangeSessionDurationComposable(
         verticalAlignment = Alignment.CenterVertically,
     ) {
         Text(
-            text = "-",
+            text = Constants.DECREASE_TEXT_SYMBOL,
             style = SessionDurationChangeButtonStyle,
             modifier = Modifier
                 .noRippleClickable {
@@ -38,7 +39,7 @@ fun ChangeSessionDurationComposable(
                 .alpha(if (viewModel.isAvailableToDecrease()) 1f else 0.2f))
         Spacer(Modifier.width(24.dp))
         Text(
-            text = "+",
+            text = Constants.INCREASE_TEXT_SYMBOL,
             style = SessionDurationChangeButtonStyle,
             modifier = Modifier
                 .noRippleClickable {

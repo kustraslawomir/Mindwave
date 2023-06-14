@@ -1,7 +1,9 @@
 package skustra.focusflow.data.database.injection
 
 import android.content.Context
+import androidx.room.AutoMigration
 import androidx.room.Room
+import androidx.room.migration.Migration
 import dagger.Module
 import dagger.Provides
 import dagger.hilt.InstallIn
@@ -9,7 +11,7 @@ import dagger.hilt.android.qualifiers.ApplicationContext
 import dagger.hilt.components.SingletonComponent
 import skustra.focusflow.data.database.AppDatabase
 import skustra.focusflow.data.database.Constants.DATABASE
-import skustra.focusflow.data.database.DateConverter
+import skustra.focusflow.data.database.DatabaseMigrations
 import javax.inject.Singleton
 
 @Module
@@ -19,15 +21,16 @@ object DatabaseModule {
     @Provides
     @Singleton
     fun provide(@ApplicationContext context: Context) = Room.databaseBuilder(
-        context,
-        AppDatabase::class.java,
-        DATABASE
+        context, AppDatabase::class.java, DATABASE
     )
-        .allowMainThreadQueries()
         .fallbackToDestructiveMigration()
         .build()
 
     @Provides
     @Singleton
-    fun provideDao(database: AppDatabase) = database.sessionArchiveDao()
+    fun provideSessionArchiveDao(database: AppDatabase) = database.sessionArchiveDao()
+
+    @Provides
+    @Singleton
+    fun provideSessionCategoryDao(database: AppDatabase) = database.sessionCategoryDao()
 }

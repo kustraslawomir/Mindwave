@@ -15,12 +15,12 @@ import skustra.focusflow.ui.localization.LocalizationManager
 
 @Composable
 fun TimeProgress(
-    sessionState: Session
+    session: Session
 ) {
-    val minutesLeft = when (val timerState = sessionState.currentTimerState) {
+    val minutesLeft = when (val timerState = session.currentTimerState) {
         is TimerState.InProgress -> timerState.progress.minutesLeft.toString()
         is TimerState.Paused -> timerState.progress.minutesLeft.toString()
-        is TimerState.Idle -> sessionState.sessionDuration().toString()
+        is TimerState.Idle -> session.sessionDuration().toString()
         else -> 0.toString()
     }
 
