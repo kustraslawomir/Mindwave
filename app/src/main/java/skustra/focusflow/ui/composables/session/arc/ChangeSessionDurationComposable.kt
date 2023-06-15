@@ -1,4 +1,5 @@
 package skustra.focusflow.ui.composables.session.arc
+
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.padding
@@ -25,10 +26,7 @@ fun ChangeSessionDurationComposable(
         return
     }
 
-    Row(
-        modifier = Modifier.padding(top = 16.dp),
-        verticalAlignment = Alignment.CenterVertically,
-    ) {
+    Row {
         Text(
             text = Constants.DECREASE_TEXT_SYMBOL,
             style = SessionDurationChangeButtonStyle,

@@ -12,7 +12,9 @@ import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxWidth
+import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
+import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material3.Icon
@@ -20,6 +22,7 @@ import androidx.compose.material3.IconButton
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.ui.Alignment
@@ -30,11 +33,13 @@ import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.window.Dialog
+import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import com.google.accompanist.permissions.ExperimentalPermissionsApi
 import com.google.accompanist.permissions.PermissionStatus
 import com.google.accompanist.permissions.rememberPermissionState
 import skustra.focusflow.ui.composables.permission.GrantPostNotificationPermission
 import skustra.focusflow.ui.composables.session.SessionViewModel
+import skustra.focusflow.ui.composables.session.arc.BreaksCount
 import skustra.focusflow.ui.composables.session.panel.SkipBreaksComposable
 import skustra.focusflow.ui.localization.LocalizationKey
 import skustra.focusflow.ui.localization.LocalizationManager
@@ -45,11 +50,19 @@ object PanelState {
 
     @Composable
     fun Idle(viewModel: SessionViewModel) {
+        val session by viewModel
+            .getSessionFlow()
+            .collectAsStateWithLifecycle()
         Column(
             horizontalAlignment = Alignment.CenterHorizontally
         ) {
+            BreaksCount(session = session)
+
             if (viewModel.sessionIncludesBreaks()) {
                 SkipBreaksComposable(skipBreaks = viewModel.skipTheBreaks())
+                Box(modifier = Modifier.height(height = 4.dp))
+            } else {
+                Box(modifier = Modifier.height(height = 12.dp))
             }
             Start(viewModel)
         }
@@ -119,7 +132,7 @@ object PanelState {
     }
 
     @Composable
-     fun Pause(viewModel: SessionViewModel) {
+    fun Pause(viewModel: SessionViewModel) {
         CircleButton(
             onClick = {
                 viewModel.pauseSession()
@@ -128,7 +141,7 @@ object PanelState {
     }
 
     @Composable
-     fun Resume(viewModel: SessionViewModel) {
+    fun Resume(viewModel: SessionViewModel) {
         Row(
             Modifier.fillMaxWidth(), horizontalArrangement = Arrangement.Center
         ) {

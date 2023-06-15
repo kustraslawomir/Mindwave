@@ -91,8 +91,8 @@ object LocalizationManager {
             LocalizationKey.CurrentWeekDurationSum to "This week",
             LocalizationKey.Last30DaysDuration to "Last 30 days",
             LocalizationKey.TotalDuration to "Total time",
-            LocalizationKey.CurrentStrike to "Current strike",
-            LocalizationKey.LongestStrike to "Record strike",
+            LocalizationKey.CurrentStrike to "Current streak",
+            LocalizationKey.LongestStrike to "Longest streak",
             LocalizationKey.AverageDuration to "Daily average",
             )
     )

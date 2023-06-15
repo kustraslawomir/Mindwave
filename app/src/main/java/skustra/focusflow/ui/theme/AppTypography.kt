@@ -54,5 +54,5 @@ val Typography = Typography(
 val SessionDurationChangeButtonStyle = TextStyle(
     fontFamily = Roboto,
     fontWeight = FontWeight.Bold,
-    fontSize = 24.sp
+    fontSize = 28.sp
 )

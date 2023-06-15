@@ -6,8 +6,8 @@ plugins {
 }
 
 ext {
-    APP_NAME = "Focus"
-    APP_NAME_DEBUG = "Focus.debug"
+    APP_NAME = "Mindwave"
+    APP_NAME_DEBUG = "Mindwave.debug"
 }
 
 android {
@@ -18,8 +18,8 @@ android {
         applicationId "skustra.focus"
         minSdk 26
         targetSdk 33
-        versionCode 3
-        versionName "1.0.3"
+        versionCode 5
+        versionName "1.0.5"
 
         testInstrumentationRunner "androidx.test.runner.AndroidJUnitRunner"
         vectorDrawables {

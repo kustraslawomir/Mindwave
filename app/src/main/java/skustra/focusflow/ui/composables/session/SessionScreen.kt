@@ -19,7 +19,7 @@ import skustra.focusflow.ui.composables.session.panel.SessionPanelComposable
 fun SessionScreen(viewModel: SessionViewModel = viewModel()) {
 
     val sessionState by viewModel
-        .getSessionStateFlow()
+        .getSessionFlow()
         .collectAsStateWithLifecycle()
 
     Column(
@@ -49,7 +49,7 @@ fun SessionScreen(viewModel: SessionViewModel = viewModel()) {
         }
         Box(
             modifier = Modifier
-                .weight(0.5f)
+                .weight(0.6f)
                 .fillMaxSize(),
             contentAlignment = Alignment.BottomCenter
         ) {

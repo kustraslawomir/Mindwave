@@ -10,7 +10,7 @@ import skustra.focusflow.ui.composables.session.panel.button.PanelState
 
 @Composable
 fun SessionPanelComposable(viewModel: SessionViewModel = viewModel()) {
-    val sessionState by viewModel.getSessionStateFlow().collectAsStateWithLifecycle()
+    val sessionState by viewModel.getSessionFlow().collectAsStateWithLifecycle()
     when (sessionState.currentTimerState) {
         TimerState.Idle -> PanelState.Idle(viewModel)
         is TimerState.InProgress -> PanelState.Pause(viewModel)

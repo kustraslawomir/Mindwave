@@ -7,7 +7,6 @@ import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.launch
-import skustra.focusflow.data.database.entity.SessionCategoryEntity
 import skustra.focusflow.data.model.alias.Minute
 import skustra.focusflow.domain.usecase.resources.DrawableProvider
 import skustra.focusflow.domain.usecase.session.SessionConfig
@@ -47,7 +46,7 @@ class SessionViewModel @Inject constructor(
 
     fun stopSession() = sessionHandler.stopSession()
 
-    fun getSessionStateFlow() = sessionHandler.sessionStateFlow
+    fun getSessionFlow() = sessionHandler.sessionStateFlow
 
     fun skipBreaks(skipBreaks: Boolean) {
         this.skipTheBreaks = skipBreaks

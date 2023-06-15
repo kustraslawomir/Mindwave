@@ -1,10 +1,5 @@
 package skustra.focusflow.ui.composables.session.description
 
-import androidx.compose.animation.AnimatedContent
-import androidx.compose.animation.ExperimentalAnimationApi
-import androidx.compose.animation.fadeIn
-import androidx.compose.animation.fadeOut
-import androidx.compose.animation.with
 import androidx.compose.foundation.layout.*
 import androidx.compose.material.Text
 import androidx.compose.material3.MaterialTheme
@@ -27,7 +22,7 @@ import skustra.focusflow.ui.localization.LocalizationManager
 
 @Composable
 fun SessionDescriptionComposable(viewModel: SessionViewModel = viewModel()) {
-    val sessionState by viewModel.getSessionStateFlow().collectAsStateWithLifecycle()
+    val sessionState by viewModel.getSessionFlow().collectAsStateWithLifecycle()
 
     when (sessionState.currentTimerState) {
         TimerState.Idle -> IdleDescription()

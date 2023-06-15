@@ -22,13 +22,7 @@ import skustra.focusflow.ui.composables.statistics.chart.SessionArchiveEntry
 import skustra.focusflow.ui.composables.statistics.chart.SessionArchiveEntryDataModel
 import skustra.focusflow.ui.localization.LocalizationKey
 import skustra.focusflow.ui.localization.LocalizationManager
-import skustra.focusflow.ui.theme.CandyPink
-import skustra.focusflow.ui.theme.Lavender
-import skustra.focusflow.ui.theme.Lilac
-import skustra.focusflow.ui.theme.PaleSeaBlue
-import skustra.focusflow.ui.theme.PastelPink
 import skustra.focusflow.ui.theme.ThisWeekCardColor
-import skustra.focusflow.ui.theme.ThistlePink
 import java.util.Calendar
 import java.util.Date
 import java.util.UUID

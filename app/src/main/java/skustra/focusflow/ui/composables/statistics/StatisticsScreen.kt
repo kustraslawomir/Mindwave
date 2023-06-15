@@ -32,7 +32,7 @@ fun StatisticsScreen() {
             horizontalAlignment = Alignment.CenterHorizontally
         ) {
             StatisticsDurationComposable()
-            Box(Modifier.height(16.dp))
+            Box(Modifier.height(24.dp))
             StatisticsChartComposable()
             Text(
                 LocalizationManager.getText(LocalizationKey.ChartDescription),

@@ -28,7 +28,7 @@ import skustra.focusflow.data.model.timer.TimerState
 @Composable
 fun SessionFocusArc(
     session: Session,
-    indicatorThickness: Dp = 6.dp
+    indicatorThickness: Dp = 5.dp
 ) {
 
     val progress = when (val currentTimerState = session.currentTimerState) {
@@ -68,16 +68,12 @@ fun SessionFocusArc(
         verticalArrangement = Arrangement.Center,
         horizontalAlignment = Alignment.CenterHorizontally
     ) {
-        Row{
-            TimeProgress(session = session)
-            Box(modifier = Modifier.padding(start = 16.dp))
-            ChangeSessionDurationComposable(session = session)
-        }
+        TimeProgress(session = session)
         CurrentSessionCounter(session = session)
-        BreaksCount(session = session)
-        Box(modifier = Modifier.padding(top = 24.dp)) {
+        ChangeSessionDurationComposable(session = session)
+       /* Box(modifier = Modifier.padding(top = 16.dp)) {
             Category(session = session)
-        }
+        }*/
     }
 }
 
