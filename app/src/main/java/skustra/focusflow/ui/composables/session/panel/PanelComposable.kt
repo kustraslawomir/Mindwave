@@ -15,7 +15,8 @@ fun SessionPanelComposable(
     stopSession: () -> Unit,
     sessionIncludesBreaks: Boolean,
     skipBreaks: Boolean,
-    drawableProvider: DrawableProvider
+    drawableProvider: DrawableProvider,
+    shouldSkipBreaks: (Boolean) -> Unit
 ) {
     when (session.currentTimerState) {
         TimerState.Idle -> PanelState.Idle(
@@ -23,7 +24,8 @@ fun SessionPanelComposable(
             sessionIncludesBreaks = sessionIncludesBreaks,
             skipBreaks = skipBreaks,
             startSession = startSession,
-            drawableProvider = drawableProvider
+            drawableProvider = drawableProvider,
+            shouldSkipBreaks = shouldSkipBreaks
         )
 
         is TimerState.InProgress -> PanelState.Pause(

@@ -1,7 +1,6 @@
 package skustra.focusflow.ui.composables.session.panel
 
 import androidx.compose.foundation.layout.Row
-import androidx.compose.foundation.layout.size
 import androidx.compose.material3.Checkbox
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Text
@@ -10,20 +9,17 @@ import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.unit.dp
-import androidx.lifecycle.viewmodel.compose.viewModel
-import skustra.focusflow.ui.composables.session.SessionViewModel
 import skustra.focusflow.ui.extensions.noRippleClickable
 import skustra.focusflow.ui.localization.LocalizationKey
 import skustra.focusflow.ui.localization.LocalizationManager
 
 @Composable
-fun SkipBreaksComposable(viewModel: SessionViewModel = viewModel(), skipBreaks: Boolean) {
+fun SkipBreaksComposable(shouldSkipBreaks: (Boolean) -> Unit, skipBreaks: Boolean) {
     val checkedState = remember { mutableStateOf(skipBreaks) }
     Row(
         modifier = Modifier.noRippleClickable {
             checkedState.value = !checkedState.value
-            viewModel.skipBreaks(checkedState.value)
+            shouldSkipBreaks(checkedState.value)
         },
 
         verticalAlignment = Alignment.CenterVertically
@@ -32,7 +28,7 @@ fun SkipBreaksComposable(viewModel: SessionViewModel = viewModel(), skipBreaks: 
             checked = checkedState.value,
             onCheckedChange = { isChecked ->
                 checkedState.value = isChecked
-                viewModel.skipBreaks(isChecked)
+                shouldSkipBreaks(isChecked)
             },
         )
         Text(

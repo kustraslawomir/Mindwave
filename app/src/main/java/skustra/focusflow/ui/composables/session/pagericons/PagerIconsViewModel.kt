@@ -7,5 +7,4 @@ import javax.inject.Inject
 
 @HiltViewModel
 class PagerIconsViewModel @Inject constructor(val drawableProvider: DrawableProvider) :
-    ViewModel() {
-}
+    ViewModel()

@@ -51,7 +51,8 @@ object PanelState {
         sessionIncludesBreaks: Boolean,
         skipBreaks: Boolean,
         startSession: () -> Unit,
-        drawableProvider: DrawableProvider
+        drawableProvider: DrawableProvider,
+        shouldSkipBreaks: (Boolean) -> Unit
     ) {
         Column(
             horizontalAlignment = Alignment.CenterHorizontally
@@ -59,7 +60,10 @@ object PanelState {
             BreaksCount(session = session)
 
             if (sessionIncludesBreaks) {
-                SkipBreaksComposable(skipBreaks = skipBreaks)
+                SkipBreaksComposable(
+                    skipBreaks = skipBreaks,
+                    shouldSkipBreaks = shouldSkipBreaks
+                )
                 Box(modifier = Modifier.height(height = 4.dp))
             } else {
                 Box(modifier = Modifier.height(height = 12.dp))
@@ -119,7 +123,8 @@ object PanelState {
                         showPermissionDialog.value = false
                         startSession()
                     }) {
-                    GrantPostNotificationPermission(permissionState = permissionState,
+                    GrantPostNotificationPermission(
+                        permissionState = permissionState,
                         launcher = launcher,
                         onClick = {
                             showPermissionDialog.value = false

@@ -17,11 +17,12 @@ import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.unit.dp
 import androidx.lifecycle.viewmodel.compose.viewModel
 import kotlinx.coroutines.launch
+import skustra.focusflow.domain.usecase.resources.DrawableProvider
 
 @OptIn(ExperimentalFoundationApi::class)
 @Composable
 fun StatisticsIcon(
-    viewModel: PagerIconsViewModel = viewModel(),
+    drawableProvider: DrawableProvider,
     pagerState: PagerState
 ) {
     val scope = rememberCoroutineScope()
@@ -39,7 +40,7 @@ fun StatisticsIcon(
             }
         ) {
             Icon(
-                painter = painterResource(id = viewModel.drawableProvider.getStatisticsIcon()),
+                painter = painterResource(id = drawableProvider.getStatisticsIcon()),
                 modifier = Modifier.size(24.dp),
                 tint = Color.White,
                 contentDescription = ""

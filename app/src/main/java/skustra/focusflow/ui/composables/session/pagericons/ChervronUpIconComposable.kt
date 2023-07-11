@@ -17,11 +17,12 @@ import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.unit.dp
 import androidx.lifecycle.viewmodel.compose.viewModel
 import kotlinx.coroutines.launch
+import skustra.focusflow.domain.usecase.resources.DrawableProvider
 
 @OptIn(ExperimentalFoundationApi::class)
 @Composable
 fun NavigateUpIcon(
-    viewModel: PagerIconsViewModel = viewModel(), pagerState: PagerState
+    drawableProvider: DrawableProvider, pagerState: PagerState
 ) {
     val scope = rememberCoroutineScope()
     Box(
@@ -36,7 +37,7 @@ fun NavigateUpIcon(
             }
         }) {
             Icon(
-                painter = painterResource(id = viewModel.drawableProvider.getChevronUpIcon()),
+                painter = painterResource(id = drawableProvider.getChevronUpIcon()),
                 modifier = Modifier.size(32.dp),
                 tint = Color.White,
                 contentDescription = ""

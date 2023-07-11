@@ -74,6 +74,7 @@ fun SessionScreen(viewModel: SessionViewModel = viewModel()) {
                 sessionIncludesBreaks = viewModel.sessionIncludesBreaks(),
                 skipBreaks = viewModel.skipTheBreaks(),
                 drawableProvider = viewModel.drawableProvider,
+                shouldSkipBreaks = viewModel::skipBreaks
             )
         }
     }
