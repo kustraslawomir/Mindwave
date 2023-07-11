@@ -13,10 +13,10 @@ fun SessionPanelComposable(
     pauseSession: () -> Unit,
     resumeSession: () -> Unit,
     stopSession: () -> Unit,
-    sessionIncludesBreaks: Boolean,
-    skipBreaks: Boolean,
+    shouldSkipBreaks: (Boolean) -> Unit,
     drawableProvider: DrawableProvider,
-    shouldSkipBreaks: (Boolean) -> Unit
+    sessionIncludesBreaks: Boolean,
+    skipBreaks: Boolean
 ) {
     when (session.currentTimerState) {
         TimerState.Idle -> PanelState.Idle(

@@ -2,6 +2,7 @@ package skustra.focusflow.ui.composables.session
 
 import android.content.Context
 import android.content.Intent
+import androidx.compose.runtime.getValue
 import androidx.core.content.ContextCompat
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
@@ -28,7 +29,21 @@ class SessionViewModel @Inject constructor(
 
     private var durationChosenByUser = SessionConfig.DEFAULT_DURATION
 
-    fun startSession(context: Context) {
+    fun onSessionUiEvent(event: SessionUiEvent) {
+        when (event) {
+            is SessionUiEvent.Start -> startSession(event.context)
+            SessionUiEvent.Pause -> sessionHandler.pauseSession()
+            SessionUiEvent.Resume -> sessionHandler.resumeSession()
+            SessionUiEvent.Stop -> sessionHandler.stopSession()
+            is SessionUiEvent.SkipBreaks -> skipBreaks(event.skip)
+        }
+    }
+
+    fun skipTheBreaks() = skipTheBreaks
+
+    fun getSessionFlow() = sessionHandler.sessionStateFlow
+
+    private   fun startSession(context: Context) {
         ContextCompat.startForegroundService(
             context,
             Intent(context, SessionForegroundService::class.java).apply {
@@ -38,17 +53,7 @@ class SessionViewModel @Inject constructor(
         )
     }
 
-    fun skipTheBreaks() = skipTheBreaks
-
-    fun pauseSession() = sessionHandler.pauseSession()
-
-    fun resumeSession() = sessionHandler.resumeSession()
-
-    fun stopSession() = sessionHandler.stopSession()
-
-    fun getSessionFlow() = sessionHandler.sessionStateFlow
-
-    fun skipBreaks(skipBreaks: Boolean) {
+    private fun skipBreaks(skipBreaks: Boolean) {
         this.skipTheBreaks = skipBreaks
 
         viewModelScope.launch {

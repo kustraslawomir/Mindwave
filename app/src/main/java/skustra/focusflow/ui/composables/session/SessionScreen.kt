@@ -66,15 +66,21 @@ fun SessionScreen(viewModel: SessionViewModel = viewModel()) {
             SessionPanelComposable(
                 session = session,
                 startSession = {
-                    viewModel.startSession(context)
+                    viewModel.onSessionUiEvent(SessionUiEvent.Start(context))
                 },
-                pauseSession = viewModel::pauseSession,
-                resumeSession = viewModel::resumeSession,
-                stopSession = viewModel::stopSession,
+                pauseSession = { viewModel.onSessionUiEvent(SessionUiEvent.Pause) },
+                resumeSession = { viewModel.onSessionUiEvent(SessionUiEvent.Resume) },
+                stopSession = { viewModel.onSessionUiEvent(SessionUiEvent.Stop) },
                 sessionIncludesBreaks = viewModel.sessionIncludesBreaks(),
                 skipBreaks = viewModel.skipTheBreaks(),
                 drawableProvider = viewModel.drawableProvider,
-                shouldSkipBreaks = viewModel::skipBreaks
+                shouldSkipBreaks = { skip ->
+                    viewModel.onSessionUiEvent(
+                        SessionUiEvent.SkipBreaks(
+                            skip
+                        )
+                    )
+                }
             )
         }
     }
