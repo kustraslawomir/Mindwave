@@ -22,7 +22,8 @@ class MainActivity : ComponentActivity() {
 
         setContent {
             AppTheme(
-                isDarkTheme = isSystemInDarkTheme()
+                //isDarkTheme = isSystemInDarkTheme()
+                isDarkTheme = true
             ) {
                 Surface(
                     color = MaterialTheme.colorScheme.background,
