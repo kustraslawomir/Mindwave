@@ -1,6 +1,7 @@
 package skustra.focusflow.ui.extensions
 
 import skustra.focusflow.data.model.alias.Minute
+import skustra.focusflow.domain.utilities.logs.AppLog
 import kotlin.math.roundToInt
 
 fun Minute.toDisplayFormat() : String {
@@ -8,5 +9,7 @@ fun Minute.toDisplayFormat() : String {
 }
 
 fun Float.toDisplayFormat() : String {
-    return "${this.roundToInt()} m."
+    val result =  "${this.roundToInt()} m."
+    AppLog.log("Format: $this to: $result")
+    return result
 }

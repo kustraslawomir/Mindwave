@@ -13,7 +13,7 @@ import javax.inject.Inject
 @AndroidEntryPoint
 class SessionForegroundService @Inject constructor() : Service() {
 
-    private val serviceScope = CoroutineScope(Job() + Dispatchers.Main)
+    private val serviceScope = CoroutineScope(SupervisorJob() + Dispatchers.IO)
 
     @Inject
     lateinit var sessionStateHandler: SessionStateHandler

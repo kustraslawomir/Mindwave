@@ -13,4 +13,8 @@ object AppLog {
     fun notificationState(timerState: TimerState) {
         Timber.d("[NOTIFICATION] $timerState")
     }
+
+    fun log(value: String){
+        Timber.d(value)
+    }
 }

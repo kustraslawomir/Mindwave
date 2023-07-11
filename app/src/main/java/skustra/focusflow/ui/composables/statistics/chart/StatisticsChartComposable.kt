@@ -33,18 +33,18 @@ import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.runtime.rememberCoroutineScope
 import androidx.compose.runtime.setValue
+import com.patrykandpatrick.vico.compose.axis.axisLabelComponent
+import com.patrykandpatrick.vico.core.entry.ChartEntryModelProducer
+import com.patrykandpatrick.vico.core.entry.ChartModelProducer
 import skustra.focusflow.data.model.statistics.DurationStatistics
+import android.graphics.Color as AndroidColor
 
 @Composable
-fun StatisticsChartComposable(viewModel: StatisticsViewModel = viewModel()) {
+fun StatisticsChartComposable(
+    axisValuesOverrider: AxisValuesOverrider<ChartEntryModel>?,
+    entryProducer: ChartEntryModelProducer
+) {
     val thresholdLine = rememberThresholdLine()
-
-    var axisValuesOverrider by remember { mutableStateOf<AxisValuesOverrider<ChartEntryModel>?>(null) }
-    LaunchedEffect(key1 = Unit, block = {
-        launch(Dispatchers.IO) {
-            axisValuesOverrider = getAxisValueOverrider(viewModel.getAxisValueMaxY())
-        }
-    })
 
     ProvideChartStyle(rememberChartStyle(chartColors)) {
         val lineChart = lineChart(
@@ -54,17 +54,21 @@ fun StatisticsChartComposable(viewModel: StatisticsViewModel = viewModel()) {
                 listOf(thresholdLine)
             })
         Chart(
-            chartModelProducer = viewModel.getEntryProducer(),
+            chartModelProducer = entryProducer,
             chart = remember(lineChart) { lineChart },
             startAxis = startAxis(
                 valueFormatter = verticalAxisValueFormatter,
-                maxLabelCount = START_AXIS_LABEL_COUNT,
-
-                ),
+                label = axisLabelComponent().apply {
+                    color = AndroidColor.WHITE
+                },
+                maxLabelCount = START_AXIS_LABEL_COUNT
+            ),
             bottomAxis = bottomAxis(
                 labelRotationDegrees = dateRotation,
-                valueFormatter = horizontalAxisValueFormatter
-            ),
+                valueFormatter = horizontalAxisValueFormatter,
+                label = axisLabelComponent().apply {
+                    color = AndroidColor.WHITE
+                }),
             marker = rememberMarker(),
             legend = RememberLegend(),
         )
@@ -75,7 +79,7 @@ fun StatisticsChartComposable(viewModel: StatisticsViewModel = viewModel()) {
 private fun rememberThresholdLine(): ThresholdLine {
     val line = shapeComponent(strokeWidth = thresholdLineThickness, strokeColor = GoalColor)
     val label = textComponent(
-        color = Color.Black,
+        color = Color.White,
         background = shapeComponent(Shapes.pillShape, GoalColor),
         padding = thresholdLineLabelPadding,
         margins = thresholdLineLabelMargins,
@@ -102,6 +106,7 @@ private val thresholdLineLabelPadding = dimensionsOf(
     thresholdLineLabelHorizontalPaddingValue,
     thresholdLineLabelVerticalPaddingValue
 )
+
 private val thresholdLineLabelMargins = dimensionsOf(thresholdLineLabelMarginValue)
 
 val horizontalAxisValueFormatter =
@@ -121,11 +126,3 @@ val verticalAxisValueFormatter =
             ?.run { value.toDisplayFormat() }
             .orEmpty()
     }
-
-suspend fun getAxisValueOverrider(maxY: Float): AxisValuesOverrider<ChartEntryModel> {
-    return AxisValuesOverrider
-        .fixed(
-            minY = 0f,
-            maxY = maxY
-        )
-}

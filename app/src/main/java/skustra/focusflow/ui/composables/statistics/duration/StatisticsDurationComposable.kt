@@ -16,18 +16,10 @@ import skustra.focusflow.ui.composables.statistics.StatisticsViewModel
 import androidx.lifecycle.viewmodel.compose.viewModel
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
+import skustra.focusflow.data.model.statistics.DurationUiModel
 
 @Composable
-fun StatisticsDurationComposable(viewModel: StatisticsViewModel = viewModel()) {
-    val coroutineScope = rememberCoroutineScope()
-    var data by remember { mutableStateOf(viewModel.getEmptyDurationUiModelList()) }
-
-    LaunchedEffect(key1 = Unit) {
-        coroutineScope.launch(Dispatchers.IO) {
-            data = viewModel.getDurationStatistics()
-        }
-    }
-
+fun StatisticsDurationComposable(data : List<DurationUiModel>) {
     LazyVerticalGrid(
         columns = GridCells.Fixed(3),
         modifier = Modifier.padding(16.dp)
