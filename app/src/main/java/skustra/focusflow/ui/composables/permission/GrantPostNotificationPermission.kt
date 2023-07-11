@@ -5,6 +5,7 @@ import androidx.compose.runtime.Composable
 import com.google.accompanist.permissions.ExperimentalPermissionsApi
 import com.google.accompanist.permissions.PermissionState
 import com.google.accompanist.permissions.PermissionStatus
+import skustra.focusflow.domain.usecase.resources.DrawableProvider
 
 
 @Composable
@@ -12,7 +13,8 @@ import com.google.accompanist.permissions.PermissionStatus
 fun GrantPostNotificationPermission(
     permissionState: PermissionState?,
     launcher: ManagedActivityResultLauncher<String, Boolean>,
-    onClick: () -> Unit
+    onClick: () -> Unit,
+    drawableProvider: DrawableProvider
 ) {
     if (permissionState == null) {
         return
@@ -24,14 +26,17 @@ fun GrantPostNotificationPermission(
     }
 
     if (status.shouldShowRationale) {
-        PostNotificationPermissionRationaleDialog(onClick = {
-            onClick()
-        })
+        PostNotificationPermissionRationaleDialog(
+            onRationaleClicked = onClick,
+            drawableProvider = drawableProvider
+        )
         return
     }
 
-    PostNotificationPermissionDialog(launcher = launcher, onClick = {
-        onClick()
-    })
+    PostNotificationPermissionDialog(
+        launcher = launcher,
+        onAllowClicked = onClick,
+        drawableProvider = drawableProvider
+    )
 }
 

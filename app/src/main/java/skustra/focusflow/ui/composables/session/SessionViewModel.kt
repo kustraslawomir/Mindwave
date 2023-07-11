@@ -20,7 +20,7 @@ import javax.inject.Inject
 
 @HiltViewModel
 class SessionViewModel @Inject constructor(
-    val resourceManager: DrawableProvider,
+    val drawableProvider: DrawableProvider,
     private val sessionHandler: SessionStateHandler
 ) : ViewModel() {
 

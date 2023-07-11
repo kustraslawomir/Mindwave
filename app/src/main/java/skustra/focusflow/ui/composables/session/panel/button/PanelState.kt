@@ -14,7 +14,6 @@ import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
-import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material3.Icon
@@ -22,23 +21,21 @@ import androidx.compose.material3.IconButton
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
-import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.graphics.Color
-import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.window.Dialog
-import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import com.google.accompanist.permissions.ExperimentalPermissionsApi
 import com.google.accompanist.permissions.PermissionStatus
 import com.google.accompanist.permissions.rememberPermissionState
+import skustra.focusflow.data.model.session.Session
+import skustra.focusflow.domain.usecase.resources.DrawableProvider
 import skustra.focusflow.ui.composables.permission.GrantPostNotificationPermission
-import skustra.focusflow.ui.composables.session.SessionViewModel
 import skustra.focusflow.ui.composables.session.arc.BreaksCount
 import skustra.focusflow.ui.composables.session.panel.SkipBreaksComposable
 import skustra.focusflow.ui.localization.LocalizationKey
@@ -49,35 +46,37 @@ import timber.log.Timber
 object PanelState {
 
     @Composable
-    fun Idle(viewModel: SessionViewModel) {
-        val session by viewModel
-            .getSessionFlow()
-            .collectAsStateWithLifecycle()
+    fun Idle(
+        session: Session,
+        sessionIncludesBreaks: Boolean,
+        skipBreaks: Boolean,
+        startSession: () -> Unit,
+        drawableProvider: DrawableProvider
+    ) {
         Column(
             horizontalAlignment = Alignment.CenterHorizontally
         ) {
             BreaksCount(session = session)
 
-            if (viewModel.sessionIncludesBreaks()) {
-                SkipBreaksComposable(skipBreaks = viewModel.skipTheBreaks())
+            if (sessionIncludesBreaks) {
+                SkipBreaksComposable(skipBreaks = skipBreaks)
                 Box(modifier = Modifier.height(height = 4.dp))
             } else {
                 Box(modifier = Modifier.height(height = 12.dp))
             }
-            Start(viewModel)
+            Start(drawableProvider = drawableProvider, startSession = startSession)
         }
     }
 
     @OptIn(ExperimentalPermissionsApi::class)
     @Composable
-    private fun Start(viewModel: SessionViewModel) {
-        val context = LocalContext.current
+    private fun Start(startSession: () -> Unit, drawableProvider: DrawableProvider) {
         val launcher = rememberLauncherForActivityResult(
             ActivityResultContracts.RequestPermission()
-        ) { wasGranted ->
-            Timber.d("POST_NOTIFICATIONS permission was granted: $wasGranted")
-            if (wasGranted) {
-                viewModel.startSession(context)
+        ) { permissionGranted ->
+            Timber.d("POST_NOTIFICATIONS permission was granted: $permissionGranted")
+            if (permissionGranted) {
+                startSession()
             }
         }
         val permissionState = if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.TIRAMISU) {
@@ -93,16 +92,16 @@ object PanelState {
             .background(color = ButtonColor)
             .clickable {
                 when (status) {
-                    is PermissionStatus.Granted -> viewModel.startSession(context)
+                    is PermissionStatus.Granted -> startSession()
                     is PermissionStatus.Denied -> showPermissionDialog.value = true
-                    else -> viewModel.startSession(context)
+                    else -> startSession()
                 }
 
             }) {
             Row(verticalAlignment = Alignment.CenterVertically) {
                 IconButton(onClick = { }) {
                     Icon(
-                        painter = painterResource(id = viewModel.resourceManager.getPlayIcon()),
+                        painter = painterResource(id = drawableProvider.getPlayIcon()),
                         contentDescription = "",
                         tint = Color.Black
                     )
@@ -118,43 +117,47 @@ object PanelState {
                 Dialog(
                     onDismissRequest = {
                         showPermissionDialog.value = false
-                        viewModel.startSession(context)
+                        startSession()
                     }) {
                     GrantPostNotificationPermission(permissionState = permissionState,
                         launcher = launcher,
                         onClick = {
                             showPermissionDialog.value = false
-                        })
+                        }, drawableProvider = drawableProvider
+                    )
                 }
-
             }
         }
     }
 
     @Composable
-    fun Pause(viewModel: SessionViewModel) {
+    fun Pause(drawableProvider: DrawableProvider, pauseSession: () -> Unit) {
         CircleButton(
             onClick = {
-                viewModel.pauseSession()
-            }, icon = viewModel.resourceManager.getPauseIcon()
+                pauseSession()
+            }, icon = drawableProvider.getPauseIcon()
         )
     }
 
     @Composable
-    fun Resume(viewModel: SessionViewModel) {
+    fun Resume(
+        drawableProvider: DrawableProvider,
+        resumeSession: () -> Unit,
+        stopSession: () -> Unit
+    ) {
         Row(
             Modifier.fillMaxWidth(), horizontalArrangement = Arrangement.Center
         ) {
             CircleButton(
                 onClick = {
-                    viewModel.resumeSession()
-                }, icon = viewModel.resourceManager.getResumeIcon()
+                    resumeSession()
+                }, icon = drawableProvider.getResumeIcon()
             )
             Spacer(modifier = Modifier.width(16.dp))
             CircleButton(
                 onClick = {
-                    viewModel.stopSession()
-                }, icon = viewModel.resourceManager.getStopIcon(), color = Color.White
+                    stopSession()
+                }, icon = drawableProvider.getStopIcon(), color = Color.White
             )
         }
     }

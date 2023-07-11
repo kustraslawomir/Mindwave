@@ -8,6 +8,7 @@ import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.unit.dp
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import androidx.lifecycle.viewmodel.compose.viewModel
@@ -18,9 +19,12 @@ import skustra.focusflow.ui.composables.session.panel.SessionPanelComposable
 @Composable
 fun SessionScreen(viewModel: SessionViewModel = viewModel()) {
 
-    val sessionState by viewModel
+    val session by viewModel
         .getSessionFlow()
         .collectAsStateWithLifecycle()
+
+    val context = LocalContext.current
+
 
     Column(
         modifier = Modifier
@@ -35,7 +39,9 @@ fun SessionScreen(viewModel: SessionViewModel = viewModel()) {
             contentAlignment = Alignment.BottomCenter
 
         ) {
-            SessionDescriptionComposable()
+            SessionDescriptionComposable(
+                session = session
+            )
         }
         Box(
             modifier = Modifier
@@ -44,7 +50,11 @@ fun SessionScreen(viewModel: SessionViewModel = viewModel()) {
             contentAlignment = Alignment.Center
         ) {
             SessionFocusArc(
-                session = sessionState
+                session = session,
+                decreaseSessionDuration = viewModel::decreaseSessionDuration,
+                increaseSessionDuration = viewModel::increaseSessionDuration,
+                isAvailableToDecrease = viewModel.isAvailableToDecrease(),
+                isAvailableToIncrease = viewModel.isAvailableToIncrease()
             )
         }
         Box(
@@ -53,7 +63,18 @@ fun SessionScreen(viewModel: SessionViewModel = viewModel()) {
                 .fillMaxSize(),
             contentAlignment = Alignment.BottomCenter
         ) {
-            SessionPanelComposable()
+            SessionPanelComposable(
+                session = session,
+                startSession = {
+                    viewModel.startSession(context)
+                },
+                pauseSession = viewModel::pauseSession,
+                resumeSession = viewModel::resumeSession,
+                stopSession = viewModel::stopSession,
+                sessionIncludesBreaks = viewModel.sessionIncludesBreaks(),
+                skipBreaks = viewModel.skipTheBreaks(),
+                drawableProvider = viewModel.drawableProvider,
+            )
         }
     }
 }

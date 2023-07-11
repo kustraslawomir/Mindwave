@@ -1,20 +1,42 @@
 package skustra.focusflow.ui.composables.session.panel
 
 import androidx.compose.runtime.Composable
-import androidx.compose.runtime.getValue
-import androidx.lifecycle.compose.collectAsStateWithLifecycle
-import androidx.lifecycle.viewmodel.compose.viewModel
+import skustra.focusflow.data.model.session.Session
 import skustra.focusflow.data.model.timer.TimerState
-import skustra.focusflow.ui.composables.session.SessionViewModel
+import skustra.focusflow.domain.usecase.resources.DrawableProvider
 import skustra.focusflow.ui.composables.session.panel.button.PanelState
 
 @Composable
-fun SessionPanelComposable(viewModel: SessionViewModel = viewModel()) {
-    val sessionState by viewModel.getSessionFlow().collectAsStateWithLifecycle()
-    when (sessionState.currentTimerState) {
-        TimerState.Idle -> PanelState.Idle(viewModel)
-        is TimerState.InProgress -> PanelState.Pause(viewModel)
-        is TimerState.Paused -> PanelState.Resume(viewModel)
+fun SessionPanelComposable(
+    session: Session,
+    startSession: () -> Unit,
+    pauseSession: () -> Unit,
+    resumeSession: () -> Unit,
+    stopSession: () -> Unit,
+    sessionIncludesBreaks: Boolean,
+    skipBreaks: Boolean,
+    drawableProvider: DrawableProvider
+) {
+    when (session.currentTimerState) {
+        TimerState.Idle -> PanelState.Idle(
+            session = session,
+            sessionIncludesBreaks = sessionIncludesBreaks,
+            skipBreaks = skipBreaks,
+            startSession = startSession,
+            drawableProvider = drawableProvider
+        )
+
+        is TimerState.InProgress -> PanelState.Pause(
+            drawableProvider = drawableProvider,
+            pauseSession = pauseSession
+        )
+
+        is TimerState.Paused -> PanelState.Resume(
+            drawableProvider = drawableProvider,
+            resumeSession = resumeSession,
+            stopSession = stopSession
+        )
+
         is TimerState.Completed -> {
             //ignore
         }

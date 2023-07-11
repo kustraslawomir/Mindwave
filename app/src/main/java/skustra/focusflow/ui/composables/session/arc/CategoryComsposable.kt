@@ -8,14 +8,12 @@ import skustra.focusflow.data.database.entity.SessionCategoryEntity
 import skustra.focusflow.data.model.session.Session
 import skustra.focusflow.data.model.timer.TimerState
 import skustra.focusflow.ui.composables.session.SessionCategoryViewModel
-import skustra.focusflow.ui.composables.session.SessionViewModel
 import skustra.focusflow.ui.localization.LocalizationKey
 import skustra.focusflow.ui.localization.LocalizationManager
 
 @Composable
 fun Category(
     session: Session,
-    sessionViewModel: SessionViewModel = viewModel(),
     sessionCategoryViewModel: SessionCategoryViewModel = viewModel()
 ) {
     if (session.currentTimerState != TimerState.Idle) {

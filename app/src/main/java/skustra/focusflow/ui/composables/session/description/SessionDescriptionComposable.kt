@@ -1,32 +1,28 @@
 package skustra.focusflow.ui.composables.session.description
 
-import androidx.compose.foundation.layout.*
+import androidx.compose.foundation.layout.Column
+import androidx.compose.foundation.layout.padding
 import androidx.compose.material.Text
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.runtime.Composable
-import androidx.compose.runtime.getValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.alpha
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
-import androidx.lifecycle.compose.collectAsStateWithLifecycle
-import androidx.lifecycle.viewmodel.compose.viewModel
+import skustra.focusflow.data.model.session.Session
 import skustra.focusflow.data.model.session.SessionPart
 import skustra.focusflow.data.model.session.SessionPartType
 import skustra.focusflow.data.model.timer.TimerState
-import skustra.focusflow.ui.composables.session.SessionViewModel
 import skustra.focusflow.ui.localization.LocalizationKey
 import skustra.focusflow.ui.localization.LocalizationManager
 
 @Composable
-fun SessionDescriptionComposable(viewModel: SessionViewModel = viewModel()) {
-    val sessionState by viewModel.getSessionFlow().collectAsStateWithLifecycle()
-
-    when (sessionState.currentTimerState) {
+fun SessionDescriptionComposable(session: Session) {
+    when (session.currentTimerState) {
         TimerState.Idle -> IdleDescription()
-        is TimerState.InProgress -> InProgressDescription(sessionState.currentSessionPart())
+        is TimerState.InProgress -> InProgressDescription(session.currentSessionPart())
         is TimerState.Paused -> PauseDescription()
         is TimerState.Completed -> {
             //ignore

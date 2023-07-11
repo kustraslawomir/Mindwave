@@ -19,6 +19,7 @@ import skustra.focusflow.data.repository.SessionArchiveRepository
 import skustra.focusflow.domain.usecase.session.SessionCreator
 import skustra.focusflow.domain.usecase.statenotification.BreakCompletedNotification
 import skustra.focusflow.domain.usecase.statenotification.SessionCompletedNotification
+import skustra.focusflow.domain.usecase.statenotification.SessionStartedNotification
 import skustra.focusflow.domain.usecase.statenotification.WorkCompletedNotification
 import skustra.focusflow.domain.utilities.logs.AppLog
 import skustra.focusflow.ui.service.SessionForegroundService
@@ -29,15 +30,16 @@ class SessionStateHandler(
     private val workCompletedNotification: WorkCompletedNotification,
     private val breakCompletedNotification: BreakCompletedNotification,
     private val sessionCompletedNotification: SessionCompletedNotification,
+    private val sessionStartedNotification: SessionStartedNotification,
     private val sessionStateEmitter: SessionStateEmitter,
     private val sessionArchiveRepository: SessionArchiveRepository
 ) {
 
     private lateinit var sessionScope: CoroutineScope
     private var currentSessionState = SessionCreator.generate()
-    private val _sessionMutableStateFlow = MutableStateFlow(currentSessionState)
 
-    val sessionStateFlow: StateFlow<Session> = _sessionMutableStateFlow
+    var sessionStateFlow: MutableStateFlow<Session> = MutableStateFlow(currentSessionState)
+        private set
 
     fun init(scope: CoroutineScope) {
         this.sessionScope = scope
@@ -60,11 +62,12 @@ class SessionStateHandler(
             sessionStateEmitter.start(
                 sessionPart = currentSessionState.currentSessionPart(), scope = sessionScope
             )
+            sessionStartedNotification.notifyUser()
         }
     }
 
     suspend fun emitSession(session: Session) {
-        _sessionMutableStateFlow.emit(session.copy())
+        sessionStateFlow.emit(session.copy())
     }
 
     fun pauseSession() {
@@ -100,7 +103,7 @@ class SessionStateHandler(
                         SessionPartType.Work -> workCompletedNotification.notifyUser()
                     }
                 }, onSessionCompleted = {
-                    val data = SessionArchiveEntity.create(_sessionMutableStateFlow.value)
+                    val data = SessionArchiveEntity.create(sessionStateFlow.value)
                     storeSession(data)
                     sessionCompletedNotification.notifyUser()
                     stopSession()
@@ -120,7 +123,7 @@ class SessionStateHandler(
 
     private suspend fun emiTimerState(state: TimerState) {
         Timber.d("Emit: $state ${state is TimerState.Completed}")
-        _sessionMutableStateFlow.emit(currentSessionState.apply {
+        sessionStateFlow.emit(currentSessionState.apply {
             currentTimerState = state
         }.copy())
     }

@@ -25,16 +25,16 @@ import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
-import skustra.focusflow.ui.composables.session.SessionViewModel
+import skustra.focusflow.domain.usecase.resources.DrawableProvider
 import skustra.focusflow.ui.localization.LocalizationKey
 import skustra.focusflow.ui.localization.LocalizationManager
 import skustra.focusflow.ui.theme.ButtonColor
 
 @Composable
 fun PostNotificationPermissionDialog(
-    viewModel: SessionViewModel = androidx.lifecycle.viewmodel.compose.viewModel(),
+    drawableProvider: DrawableProvider,
     launcher: ManagedActivityResultLauncher<String, Boolean>,
-    onClick: () -> Unit
+    onAllowClicked: () -> Unit
 ) {
     Box(
         modifier = Modifier
@@ -65,9 +65,9 @@ fun PostNotificationPermissionDialog(
                     }
                 }) {
                 Row(verticalAlignment = Alignment.CenterVertically) {
-                    IconButton(onClick = {}) {
+                    IconButton(onClick = onAllowClicked) {
                         Icon(
-                            painter = painterResource(id = viewModel.resourceManager.getNotificationIcon()),
+                            painter = painterResource(id = drawableProvider.getNotificationIcon()),
                             contentDescription = "",
                             tint = Color.Black
                         )

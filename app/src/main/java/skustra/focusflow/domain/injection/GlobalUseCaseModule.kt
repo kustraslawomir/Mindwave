@@ -16,6 +16,7 @@ import skustra.focusflow.domain.usecase.sessionstate.SessionStateEmitterImpl
 import skustra.focusflow.domain.usecase.sessionstate.SessionStateHandler
 import skustra.focusflow.domain.usecase.statenotification.BreakCompletedNotification
 import skustra.focusflow.domain.usecase.statenotification.SessionCompletedNotification
+import skustra.focusflow.domain.usecase.statenotification.SessionStartedNotification
 import skustra.focusflow.domain.usecase.statenotification.WorkCompletedNotification
 import skustra.focusflow.domain.usecase.vibrate.SingleVibrationUseCase
 import skustra.focusflow.ui.notification.SessionServiceNotificationManager
@@ -37,9 +38,11 @@ object GlobalComponent {
     @Provides
     @Singleton
     fun provideTimerStateHandler(
-        @ApplicationContext context: Context, workCompletedNotification: WorkCompletedNotification,
+        @ApplicationContext context: Context,
+        workCompletedNotification: WorkCompletedNotification,
         breakCompletedNotification: BreakCompletedNotification,
         sessionCompletedNotification: SessionCompletedNotification,
+        sessionStartedNotification: SessionStartedNotification,
         sessionStateEmitter: SessionStateEmitter,
         sessionArchiveRepository: SessionArchiveRepository
     ) =
@@ -48,6 +51,7 @@ object GlobalComponent {
             workCompletedNotification,
             breakCompletedNotification,
             sessionCompletedNotification,
+            sessionStartedNotification,
             sessionStateEmitter,
             sessionArchiveRepository
         )

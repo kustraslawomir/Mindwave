@@ -22,13 +22,18 @@ import androidx.compose.ui.platform.LocalConfiguration
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.unit.Dp
 import androidx.compose.ui.unit.dp
+import androidx.lifecycle.viewmodel.compose.viewModel
 import skustra.focusflow.data.model.session.Session
 import skustra.focusflow.data.model.timer.TimerState
 
 @Composable
 fun SessionFocusArc(
     session: Session,
-    indicatorThickness: Dp = 5.dp
+    indicatorThickness: Dp = 5.dp,
+    decreaseSessionDuration: () -> Unit,
+    increaseSessionDuration: () -> Unit,
+    isAvailableToDecrease: Boolean,
+    isAvailableToIncrease: Boolean
 ) {
 
     val progress = when (val currentTimerState = session.currentTimerState) {
@@ -70,10 +75,13 @@ fun SessionFocusArc(
     ) {
         TimeProgress(session = session)
         CurrentSessionCounter(session = session)
-        ChangeSessionDurationComposable(session = session)
-       /* Box(modifier = Modifier.padding(top = 16.dp)) {
-            Category(session = session)
-        }*/
+        ChangeSessionDurationComposable(
+            session = session,
+            decreaseSessionDuration = decreaseSessionDuration,
+            increaseSessionDuration = increaseSessionDuration,
+            isAvailableToDecrease = isAvailableToDecrease,
+            isAvailableToIncrease = isAvailableToIncrease
+        )
     }
 }
 
