@@ -51,8 +51,8 @@ fun SessionScreen(viewModel: SessionViewModel = viewModel()) {
         ) {
             SessionFocusArc(
                 session = session,
-                decreaseSessionDuration = viewModel::decreaseSessionDuration,
-                increaseSessionDuration = viewModel::increaseSessionDuration,
+                decreaseSessionDuration = { viewModel.onSessionUiEvent(SessionUiEvent.DecreaseDuration) },
+                increaseSessionDuration = { viewModel.onSessionUiEvent(SessionUiEvent.IncreaseDuration) },
                 isAvailableToDecrease = viewModel.isAvailableToDecrease(),
                 isAvailableToIncrease = viewModel.isAvailableToIncrease()
             )
@@ -76,7 +76,7 @@ fun SessionScreen(viewModel: SessionViewModel = viewModel()) {
                 drawableProvider = viewModel.drawableProvider,
                 shouldSkipBreaks = { skip ->
                     viewModel.onSessionUiEvent(
-                        SessionUiEvent.SkipBreaks(
+                        SessionUiEvent.ShouldSkipTheBreaks(
                             skip
                         )
                     )

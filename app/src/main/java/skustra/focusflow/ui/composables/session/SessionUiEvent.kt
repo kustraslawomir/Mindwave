@@ -7,5 +7,7 @@ sealed class SessionUiEvent {
     object Pause : SessionUiEvent()
     object Resume : SessionUiEvent()
     object Stop : SessionUiEvent()
-    data class SkipBreaks(val skip : Boolean) : SessionUiEvent()
+    object IncreaseDuration : SessionUiEvent()
+    object DecreaseDuration : SessionUiEvent()
+    data class ShouldSkipTheBreaks(val skip : Boolean) : SessionUiEvent()
 }
