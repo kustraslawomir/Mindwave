@@ -1,9 +1,10 @@
-package skustra.focusflow.ui.features.session.pagericons
+package skustra.focusflow.main
 
 import androidx.lifecycle.ViewModel
 import dagger.hilt.android.lifecycle.HiltViewModel
 import skustra.focusflow.domain.usecase.resources.DrawableProvider
 import javax.inject.Inject
 
+
 @HiltViewModel
-class PagerIconsViewModel @Inject constructor(val drawableProvider: DrawableProvider) : ViewModel()
+class HomePageViewModel @Inject constructor(val drawableProvider: DrawableProvider) : ViewModel()

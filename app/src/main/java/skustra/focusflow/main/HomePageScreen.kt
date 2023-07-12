@@ -13,13 +13,14 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.platform.LocalConfiguration
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.unit.dp
+import androidx.hilt.navigation.compose.hiltViewModel
 import skustra.focusflow.patterns.ApplicationNavHost
 import skustra.focusflow.patterns.HomeBottomBar
 import skustra.focusflow.ui.theme.Theme
 
 
 @Composable
-fun HomePageScreen() {
+fun HomePageScreen(viewModel: HomePageViewModel = hiltViewModel()) {
     Theme {
         Surface(
             color = MaterialTheme.colorScheme.background,
@@ -36,7 +37,9 @@ fun HomePageScreen() {
                 )
             },
                 bottomBar = {
-                    HomeBottomBar(navController = applicationState.navController)
+                    HomeBottomBar(
+                        navController = applicationState.navController
+                    )
                 })
         }
     }

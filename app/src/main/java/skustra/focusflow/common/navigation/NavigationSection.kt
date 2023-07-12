@@ -1,10 +1,9 @@
 package skustra.focusflow.common.navigation
 
-import androidx.compose.material.icons.Icons
-import androidx.compose.material.icons.filled.Home
-import androidx.compose.ui.graphics.vector.ImageVector
+import skustra.focusflow.R
 
-sealed class NavigationSection(val icon : ImageVector, val route : String) {
+sealed class NavigationSection(val iconResourceId: Int, val route: String) {
+
     companion object {
         val sections = listOf(
             SessionSection,
@@ -13,12 +12,12 @@ sealed class NavigationSection(val icon : ImageVector, val route : String) {
     }
 
     object SessionSection : NavigationSection(
-        icon = Icons.Filled.Home,
+        iconResourceId = R.drawable.ic_home,
         route = ApplicationRoute.Session.route
     )
 
     object StatisticsSection : NavigationSection(
-        icon = Icons.Filled.Home,
+        iconResourceId = R.drawable.ic_statistics,
         route = ApplicationRoute.Statistics.route
     )
 }
