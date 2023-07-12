@@ -12,12 +12,12 @@ ext {
 
 android {
     namespace 'skustra.focusflow'
-    compileSdk 33
+    compileSdk 34
 
     defaultConfig {
         applicationId "skustra.focus"
         minSdk 26
-        targetSdk 33
+        targetSdk 34
         versionCode 6
         versionName "1.0.6"
 

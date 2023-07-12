@@ -10,7 +10,7 @@ import androidx.core.app.NotificationCompat
 import skustra.focusflow.BuildConfig
 import skustra.focusflow.R
 import skustra.focusflow.data.model.timer.TimerState
-import skustra.focusflow.ui.activity.MainActivity
+import skustra.focusflow.main.MainActivity
 import skustra.focusflow.ui.localization.LocalizationKey
 import skustra.focusflow.ui.localization.LocalizationManager
 import java.util.*
