@@ -21,6 +21,7 @@ import androidx.compose.ui.draw.alpha
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
+import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.lifecycle.viewmodel.compose.viewModel
 import com.patrykandpatrick.vico.core.chart.values.AxisValuesOverrider
 import com.patrykandpatrick.vico.core.entry.ChartEntryModel
@@ -33,7 +34,7 @@ import skustra.focusflow.ui.localization.LocalizationKey
 import skustra.focusflow.ui.localization.LocalizationManager
 
 @Composable
-fun StatisticsScreen(viewModel: StatisticsViewModel = viewModel()) {
+fun StatisticsScreen(viewModel: StatisticsViewModel = hiltViewModel()) {
 
     val coroutineScope = rememberCoroutineScope()
     var data by remember { mutableStateOf(viewModel.getEmptyDurationUiModelList()) }

@@ -10,6 +10,7 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.unit.dp
+import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import androidx.lifecycle.viewmodel.compose.viewModel
 import skustra.focusflow.ui.features.session.arc.SessionFocusArc
@@ -17,7 +18,7 @@ import skustra.focusflow.ui.features.session.description.SessionDescriptionCompo
 import skustra.focusflow.ui.features.session.panel.SessionPanelComposable
 
 @Composable
-fun SessionScreen(viewModel: SessionViewModel = viewModel()) {
+fun SessionScreen(viewModel: SessionViewModel = hiltViewModel()) {
 
     val session by viewModel
         .getSessionFlow()

@@ -1,19 +1,20 @@
 package skustra.focusflow.main
 
 import android.content.res.Resources
+import androidx.compose.foundation.layout.PaddingValues
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Scaffold
 import androidx.compose.material3.SnackbarHost
 import androidx.compose.material3.Surface
 import androidx.compose.runtime.Composable
-import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.ReadOnlyComposable
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.platform.LocalConfiguration
 import androidx.compose.ui.platform.LocalContext
-import kotlinx.coroutines.launch
-import skustra.focusflow.ui.features.homeviewpager.HomeViewPagerScreen
+import androidx.compose.ui.unit.dp
+import skustra.focusflow.patterns.ApplicationNavHost
+import skustra.focusflow.patterns.HomeBottomBar
 import skustra.focusflow.ui.theme.Theme
 
 
@@ -29,14 +30,14 @@ fun HomePageScreen() {
                 SnackbarHost(applicationState.snackBarHostState)
             }, content = { content ->
                 println(content)
-                LaunchedEffect(Unit) {
-                    applicationState.coroutineScope.launch {
-                        applicationState.snackBarHostState.showSnackbar("lol")
-
-                    }
-                }
-                HomeViewPagerScreen()
-            })
+                ApplicationNavHost(
+                    applicationState = applicationState,
+                    paddingValues = PaddingValues(all = 16.dp)
+                )
+            },
+                bottomBar = {
+                    HomeBottomBar(navController = applicationState.navController)
+                })
         }
     }
 }

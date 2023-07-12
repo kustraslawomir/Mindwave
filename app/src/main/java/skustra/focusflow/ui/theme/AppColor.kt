@@ -10,6 +10,7 @@ val DarkPrimary = Color(0xFFFFFFFF)
 val DarkSecondary = Color(0xFFFFFFFF)
 val DarkBackground = Color(0xFF0C0C0C)
 
+val Accent = Color(0xFF4FBC7C)
 val ButtonColor = Color(0xFF4FBC7C)
 val ChartItemColor = Color(0xFFE0F8D1)
 val GoalColor = Color(0xFF4FBC7C)
