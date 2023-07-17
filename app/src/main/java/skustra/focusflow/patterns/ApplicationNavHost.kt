@@ -7,8 +7,8 @@ import androidx.compose.ui.Modifier
 import androidx.navigation.NavGraphBuilder
 import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
-import skustra.focusflow.common.navigation.BottomNavigationSection
-import skustra.focusflow.common.navigation.DrawerSection
+import skustra.focusflow.common.navigation.BottomNavigationSectionsSource
+import skustra.focusflow.common.navigation.DrawerNavigationSection
 import skustra.focusflow.main.ApplicationState
 import skustra.focusflow.ui.features.session.SessionScreen
 import skustra.focusflow.ui.features.settings.SettingsScreen
@@ -18,7 +18,7 @@ import skustra.focusflow.ui.features.statistics.StatisticsScreen
 fun ApplicationNavHost(applicationState: ApplicationState, paddingValues: PaddingValues) {
     NavHost(
         navController = applicationState.navController,
-        startDestination = BottomNavigationSection.SessionSection.route,
+        startDestination = BottomNavigationSectionsSource.SessionSection.route,
         modifier = Modifier.padding(paddingValues)
     ) {
         graph()
@@ -27,17 +27,17 @@ fun ApplicationNavHost(applicationState: ApplicationState, paddingValues: Paddin
 
 fun NavGraphBuilder.graph() {
 
-    val sessionRoute = BottomNavigationSection.SessionSection.route
+    val sessionRoute = BottomNavigationSectionsSource.SessionSection.route
     composable(sessionRoute) {
         SessionScreen()
     }
 
-    val statisticsRoute = BottomNavigationSection.StatisticsSection.route
+    val statisticsRoute = BottomNavigationSectionsSource.StatisticsSection.route
     composable(statisticsRoute) {
         StatisticsScreen()
     }
 
-    val settingsRoute = DrawerSection.Settings.route
+    val settingsRoute = DrawerNavigationSection.Settings.route
     composable(settingsRoute) {
         SettingsScreen()
     }

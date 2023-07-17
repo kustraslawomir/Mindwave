@@ -32,15 +32,15 @@ import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
 import kotlinx.coroutines.launch
 import skustra.focusflow.R
-import skustra.focusflow.common.navigation.DrawerSection
+import skustra.focusflow.common.navigation.DrawerNavigationSection
 
 @Composable
 fun <T : Enum<T>> AppDrawerContent(
     drawerState: DrawerState,
-    menuItems: List<AppDrawerItemInfo<DrawerSection>>,
+    menuItems: List<AppDrawerItemInfo<DrawerNavigationSection>>,
     goToSettings: () -> Unit,
     goBack: () -> Unit,
-    defaultPick: DrawerSection
+    defaultPick: DrawerNavigationSection
 ) {
 
     val coroutineScope = rememberCoroutineScope()
@@ -77,7 +77,7 @@ fun <T : Enum<T>> AppDrawerContent(
                             }
 
                             when (navOption) {
-                                DrawerSection.Settings -> goToSettings()
+                                DrawerNavigationSection.Settings -> goToSettings()
                             }
                         }
                     }
@@ -96,16 +96,16 @@ data class AppDrawerItemInfo<ApplicationRoute>(
 )
 
 object DrawerItems {
-    val items: List<AppDrawerItemInfo<DrawerSection>> = listOf(
+    val items: List<AppDrawerItemInfo<DrawerNavigationSection>> = listOf(
         AppDrawerItemInfo(
-            DrawerSection.Settings, R.string.settings, R.drawable.ic_home, R.string.settings
+            DrawerNavigationSection.Settings, R.string.settings, R.drawable.ic_home, R.string.settings
         )
     )
 }
 
 @Composable
 fun AppDrawerItem(
-    item: AppDrawerItemInfo<DrawerSection>, onClick: (options: DrawerSection) -> Unit
+    item: AppDrawerItemInfo<DrawerNavigationSection>, onClick: (options: DrawerNavigationSection) -> Unit
 ) = Surface(
     color = MaterialTheme.colorScheme.onPrimary,
     modifier = Modifier.width(150.dp),

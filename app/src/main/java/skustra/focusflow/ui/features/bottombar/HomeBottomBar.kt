@@ -17,7 +17,7 @@ import androidx.compose.ui.unit.dp
 import androidx.navigation.NavDestination.Companion.hierarchy
 import androidx.navigation.NavGraph.Companion.findStartDestination
 import androidx.navigation.compose.currentBackStackEntryAsState
-import skustra.focusflow.common.navigation.BottomNavigationSection
+import skustra.focusflow.common.navigation.BottomNavigationSectionsSource
 import skustra.focusflow.common.navigation.navigateSaved
 import skustra.focusflow.main.ApplicationState
 
@@ -34,7 +34,7 @@ fun HomeBottomBar(
         contentColor = contentColorFor(MaterialTheme.colorScheme.background),
         elevation = 10.dp
     ) {
-        BottomNavigationSection.sections.forEach { section ->
+        BottomNavigationSectionsSource.sections.forEach { section ->
 
             val selected = currentDestination?.hierarchy?.any {
                 it.route == section.route

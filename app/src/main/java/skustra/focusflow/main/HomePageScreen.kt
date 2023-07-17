@@ -15,7 +15,7 @@ import androidx.compose.ui.platform.LocalConfiguration
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.unit.dp
 import androidx.hilt.navigation.compose.hiltViewModel
-import skustra.focusflow.common.navigation.DrawerSection
+import skustra.focusflow.common.navigation.DrawerNavigationSection
 import skustra.focusflow.common.navigation.navigate
 import skustra.focusflow.common.navigation.popBackStack
 import skustra.focusflow.patterns.ApplicationNavHost
@@ -40,7 +40,7 @@ fun HomePageScreen(viewModel: HomePageViewModel = hiltViewModel()) {
                     drawerState = applicationState.drawerState,
                     drawerContent = {
 
-                        val settingsRoute = DrawerSection.Settings.route
+                        val settingsRoute = DrawerNavigationSection.Settings.route
                         val goToSettings: () -> Unit = {
                             applicationState.navigate(route = settingsRoute)
                         }
@@ -50,7 +50,7 @@ fun HomePageScreen(viewModel: HomePageViewModel = hiltViewModel()) {
 
                         AppDrawerContent(
                             drawerState = applicationState.drawerState,
-                            defaultPick = DrawerSection.Settings,
+                            defaultPick = DrawerNavigationSection.Settings,
                             menuItems = DrawerItems.items,
                             goToSettings = goToSettings,
                             goBack = goBack
