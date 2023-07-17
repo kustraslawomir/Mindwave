@@ -1,4 +1,4 @@
-package skustra.focusflow.main
+package skustra.focusflow.ui.features.drawer
 
 import androidx.annotation.DrawableRes
 import androidx.annotation.StringRes

@@ -1,4 +1,4 @@
-package skustra.focusflow.patterns
+package skustra.focusflow.ui.features.bottombar
 
 
 import androidx.compose.foundation.layout.size
