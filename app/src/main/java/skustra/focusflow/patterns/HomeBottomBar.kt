@@ -16,42 +16,45 @@ import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.unit.dp
 import androidx.navigation.NavDestination.Companion.hierarchy
 import androidx.navigation.NavGraph.Companion.findStartDestination
-import androidx.navigation.NavHostController
 import androidx.navigation.compose.currentBackStackEntryAsState
 import skustra.focusflow.common.navigation.BottomNavigationSection
+import skustra.focusflow.common.navigation.navigateSaved
+import skustra.focusflow.main.ApplicationState
 
 
 @Composable
-fun HomeBottomBar(navController: NavHostController) {
-
-    val navBackStackEntry by navController.currentBackStackEntryAsState()
+fun HomeBottomBar(
+    applicationState: ApplicationState
+) {
+    val navBackStackEntry by applicationState.navController.currentBackStackEntryAsState()
     val currentDestination = navBackStackEntry?.destination
+
     BottomNavigation(
         backgroundColor = MaterialTheme.colorScheme.background,
         contentColor = contentColorFor(MaterialTheme.colorScheme.background),
         elevation = 10.dp
     ) {
         BottomNavigationSection.sections.forEach { section ->
+
             val selected = currentDestination?.hierarchy?.any {
                 it.route == section.route
             } == true
+
             BottomNavigationItem(icon = {
                 Icon(
                     painter = painterResource(id = section.iconResourceId),
                     modifier = Modifier.size(24.dp),
                     contentDescription = ""
                 )
-            }, selected = selected,
+            },
+                selected = selected,
                 unselectedContentColor = Color.Gray,
                 selectedContentColor = MaterialTheme.colorScheme.primary,
                 onClick = {
-                    navController.navigate(section.route) {
-                        popUpTo(navController.graph.findStartDestination().id) {
-                            saveState = true
-                        }
-                        launchSingleTop = true
-                        restoreState = true
-                    }
+                    applicationState.navigateSaved(
+                        route = section.route,
+                        popUpRoute = applicationState.navController.graph.findStartDestination().route
+                    )
                 })
         }
     }

@@ -6,12 +6,12 @@ sealed class BottomNavigationSection(val iconResourceId: Int, val route: String)
 
     object SessionSection : BottomNavigationSection(
         iconResourceId = R.drawable.ic_home,
-        route = ApplicationRoute.Session.route
+        route = BottomNavigationBarSection.Session.route
     )
 
     object StatisticsSection : BottomNavigationSection(
         iconResourceId = R.drawable.ic_statistics,
-        route = ApplicationRoute.Statistics.route
+        route = BottomNavigationBarSection.Statistics.route
     )
 
     companion object {

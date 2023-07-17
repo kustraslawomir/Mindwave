@@ -21,18 +21,21 @@ fun ApplicationState.navigateAndPopBackStack(route: String, popUpRoute: String) 
     }
 }
 
-fun ApplicationState.navigateSave(route: String, popUpRoute: String) {
+fun ApplicationState.navigateSaved(route: String, popUpRoute: String?) {
     navController.navigate(route) {
         launchSingleTop = true
         restoreState = true
-        popUpTo(popUpRoute) {
-            saveState = true
+        if (popUpRoute != null) {
+            popUpTo(popUpRoute) {
+                saveState = true
+            }
         }
+
     }
 }
 
 fun ApplicationState.clearAndNavigate(route: String) {
-    navController.navigate(route){
+    navController.navigate(route) {
         launchSingleTop = true
         popUpTo(0) {
             inclusive = true
