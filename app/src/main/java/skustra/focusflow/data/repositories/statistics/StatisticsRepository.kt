@@ -1,9 +1,9 @@
 package skustra.focusflow.data.repositories.statistics
 
-import androidx.annotation.WorkerThread
 import skustra.focusflow.data.database.dao.SessionArchiveDao
 import skustra.focusflow.data.model.alias.Minute
 import skustra.focusflow.data.model.statistics.SessionStatistics
+import skustra.focusflow.domain.ports.StatisticsRepositoryPort
 import skustra.focusflow.domain.usecase.session.SessionConfig
 import skustra.focusflow.domain.utilities.dates.StatisticDateUtils.formatDateMsToReadableDate
 import skustra.focusflow.domain.utilities.dates.StatisticDateUtils.getDateMsWithoutTime
@@ -11,10 +11,11 @@ import timber.log.Timber
 import java.util.Calendar
 import javax.inject.Inject
 
-class StatisticsRepository  @Inject constructor(private val archiveDao: SessionArchiveDao) {
+class StatisticsRepository @Inject constructor(
+    val archiveDao: SessionArchiveDao
+) : StatisticsRepositoryPort {
 
-    @WorkerThread
-    fun getSessionStatistics(): SessionStatistics {
+    override fun getSessionStatistics(): SessionStatistics {
         return SessionStatistics(
             currentWeekDurationSum = currentWeekDurationSum(),
             currentMonthDurationSum = currentMonthDurationSum(),
@@ -26,8 +27,7 @@ class StatisticsRepository  @Inject constructor(private val archiveDao: SessionA
         )
     }
 
-    @WorkerThread
-    fun getLongestSessionDurationOrDefault(): Float {
+    override fun getLongestSessionDurationOrDefault(): Float {
         val entities = archiveDao.getAll()
         if (entities.isEmpty()) {
             return SessionConfig.SESSION_MAX_DURATION_LIMIT.toFloat()

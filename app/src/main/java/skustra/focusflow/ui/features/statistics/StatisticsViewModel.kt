@@ -13,9 +13,8 @@ import skustra.focusflow.BuildConfig
 import skustra.focusflow.data.database.entity.SessionArchiveEntity
 import skustra.focusflow.data.database.entity.SessionCategoryEntity
 import skustra.focusflow.data.model.statistics.DurationUiModel
-import skustra.focusflow.data.repositories.sessionarchive.SessionArchiveRepository
-import skustra.focusflow.data.repositories.statistics.StatisticsRepository
 import skustra.focusflow.domain.usecase.session.SessionConfig
+import skustra.focusflow.domain.usecase.sessionarchive.SessionArchiveDataUseCase
 import skustra.focusflow.domain.utilities.dates.StatisticDateUtils
 import skustra.focusflow.domain.utilities.dates.StatisticDateUtils.generateDates
 import skustra.focusflow.domain.utilities.time.TimeUtils
@@ -33,8 +32,7 @@ import kotlin.random.Random
 
 @HiltViewModel
 class StatisticsViewModel @Inject constructor(
-    private val sessionArchiveRepository: SessionArchiveRepository,
-    private val statisticsRepository: StatisticsRepository,
+    private val sessionArchiveDataUseCase: SessionArchiveDataUseCase
 ) : ViewModel() {
 
     private val entryProducer = ChartEntryModelProducer()
@@ -55,7 +53,7 @@ class StatisticsViewModel @Inject constructor(
 
     @WorkerThread
     fun getDurationStatistics(): List<DurationUiModel> {
-        val statistics = statisticsRepository.getSessionStatistics()
+        val statistics = sessionArchiveDataUseCase.getStatisticsUseCase.getSessionStatistics()
         return listOf(
             DurationUiModel(
                 name = LocalizationManager.getText(LocalizationKey.CurrentWeekDurationSum),
@@ -92,12 +90,12 @@ class StatisticsViewModel @Inject constructor(
 
     @WorkerThread
     suspend fun getAxisValueMaxY(): Float {
-        return withContext(viewModelScope.coroutineContext + Dispatchers.IO) { statisticsRepository.getLongestSessionDurationOrDefault() }
+        return withContext(viewModelScope.coroutineContext + Dispatchers.IO) { sessionArchiveDataUseCase.getStatisticsUseCase.getLongestSessionDurationOrDefault() }
     }
 
     private fun createEmptyStatistics() {
         viewModelScope.launch(Dispatchers.IO) {
-            if (!sessionArchiveRepository.isEmpty()) {
+            if (!sessionArchiveDataUseCase.getSessionArchiveUseCase.archiveIsEmpty()) {
                 return@launch
             }
 
@@ -119,7 +117,7 @@ class StatisticsViewModel @Inject constructor(
                     categoryId = SessionCategoryEntity.UnknownId
                 )
             }
-            sessionArchiveRepository.insert(dates)
+            sessionArchiveDataUseCase.setSessionArchiveUseCase.insert(dates)
         }
     }
 
@@ -130,7 +128,7 @@ class StatisticsViewModel @Inject constructor(
                     add(Calendar.DATE, -1)
                 },
                 toDate = Calendar.getInstance().apply {
-                    val lastEntityTime = sessionArchiveRepository.getLastEntity()?.dateMs
+                    val lastEntityTime = sessionArchiveDataUseCase.getSessionArchiveUseCase.getLastEntity()?.dateMs
                     if (lastEntityTime != null) {
                         time = Date(lastEntityTime)
                     }
@@ -144,13 +142,13 @@ class StatisticsViewModel @Inject constructor(
                     categoryId = SessionCategoryEntity.UnknownId
                 )
             }
-            sessionArchiveRepository.insert(dates)
+            sessionArchiveDataUseCase.setSessionArchiveUseCase.insert(dates)
         }
     }
 
     private fun listenToStatisticsChange() {
         viewModelScope.launch(Dispatchers.IO) {
-            sessionArchiveRepository.getAllAsFlow().collect { data ->
+            sessionArchiveDataUseCase.getSessionArchiveUseCase.getAllAsFlow().collect { data ->
                 var entryXIndex = 0f
                 val producer = data
                     .groupBy { it.formattedDate }

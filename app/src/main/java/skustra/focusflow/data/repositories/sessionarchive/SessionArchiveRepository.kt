@@ -4,29 +4,46 @@ import androidx.annotation.WorkerThread
 import kotlinx.coroutines.flow.Flow
 import skustra.focusflow.data.database.dao.SessionArchiveDao
 import skustra.focusflow.data.database.entity.SessionArchiveEntity
+import skustra.focusflow.domain.ports.SessionArchiveRepositoryPort
 import javax.inject.Inject
 
 
-class SessionArchiveRepository @Inject constructor(private val archiveDao: SessionArchiveDao) {
+class SessionArchiveRepository @Inject constructor(
+    private val archiveDao: SessionArchiveDao
+) : SessionArchiveRepositoryPort {
 
     @WorkerThread
-    fun getAll(): List<SessionArchiveEntity> = archiveDao.getAll()
+    override fun getAll(): List<SessionArchiveEntity> {
+        return archiveDao.getAll()
+    }
 
     @WorkerThread
-    fun getAllAsFlow(): Flow<List<SessionArchiveEntity>> = archiveDao.getAllAsFlow()
+    override fun getAllAsFlow(): Flow<List<SessionArchiveEntity>> {
+        return archiveDao.getAllAsFlow()
+    }
 
     @WorkerThread
-    fun getLastEntity(): SessionArchiveEntity? = archiveDao.getLastEntity()
+    override fun getLastEntity(): SessionArchiveEntity? {
+        return archiveDao.getLastEntity()
+    }
 
     @WorkerThread
-    fun insert(archiveEntity: SessionArchiveEntity) = archiveDao.insert(archiveEntity)
+    override fun insert(archiveEntity: SessionArchiveEntity) {
+        return archiveDao.insert(archiveEntity)
+    }
 
     @WorkerThread
-    fun insert(archiveEntities: List<SessionArchiveEntity>) = archiveDao.insert(archiveEntities)
+    override fun insert(archiveEntities: List<SessionArchiveEntity>) {
+        archiveDao.insert(archiveEntities)
+    }
 
     @WorkerThread
-    fun clearTable() = archiveDao.clearTable()
+    override fun clearTable() {
+        archiveDao.clearTable()
+    }
 
     @WorkerThread
-    fun isEmpty() = archiveDao.countEntries() == 0
+    override fun archiveIsEmpty(): Boolean {
+        return archiveDao.countEntries() == 0
+    }
 }

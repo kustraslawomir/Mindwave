@@ -8,9 +8,16 @@ import dagger.hilt.android.qualifiers.ApplicationContext
 import dagger.hilt.components.SingletonComponent
 import skustra.focusflow.data.database.dao.SessionArchiveDao
 import skustra.focusflow.data.repositories.sessionarchive.SessionArchiveRepository
+import skustra.focusflow.domain.ports.SessionArchiveRepositoryPort
+import skustra.focusflow.domain.ports.StatisticsRepositoryPort
+import skustra.focusflow.data.repositories.statistics.StatisticsRepository
 import skustra.focusflow.domain.usecase.playsound.PlaySoundUseCase
 import skustra.focusflow.domain.usecase.resources.DrawableProvider
 import skustra.focusflow.domain.usecase.resources.DrawableProviderImpl
+import skustra.focusflow.domain.usecase.sessionarchive.SessionArchiveDataUseCase
+import skustra.focusflow.domain.usecase.sessionarchive.archive.GetSessionArchiveUseCase
+import skustra.focusflow.domain.usecase.sessionarchive.archive.SetSessionArchiveUseCase
+import skustra.focusflow.domain.usecase.sessionarchive.statistics.GetStatisticsUseCase
 import skustra.focusflow.domain.usecase.sessionstate.SessionStateEmitter
 import skustra.focusflow.domain.usecase.sessionstate.SessionStateEmitterImpl
 import skustra.focusflow.domain.usecase.sessionstate.SessionStateHandler
@@ -34,6 +41,50 @@ object GlobalComponent {
     @Provides
     @Singleton
     fun provideResourceManager(): DrawableProvider = DrawableProviderImpl()
+
+    @Provides
+    @Singleton
+    fun provideStatisticsPort(dao: SessionArchiveDao): StatisticsRepositoryPort {
+        return StatisticsRepository(dao)
+    }
+
+    @Provides
+    @Singleton
+    fun provideSessionArchiveRepositoryPort(dao: SessionArchiveDao): SessionArchiveRepositoryPort {
+        return SessionArchiveRepository(dao)
+    }
+
+    @Provides
+    @Singleton
+    fun provideGetStatisticsUseCase(port: StatisticsRepositoryPort): GetStatisticsUseCase {
+        return GetStatisticsUseCase(port)
+    }
+
+    @Provides
+    @Singleton
+    fun provideGetSessionArchiveUseCase(port: SessionArchiveRepositoryPort): GetSessionArchiveUseCase {
+        return GetSessionArchiveUseCase(port)
+    }
+
+    @Provides
+    @Singleton
+    fun provideSetSessionArchiveUseCase(port: SessionArchiveRepositoryPort): SetSessionArchiveUseCase {
+        return SetSessionArchiveUseCase(port)
+    }
+
+    @Provides
+    @Singleton
+    fun provideSessionArchiveDataUseCase(
+        getStatisticsUseCase: GetStatisticsUseCase,
+        getSessionArchiveUseCase: GetSessionArchiveUseCase,
+        setSessionArchiveUseCase: SetSessionArchiveUseCase
+    ): SessionArchiveDataUseCase {
+        return SessionArchiveDataUseCase(
+            getStatisticsUseCase,
+            getSessionArchiveUseCase,
+            setSessionArchiveUseCase
+        )
+    }
 
     @Provides
     @Singleton
