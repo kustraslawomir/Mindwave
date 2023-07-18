@@ -5,8 +5,8 @@ import skustra.focusflow.data.model.alias.Minute
 import skustra.focusflow.data.model.statistics.SessionStatistics
 import skustra.focusflow.domain.ports.StatisticsRepositoryPort
 import skustra.focusflow.domain.usecase.session.SessionConfig
-import skustra.focusflow.domain.utilities.dates.StatisticDateUtils.formatDateMsToReadableDate
-import skustra.focusflow.domain.utilities.dates.StatisticDateUtils.getDateMsWithoutTime
+import skustra.focusflow.ui.utilities.dates.StatisticDateUtils.formatDateMsToReadableDate
+import skustra.focusflow.ui.utilities.dates.StatisticDateUtils.getDateMsWithoutTime
 import timber.log.Timber
 import java.util.Calendar
 import javax.inject.Inject

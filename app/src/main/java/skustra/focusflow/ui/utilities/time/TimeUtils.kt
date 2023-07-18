@@ -1,4 +1,4 @@
-package skustra.focusflow.domain.utilities.time
+package skustra.focusflow.ui.utilities.time
 
 import skustra.focusflow.data.model.alias.Minute
 

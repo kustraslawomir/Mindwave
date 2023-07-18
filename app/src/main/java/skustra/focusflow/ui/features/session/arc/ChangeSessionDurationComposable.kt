@@ -11,7 +11,7 @@ import androidx.compose.ui.unit.dp
 import skustra.focusflow.data.database.Constants
 import skustra.focusflow.data.model.session.Session
 import skustra.focusflow.data.model.timer.TimerState
-import skustra.focusflow.domain.extensions.noRippleClickable
+import skustra.focusflow.ui.utilities.composable.noRippleClickable
 import skustra.focusflow.ui.theme.SessionDurationChangeButtonStyle
 
 @Composable

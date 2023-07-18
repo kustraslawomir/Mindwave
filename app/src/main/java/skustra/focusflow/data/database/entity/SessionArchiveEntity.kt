@@ -5,7 +5,7 @@ import androidx.room.Entity
 import androidx.room.PrimaryKey
 import skustra.focusflow.data.database.Table.SESSION_ARCHIVE
 import skustra.focusflow.data.model.session.Session
-import skustra.focusflow.domain.utilities.dates.StatisticDateUtils
+import skustra.focusflow.ui.utilities.dates.StatisticDateUtils
 import java.util.Date
 
 @Entity(tableName = SESSION_ARCHIVE)

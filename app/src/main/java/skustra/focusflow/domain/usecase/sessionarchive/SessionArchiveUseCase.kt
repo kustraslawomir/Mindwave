@@ -4,8 +4,8 @@ import skustra.focusflow.domain.usecase.sessionarchive.archive.GetSessionArchive
 import skustra.focusflow.domain.usecase.sessionarchive.archive.SetSessionArchiveUseCase
 import skustra.focusflow.domain.usecase.sessionarchive.statistics.GetStatisticsUseCase
 
-data class SessionArchiveDataUseCase(
-    val getStatisticsUseCase: GetStatisticsUseCase,
+data class SessionArchiveUseCase(
     val getSessionArchiveUseCase: GetSessionArchiveUseCase,
-    val setSessionArchiveUseCase: SetSessionArchiveUseCase
+    val setSessionArchiveUseCase: SetSessionArchiveUseCase,
+    val getStatisticsUseCase: GetStatisticsUseCase
 )

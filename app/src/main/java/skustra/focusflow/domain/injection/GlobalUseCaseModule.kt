@@ -14,7 +14,7 @@ import skustra.focusflow.data.repositories.statistics.StatisticsRepository
 import skustra.focusflow.domain.usecase.playsound.PlaySoundUseCase
 import skustra.focusflow.domain.usecase.resources.DrawableProvider
 import skustra.focusflow.domain.usecase.resources.DrawableProviderImpl
-import skustra.focusflow.domain.usecase.sessionarchive.SessionArchiveDataUseCase
+import skustra.focusflow.domain.usecase.sessionarchive.SessionArchiveUseCase
 import skustra.focusflow.domain.usecase.sessionarchive.archive.GetSessionArchiveUseCase
 import skustra.focusflow.domain.usecase.sessionarchive.archive.SetSessionArchiveUseCase
 import skustra.focusflow.domain.usecase.sessionarchive.statistics.GetStatisticsUseCase
@@ -78,11 +78,11 @@ object GlobalComponent {
         getStatisticsUseCase: GetStatisticsUseCase,
         getSessionArchiveUseCase: GetSessionArchiveUseCase,
         setSessionArchiveUseCase: SetSessionArchiveUseCase
-    ): SessionArchiveDataUseCase {
-        return SessionArchiveDataUseCase(
-            getStatisticsUseCase,
+    ): SessionArchiveUseCase {
+        return SessionArchiveUseCase(
             getSessionArchiveUseCase,
-            setSessionArchiveUseCase
+            setSessionArchiveUseCase,
+            getStatisticsUseCase
         )
     }
 

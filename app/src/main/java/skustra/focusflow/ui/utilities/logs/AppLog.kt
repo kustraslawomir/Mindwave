@@ -1,4 +1,4 @@
-package skustra.focusflow.domain.utilities.logs
+package skustra.focusflow.ui.utilities.logs
 
 import skustra.focusflow.data.model.session.Session
 import skustra.focusflow.data.model.timer.TimerState

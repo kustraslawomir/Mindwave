@@ -14,10 +14,10 @@ import skustra.focusflow.data.database.entity.SessionArchiveEntity
 import skustra.focusflow.data.database.entity.SessionCategoryEntity
 import skustra.focusflow.data.model.statistics.DurationUiModel
 import skustra.focusflow.domain.usecase.session.SessionConfig
-import skustra.focusflow.domain.usecase.sessionarchive.SessionArchiveDataUseCase
-import skustra.focusflow.domain.utilities.dates.StatisticDateUtils
-import skustra.focusflow.domain.utilities.dates.StatisticDateUtils.generateDates
-import skustra.focusflow.domain.utilities.time.TimeUtils
+import skustra.focusflow.domain.usecase.sessionarchive.SessionArchiveUseCase
+import skustra.focusflow.ui.utilities.dates.StatisticDateUtils
+import skustra.focusflow.ui.utilities.dates.StatisticDateUtils.generateDates
+import skustra.focusflow.ui.utilities.time.TimeUtils
 import skustra.focusflow.ui.features.statistics.chart.SessionArchiveEntry
 import skustra.focusflow.ui.features.statistics.chart.SessionArchiveEntryDataModel
 import skustra.focusflow.ui.localization.LocalizationKey
@@ -32,7 +32,7 @@ import kotlin.random.Random
 
 @HiltViewModel
 class StatisticsViewModel @Inject constructor(
-    private val sessionArchiveDataUseCase: SessionArchiveDataUseCase
+    private val sessionArchiveDataUseCase: SessionArchiveUseCase
 ) : ViewModel() {
 
     private val entryProducer = ChartEntryModelProducer()

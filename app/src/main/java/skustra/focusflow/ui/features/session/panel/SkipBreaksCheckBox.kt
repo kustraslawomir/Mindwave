@@ -9,7 +9,7 @@ import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
-import skustra.focusflow.domain.extensions.noRippleClickable
+import skustra.focusflow.ui.utilities.composable.noRippleClickable
 import skustra.focusflow.ui.localization.LocalizationKey
 import skustra.focusflow.ui.localization.LocalizationManager
 

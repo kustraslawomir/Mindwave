@@ -20,7 +20,7 @@ import skustra.focusflow.domain.usecase.statenotification.BreakCompletedNotifica
 import skustra.focusflow.domain.usecase.statenotification.SessionCompletedNotification
 import skustra.focusflow.domain.usecase.statenotification.SessionStartedNotification
 import skustra.focusflow.domain.usecase.statenotification.WorkCompletedNotification
-import skustra.focusflow.domain.utilities.logs.AppLog
+import skustra.focusflow.ui.utilities.logs.AppLog
 import skustra.focusflow.ui.service.SessionForegroundService
 import timber.log.Timber
 

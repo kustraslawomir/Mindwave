@@ -1,4 +1,4 @@
-package skustra.focusflow.domain.extensions
+package skustra.focusflow.ui.utilities.composable
 
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.interaction.MutableInteractionSource

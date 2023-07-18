@@ -1,4 +1,4 @@
-package skustra.focusflow.domain.utilities.dates
+package skustra.focusflow.ui.utilities.dates
 
 import timber.log.Timber
 import java.text.SimpleDateFormat
