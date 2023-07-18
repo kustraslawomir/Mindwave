@@ -29,7 +29,6 @@ import java.util.UUID
 import javax.inject.Inject
 import kotlin.random.Random
 
-
 @HiltViewModel
 class StatisticsViewModel @Inject constructor(
     private val sessionArchiveDataUseCase: SessionArchiveUseCase
@@ -38,7 +37,6 @@ class StatisticsViewModel @Inject constructor(
     private val entryProducer = ChartEntryModelProducer()
 
     init {
-        createEmptyStatistics()
         fillStatisticsDateGap()
         listenToStatisticsChange()
     }
@@ -93,34 +91,6 @@ class StatisticsViewModel @Inject constructor(
         return withContext(viewModelScope.coroutineContext + Dispatchers.IO) { sessionArchiveDataUseCase.getStatisticsUseCase.getLongestSessionDurationOrDefault() }
     }
 
-    private fun createEmptyStatistics() {
-        viewModelScope.launch(Dispatchers.IO) {
-            if (!sessionArchiveDataUseCase.getSessionArchiveUseCase.archiveIsEmpty()) {
-                return@launch
-            }
-
-            val durations = SessionConfig.availableDurations()
-            val fromDate = Calendar.getInstance()
-            val dates = generateDates(
-                fromDate = fromDate,
-                toDate = Calendar.getInstance().apply {
-                    time = fromDate.time
-                    add(Calendar.MONTH, -1)
-                }
-            ).map { dayInterval ->
-                val randomDuration = durations[Random.nextInt(0, durations.size - 1)]
-                SessionArchiveEntity(
-                    formattedDate = StatisticDateUtils.format(dayInterval),
-                    sessionId = UUID.randomUUID().toString(),
-                    minutes = if (BuildConfig.DEBUG) randomDuration else 0,
-                    dateMs = dayInterval.time,
-                    categoryId = SessionCategoryEntity.UnknownId
-                )
-            }
-            sessionArchiveDataUseCase.setSessionArchiveUseCase.insert(dates)
-        }
-    }
-
     private fun fillStatisticsDateGap() {
         viewModelScope.launch(Dispatchers.IO) {
             val dates = generateDates(
@@ -128,7 +98,8 @@ class StatisticsViewModel @Inject constructor(
                     add(Calendar.DATE, -1)
                 },
                 toDate = Calendar.getInstance().apply {
-                    val lastEntityTime = sessionArchiveDataUseCase.getSessionArchiveUseCase.getLastEntity()?.dateMs
+                    val lastEntityTime =
+                        sessionArchiveDataUseCase.getSessionArchiveUseCase.getLastEntity()?.dateMs
                     if (lastEntityTime != null) {
                         time = Date(lastEntityTime)
                     }

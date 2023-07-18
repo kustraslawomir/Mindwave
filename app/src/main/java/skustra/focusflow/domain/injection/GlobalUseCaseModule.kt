@@ -11,6 +11,7 @@ import skustra.focusflow.data.repositories.sessionarchive.SessionArchiveReposito
 import skustra.focusflow.domain.ports.SessionArchiveRepositoryPort
 import skustra.focusflow.domain.ports.StatisticsRepositoryPort
 import skustra.focusflow.data.repositories.statistics.StatisticsRepository
+import skustra.focusflow.domain.usecase.mock.MockSessionArchiveData
 import skustra.focusflow.domain.usecase.playsound.PlaySoundUseCase
 import skustra.focusflow.domain.usecase.resources.DrawableProvider
 import skustra.focusflow.domain.usecase.resources.DrawableProviderImpl
@@ -124,4 +125,9 @@ object GlobalComponent {
     @Singleton
     fun provideSessionArchiveRepository(sessionArchiveDao: SessionArchiveDao) =
         SessionArchiveRepository(sessionArchiveDao)
+
+    @Provides
+    @Singleton
+    fun provideMockSessionArchiveData(sessionArchiveUseCase: SessionArchiveUseCase) =
+        MockSessionArchiveData(sessionArchiveUseCase)
 }

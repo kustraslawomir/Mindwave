@@ -7,7 +7,6 @@ import skustra.focusflow.data.database.entity.SessionArchiveEntity
 import skustra.focusflow.domain.ports.SessionArchiveRepositoryPort
 import javax.inject.Inject
 
-
 class SessionArchiveRepository @Inject constructor(
     private val archiveDao: SessionArchiveDao
 ) : SessionArchiveRepositoryPort {
