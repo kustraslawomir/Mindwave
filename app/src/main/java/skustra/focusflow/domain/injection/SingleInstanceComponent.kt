@@ -33,7 +33,7 @@ import javax.inject.Singleton
 
 @Module
 @InstallIn(SingletonComponent::class)
-object GlobalComponent {
+object SingleInstanceComponent {
 
     @Provides
     fun provideSessionServiceNotificationManager(@ApplicationContext context: Context)
