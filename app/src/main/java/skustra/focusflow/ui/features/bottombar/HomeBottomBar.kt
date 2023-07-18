@@ -18,6 +18,7 @@ import androidx.navigation.NavDestination.Companion.hierarchy
 import androidx.navigation.NavGraph.Companion.findStartDestination
 import androidx.navigation.compose.currentBackStackEntryAsState
 import skustra.focusflow.common.navigation.BottomNavigationSectionsSource
+import skustra.focusflow.common.navigation.navigateAndPopBackStack
 import skustra.focusflow.common.navigation.navigateSaved
 import skustra.focusflow.main.ApplicationState
 

@@ -19,7 +19,7 @@ import com.patrykandpatrick.vico.core.chart.decoration.ThresholdLine
 import com.patrykandpatrick.vico.core.chart.values.AxisValuesOverrider
 import com.patrykandpatrick.vico.core.component.shape.Shapes
 import com.patrykandpatrick.vico.core.entry.ChartEntryModel
-import skustra.focusflow.ui.utilities.math.round
+import skustra.focusflow.ui.utilities.math.convertToShortMinute
 import skustra.focusflow.ui.theme.ChartItemColor
 import skustra.focusflow.ui.theme.GoalColor
 import com.patrykandpatrick.vico.compose.axis.axisLabelComponent
@@ -110,6 +110,6 @@ val verticalAxisValueFormatter =
         (chartValues.chartEntryModel.entries.firstOrNull()
             ?.firstOrNull() as? SessionArchiveEntry)
             ?.sessionArchiveEntryDataModel?.summedDayDuration
-            ?.run { value.round() }
+            ?.run { value.convertToShortMinute() }
             .orEmpty()
     }

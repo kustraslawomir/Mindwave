@@ -14,7 +14,27 @@ object AppLog {
         Timber.d("[NOTIFICATION] $timerState")
     }
 
-    fun log(value: String){
+    fun log(value: String) {
         Timber.d(value)
+    }
+
+    fun navigate(route: String) {
+        Timber.w("[NAVIGATE] navigate to: $route")
+    }
+
+    fun navigateAndPopBackStack(route: String, popUpTo: String? = "") {
+        Timber.w("[NAVIGATE] navigate and pop back stack to: $route | pop up to: $popUpTo")
+    }
+
+    fun navigateSaved(route: String, popUpTo: String? = "") {
+        Timber.w("[NAVIGATE] navigate saved to: $route | pop up to: $popUpTo")
+    }
+
+    fun clearAndNavigate(route: String) {
+        Timber.w("[NAVIGATE] clear and navigate to: $route")
+    }
+
+    fun logNavigationPop() {
+        Timber.w("[NAVIGATE] pop up")
     }
 }
