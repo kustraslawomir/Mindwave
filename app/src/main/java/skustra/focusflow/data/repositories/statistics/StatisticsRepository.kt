@@ -1,11 +1,9 @@
-package skustra.focusflow.data.repository
+package skustra.focusflow.data.repositories.statistics
 
 import androidx.annotation.WorkerThread
-import kotlinx.coroutines.flow.Flow
 import skustra.focusflow.data.database.dao.SessionArchiveDao
-import skustra.focusflow.data.database.entity.SessionArchiveEntity
 import skustra.focusflow.data.model.alias.Minute
-import skustra.focusflow.data.model.statistics.DurationStatistics
+import skustra.focusflow.data.model.statistics.SessionStatistics
 import skustra.focusflow.domain.usecase.session.SessionConfig
 import skustra.focusflow.domain.utilities.dates.StatisticDateUtils.formatDateMsToReadableDate
 import skustra.focusflow.domain.utilities.dates.StatisticDateUtils.getDateMsWithoutTime
@@ -13,32 +11,23 @@ import timber.log.Timber
 import java.util.Calendar
 import javax.inject.Inject
 
-
-class SessionArchiveRepository @Inject constructor(private val archiveDao: SessionArchiveDao) {
-
-    @WorkerThread
-    fun getAll(): List<SessionArchiveEntity> = archiveDao.getAll()
+class StatisticsRepository  @Inject constructor(private val archiveDao: SessionArchiveDao) {
 
     @WorkerThread
-    fun getAllAsFlow(): Flow<List<SessionArchiveEntity>> = archiveDao.getAllAsFlow()
+    fun getSessionStatistics(): SessionStatistics {
+        return SessionStatistics(
+            currentWeekDurationSum = currentWeekDurationSum(),
+            currentMonthDurationSum = currentMonthDurationSum(),
+            totalDuration = totalDurationSum(),
+            last30DaysDurationSum = last30DaysDurationSum(),
+            countDurationAvg = countDurationAvg(),
+            countLongestStrike = countLongestStrike(),
+            currentStrike = getCurrentStrike()
+        )
+    }
 
     @WorkerThread
-    fun getLastEntity(): SessionArchiveEntity? = archiveDao.getLastEntity()
-
-    @WorkerThread
-    fun insert(archiveEntity: SessionArchiveEntity) = archiveDao.insert(archiveEntity)
-
-    @WorkerThread
-    fun insert(archiveEntities: List<SessionArchiveEntity>) = archiveDao.insert(archiveEntities)
-
-    @WorkerThread
-    fun clearTable() = archiveDao.clearTable()
-
-    @WorkerThread
-    fun isEmpty() = archiveDao.countEntries() == 0
-
-    @WorkerThread
-    fun getLongestDurationSessionArchive(): Float {
+    fun getLongestSessionDurationOrDefault(): Float {
         val entities = archiveDao.getAll()
         if (entities.isEmpty()) {
             return SessionConfig.SESSION_MAX_DURATION_LIMIT.toFloat()
@@ -56,19 +45,6 @@ class SessionArchiveRepository @Inject constructor(private val archiveDao: Sessi
             return maxDuration
         }
         return SessionConfig.SESSION_MAX_DURATION_LIMIT.toFloat()
-    }
-
-    @WorkerThread
-    fun getDurationStatistics(): DurationStatistics {
-        return DurationStatistics(
-            currentWeekDurationSum = currentWeekDurationSum(),
-            currentMonthDurationSum = currentMonthDurationSum(),
-            totalDuration = totalDurationSum(),
-            last30DaysDurationSum = last30DaysDurationSum(),
-            countDurationAvg = countDurationAvg(),
-            countLongestStrike = countLongestStrike(),
-            currentStrike = getCurrentStrike()
-        )
     }
 
     private fun totalDurationSum(): Minute = archiveDao.totalDurationSum()

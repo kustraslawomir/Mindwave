@@ -2,7 +2,7 @@ package skustra.focusflow.data.model.statistics
 
 import skustra.focusflow.data.model.alias.Minute
 
-data class DurationStatistics(
+data class SessionStatistics(
     val totalDuration: Minute,
     val currentWeekDurationSum: Minute,
     val currentMonthDurationSum: Minute,
@@ -12,8 +12,8 @@ data class DurationStatistics(
     val currentStrike: Minute
 ) {
     companion object {
-        fun getDraft(): DurationStatistics {
-            return DurationStatistics(
+        fun getDraft(): SessionStatistics {
+            return SessionStatistics(
                 totalDuration = 0,
                 currentWeekDurationSum = 0,
                 currentMonthDurationSum = 0,

@@ -7,7 +7,6 @@ import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.delay
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.SharingStarted
-import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.flow.stateIn
 import kotlinx.coroutines.launch
 import skustra.focusflow.data.database.entity.SessionArchiveEntity
@@ -15,7 +14,7 @@ import skustra.focusflow.data.model.alias.Minute
 import skustra.focusflow.data.model.session.Session
 import skustra.focusflow.data.model.session.SessionPartType
 import skustra.focusflow.data.model.timer.TimerState
-import skustra.focusflow.data.repository.SessionArchiveRepository
+import skustra.focusflow.data.repositories.sessionarchive.SessionArchiveRepository
 import skustra.focusflow.domain.usecase.session.SessionCreator
 import skustra.focusflow.domain.usecase.statenotification.BreakCompletedNotification
 import skustra.focusflow.domain.usecase.statenotification.SessionCompletedNotification

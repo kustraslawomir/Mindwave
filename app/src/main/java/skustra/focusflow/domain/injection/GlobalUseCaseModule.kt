@@ -7,7 +7,7 @@ import dagger.hilt.InstallIn
 import dagger.hilt.android.qualifiers.ApplicationContext
 import dagger.hilt.components.SingletonComponent
 import skustra.focusflow.data.database.dao.SessionArchiveDao
-import skustra.focusflow.data.repository.SessionArchiveRepository
+import skustra.focusflow.data.repositories.sessionarchive.SessionArchiveRepository
 import skustra.focusflow.domain.usecase.playsound.PlaySoundUseCase
 import skustra.focusflow.domain.usecase.resources.DrawableProvider
 import skustra.focusflow.domain.usecase.resources.DrawableProviderImpl

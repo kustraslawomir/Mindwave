@@ -13,7 +13,8 @@ import skustra.focusflow.BuildConfig
 import skustra.focusflow.data.database.entity.SessionArchiveEntity
 import skustra.focusflow.data.database.entity.SessionCategoryEntity
 import skustra.focusflow.data.model.statistics.DurationUiModel
-import skustra.focusflow.data.repository.SessionArchiveRepository
+import skustra.focusflow.data.repositories.sessionarchive.SessionArchiveRepository
+import skustra.focusflow.data.repositories.statistics.StatisticsRepository
 import skustra.focusflow.domain.usecase.session.SessionConfig
 import skustra.focusflow.domain.utilities.dates.StatisticDateUtils
 import skustra.focusflow.domain.utilities.dates.StatisticDateUtils.generateDates
@@ -32,7 +33,8 @@ import kotlin.random.Random
 
 @HiltViewModel
 class StatisticsViewModel @Inject constructor(
-    private val sessionArchiveRepository: SessionArchiveRepository
+    private val sessionArchiveRepository: SessionArchiveRepository,
+    private val statisticsRepository: StatisticsRepository,
 ) : ViewModel() {
 
     private val entryProducer = ChartEntryModelProducer()
@@ -53,7 +55,7 @@ class StatisticsViewModel @Inject constructor(
 
     @WorkerThread
     fun getDurationStatistics(): List<DurationUiModel> {
-        val statistics = sessionArchiveRepository.getDurationStatistics()
+        val statistics = statisticsRepository.getSessionStatistics()
         return listOf(
             DurationUiModel(
                 name = LocalizationManager.getText(LocalizationKey.CurrentWeekDurationSum),
@@ -90,7 +92,7 @@ class StatisticsViewModel @Inject constructor(
 
     @WorkerThread
     suspend fun getAxisValueMaxY(): Float {
-        return withContext(viewModelScope.coroutineContext + Dispatchers.IO) { sessionArchiveRepository.getLongestDurationSessionArchive() }
+        return withContext(viewModelScope.coroutineContext + Dispatchers.IO) { statisticsRepository.getLongestSessionDurationOrDefault() }
     }
 
     private fun createEmptyStatistics() {
