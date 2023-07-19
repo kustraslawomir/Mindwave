@@ -1,9 +1,9 @@
 package skustra.focusflow.ui.features.statistics.chart
 
 import android.graphics.Typeface
+import androidx.compose.material3.MaterialTheme
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.remember
-import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.unit.dp
 import com.patrykandpatrick.vico.compose.axis.horizontal.bottomAxis
 import com.patrykandpatrick.vico.compose.axis.vertical.startAxis
@@ -20,11 +20,8 @@ import com.patrykandpatrick.vico.core.chart.values.AxisValuesOverrider
 import com.patrykandpatrick.vico.core.component.shape.Shapes
 import com.patrykandpatrick.vico.core.entry.ChartEntryModel
 import skustra.focusflow.ui.utilities.math.convertToShortMinute
-import skustra.focusflow.ui.theme.ChartItemColor
-import skustra.focusflow.ui.theme.GoalColor
 import com.patrykandpatrick.vico.compose.axis.axisLabelComponent
 import com.patrykandpatrick.vico.core.entry.ChartEntryModelProducer
-import android.graphics.Color as AndroidColor
 
 @Composable
 fun StatisticsChartComposable(
@@ -33,7 +30,7 @@ fun StatisticsChartComposable(
 ) {
     val thresholdLine = rememberThresholdLine()
 
-    ProvideChartStyle(rememberChartStyle(chartColors)) {
+    ProvideChartStyle(rememberChartStyle(listOf(MaterialTheme.colorScheme.primary))) {
         val lineChart = lineChart(
             targetVerticalAxisPosition = AxisPosition.Vertical.End,
             axisValuesOverrider = axisValuesOverrider,
@@ -45,33 +42,35 @@ fun StatisticsChartComposable(
             chart = remember(lineChart) { lineChart },
             startAxis = startAxis(
                 valueFormatter = verticalAxisValueFormatter,
-                label = axisLabelComponent().apply {
-                    color = AndroidColor.WHITE
-                },
+                label = axisLabelComponent(color = MaterialTheme.colorScheme.onSurface),
                 maxLabelCount = START_AXIS_LABEL_COUNT
             ),
             bottomAxis = bottomAxis(
                 labelRotationDegrees = dateRotation,
                 valueFormatter = horizontalAxisValueFormatter,
-                label = axisLabelComponent().apply {
-                    color = AndroidColor.WHITE
-                }),
+                label = axisLabelComponent(color = MaterialTheme.colorScheme.onSurface)
+            ),
             marker = rememberMarker(),
-            legend = RememberLegend(),
+            legend = rememberLegend(),
         )
     }
 }
 
 @Composable
 private fun rememberThresholdLine(): ThresholdLine {
-    val line = shapeComponent(strokeWidth = thresholdLineThickness, strokeColor = GoalColor)
+
+    val line = shapeComponent(
+        strokeWidth = thresholdLineThickness,
+        strokeColor = MaterialTheme.colorScheme.primary
+    )
+
     val label = textComponent(
-        color = Color.White,
-        background = shapeComponent(Shapes.pillShape, GoalColor),
+        background = shapeComponent(Shapes.pillShape, MaterialTheme.colorScheme.primary),
         padding = thresholdLineLabelPadding,
         margins = thresholdLineLabelMargins,
         typeface = Typeface.MONOSPACE,
     )
+
     return remember(line, label) {
         ThresholdLine(
             thresholdValue = THRESHOLD_LINE_VALUE,
@@ -84,7 +83,6 @@ private fun rememberThresholdLine(): ThresholdLine {
 private const val THRESHOLD_LINE_VALUE = 90f
 private const val dateRotation = 280f
 private const val START_AXIS_LABEL_COUNT = 10
-private val chartColors = listOf(ChartItemColor, GoalColor)
 private val thresholdLineLabelMarginValue = 2.dp
 private val thresholdLineThickness = 2.dp
 private val thresholdLineLabelHorizontalPaddingValue = 6.dp

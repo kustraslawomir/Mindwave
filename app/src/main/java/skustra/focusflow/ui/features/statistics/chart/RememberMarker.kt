@@ -26,7 +26,7 @@ import com.patrykandpatrick.vico.core.marker.Marker
 
 @Composable
 internal fun rememberMarker(): Marker {
-    val labelBackgroundColor = MaterialTheme.colorScheme.surface
+    val labelBackgroundColor = MaterialTheme.colorScheme.background
     val labelBackground = remember(labelBackgroundColor) {
         ShapeComponent(labelBackgroundShape, labelBackgroundColor.toArgb()).setShadow(
             radius = LABEL_BACKGROUND_SHADOW_RADIUS,
@@ -40,7 +40,8 @@ internal fun rememberMarker(): Marker {
         padding = labelPadding,
         typeface = Typeface.MONOSPACE,
     )
-    val indicatorInnerComponent = shapeComponent(Shapes.pillShape, MaterialTheme.colorScheme.surface)
+    val indicatorInnerComponent =
+        shapeComponent(Shapes.pillShape, MaterialTheme.colorScheme.background)
     val indicatorCenterComponent = shapeComponent(Shapes.pillShape, Color.White)
     val indicatorOuterComponent = shapeComponent(Shapes.pillShape, Color.White)
     val indicator = overlayingComponent(
@@ -53,7 +54,7 @@ internal fun rememberMarker(): Marker {
         innerPaddingAll = indicatorCenterAndOuterComponentPaddingValue,
     )
     val guideline = lineComponent(
-        MaterialTheme.colorScheme.onSurface.copy(GUIDELINE_ALPHA),
+        MaterialTheme.colorScheme.background.copy(GUIDELINE_ALPHA),
         guidelineThickness,
         guidelineShape,
     )
@@ -67,16 +68,24 @@ internal fun rememberMarker(): Marker {
                     )
                     with(indicatorCenterComponent) {
                         color = entryColor
-                        setShadow(radius = INDICATOR_CENTER_COMPONENT_SHADOW_RADIUS, color = entryColor)
+                        setShadow(
+                            radius = INDICATOR_CENTER_COMPONENT_SHADOW_RADIUS,
+                            color = entryColor
+                        )
                     }
                 }
             }
 
-            override fun getInsets(context: MeasureContext, outInsets: Insets, segmentProperties: SegmentProperties) =
+            override fun getInsets(
+                context: MeasureContext,
+                outInsets: Insets,
+                segmentProperties: SegmentProperties
+            ) =
                 with(context) {
-                    outInsets.top = label.getHeight(context) + labelBackgroundShape.tickSizeDp.pixels +
-                        LABEL_BACKGROUND_SHADOW_RADIUS.pixels * SHADOW_RADIUS_MULTIPLIER -
-                        LABEL_BACKGROUND_SHADOW_DY.pixels
+                    outInsets.top =
+                        label.getHeight(context) + labelBackgroundShape.tickSizeDp.pixels +
+                                LABEL_BACKGROUND_SHADOW_RADIUS.pixels * SHADOW_RADIUS_MULTIPLIER -
+                                LABEL_BACKGROUND_SHADOW_DY.pixels
                 }
         }
     }
@@ -100,4 +109,5 @@ private val labelPadding = dimensionsOf(labelHorizontalPaddingValue, labelVertic
 private val indicatorInnerAndCenterComponentPaddingValue = 5.dp
 private val indicatorCenterAndOuterComponentPaddingValue = 10.dp
 private val guidelineThickness = 2.dp
-private val guidelineShape = DashedShape(Shapes.pillShape, GUIDELINE_DASH_LENGTH_DP, GUIDELINE_GAP_LENGTH_DP)
+private val guidelineShape =
+    DashedShape(Shapes.pillShape, GUIDELINE_DASH_LENGTH_DP, GUIDELINE_GAP_LENGTH_DP)

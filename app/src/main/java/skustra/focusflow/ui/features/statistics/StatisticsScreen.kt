@@ -8,6 +8,7 @@ import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.material.Text
 import androidx.compose.material3.MaterialTheme
+import androidx.compose.material3.Surface
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.getValue
@@ -66,9 +67,8 @@ fun StatisticsScreen(viewModel: StatisticsViewModel = hiltViewModel()) {
                 modifier = Modifier
                     .padding(top = 50.dp, start = 16.dp, end = 16.dp)
                     .alpha(0.5f),
-                style = MaterialTheme.typography.bodySmall,
-                color = Color.White,
-                textAlign = TextAlign.Center
+                textAlign = TextAlign.Center,
+                color = MaterialTheme.colorScheme.onSurface
             )
         }
     }

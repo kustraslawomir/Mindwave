@@ -9,6 +9,7 @@ import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material.Text
+import androidx.compose.material3.MaterialTheme
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
@@ -27,22 +28,20 @@ fun StatisticGridItem(durationUiModel: DurationUiModel) {
             .clip(
                 shape = RoundedCornerShape(24.dp)
             )
-            .background(durationUiModel.color),
+            .background(MaterialTheme.colorScheme.secondary),
         contentAlignment = Alignment.Center
     ) {
         Column(
             horizontalAlignment = Alignment.CenterHorizontally,
-            verticalArrangement = Arrangement.Center,
+            verticalArrangement = Arrangement.Center
         ) {
             Text(
                 text = durationUiModel.name,
-                style = androidx.compose.material3.MaterialTheme.typography.titleSmall,
-                color = Color.White
+                style = MaterialTheme.typography.bodySmall
             )
             Text(
                 text = durationUiModel.value,
-                style = androidx.compose.material3.MaterialTheme.typography.titleLarge,
-                color = Color.White
+                style = MaterialTheme.typography.bodyMedium
             )
         }
     }

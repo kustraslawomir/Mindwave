@@ -12,7 +12,6 @@ import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.unit.dp
 import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
-import androidx.lifecycle.viewmodel.compose.viewModel
 import skustra.focusflow.ui.features.session.arc.SessionFocusArc
 import skustra.focusflow.ui.features.session.description.SessionDescriptionComposable
 import skustra.focusflow.ui.features.session.panel.SessionPanelComposable
@@ -25,7 +24,6 @@ fun SessionScreen(viewModel: SessionViewModel = hiltViewModel()) {
         .collectAsStateWithLifecycle()
 
     val context = LocalContext.current
-
 
     Column(
         modifier = Modifier

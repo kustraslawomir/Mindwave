@@ -1,6 +1,7 @@
 package skustra.focusflow.ui.features.statistics
 
 import androidx.annotation.WorkerThread
+import androidx.compose.material3.MaterialTheme
 import androidx.compose.ui.graphics.Color
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
@@ -22,7 +23,6 @@ import skustra.focusflow.ui.features.statistics.chart.SessionArchiveEntry
 import skustra.focusflow.ui.features.statistics.chart.SessionArchiveEntryDataModel
 import skustra.focusflow.ui.localization.LocalizationKey
 import skustra.focusflow.ui.localization.LocalizationManager
-import skustra.focusflow.ui.theme.ThisWeekCardColor
 import java.util.Calendar
 import java.util.Date
 import java.util.UUID
@@ -55,33 +55,27 @@ class StatisticsViewModel @Inject constructor(
         return listOf(
             DurationUiModel(
                 name = LocalizationManager.getText(LocalizationKey.CurrentWeekDurationSum),
-                value = TimeUtils.formatMinutes(statistics.currentWeekDurationSum),
-                color = ThisWeekCardColor
+                value = TimeUtils.formatMinutes(statistics.currentWeekDurationSum)
             ),
             DurationUiModel(
                 name = LocalizationManager.getText(LocalizationKey.Last30DaysDuration),
-                value = TimeUtils.formatMinutes(statistics.last30DaysDurationSum),
-                color = Color.Black
+                value = TimeUtils.formatMinutes(statistics.last30DaysDurationSum)
             ),
             DurationUiModel(
                 name = LocalizationManager.getText(LocalizationKey.TotalDuration),
-                value = TimeUtils.formatMinutes(statistics.totalDuration),
-                color = Color.Black
+                value = TimeUtils.formatMinutes(statistics.totalDuration)
             ),
             DurationUiModel(
                 name = LocalizationManager.getText(LocalizationKey.AverageDuration),
-                value = TimeUtils.formatMinutes(statistics.countDurationAvg),
-                color = Color.Black
+                value = TimeUtils.formatMinutes(statistics.countDurationAvg)
             ),
             DurationUiModel(
                 name = LocalizationManager.getText(LocalizationKey.CurrentStrike),
-                value = statistics.currentStrike.toString(),
-                color = Color.Black
+                value = statistics.currentStrike.toString()
             ),
             DurationUiModel(
                 name = LocalizationManager.getText(LocalizationKey.LongestStrike),
-                value = statistics.countLongestStrike.toString(),
-                color = Color.Black
+                value = statistics.countLongestStrike.toString()
             ),
         )
     }

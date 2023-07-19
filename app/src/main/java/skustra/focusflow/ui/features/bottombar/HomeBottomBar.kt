@@ -32,7 +32,6 @@ fun HomeBottomBar(
 
     BottomNavigation(
         backgroundColor = MaterialTheme.colorScheme.background,
-        contentColor = contentColorFor(MaterialTheme.colorScheme.background),
         elevation = 10.dp
     ) {
         BottomNavigationSectionsSource.sections.forEach { section ->

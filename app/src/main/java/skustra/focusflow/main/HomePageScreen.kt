@@ -15,7 +15,6 @@ import androidx.compose.ui.platform.LocalConfiguration
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.unit.dp
 import androidx.hilt.navigation.compose.hiltViewModel
-import skustra.focusflow.common.navigation.BottomBarNavigationSection
 import skustra.focusflow.common.navigation.DrawerNavigationSection
 import skustra.focusflow.common.navigation.navigate
 import skustra.focusflow.common.navigation.popBackStack
@@ -30,7 +29,8 @@ import skustra.focusflow.ui.theme.Theme
 fun HomePageScreen(viewModel: HomePageViewModel = hiltViewModel()) {
     Theme {
         Surface(
-            color = MaterialTheme.colorScheme.background, modifier = Modifier.fillMaxSize()
+            color = MaterialTheme.colorScheme.background,
+            modifier = Modifier.fillMaxSize()
         ) {
             val applicationState = rememberApplicationState()
             Scaffold(snackbarHost = {
@@ -40,7 +40,6 @@ fun HomePageScreen(viewModel: HomePageViewModel = hiltViewModel()) {
                 ModalNavigationDrawer(
                     drawerState = applicationState.drawerState,
                     drawerContent = {
-
                         val settingsRoute = DrawerNavigationSection.Settings.route
                         val goToSettings: () -> Unit = {
                             applicationState.navigate(route = settingsRoute)

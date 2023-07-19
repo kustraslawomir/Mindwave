@@ -1,8 +1,10 @@
 package skustra.focusflow.ui.features.drawer
 
 import androidx.compose.foundation.layout.Arrangement
+import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.Spacer
+import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.layout.width
@@ -20,20 +22,18 @@ import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
 import skustra.focusflow.common.navigation.DrawerNavigationSection
 import skustra.focusflow.ui.features.drawer.model.AppDrawerItemInfo
-import timber.log.Timber
+import skustra.focusflow.ui.utilities.composable.noRippleClickable
 
 @Composable
 fun AppDrawerItem(
     item: AppDrawerItemInfo<DrawerNavigationSection>,
     onClick: (options: DrawerNavigationSection) -> Unit
-) = Surface(
-    color = MaterialTheme.colorScheme.onPrimary,
-    modifier = Modifier.width(150.dp),
-    onClick = {
-        onClick(item.applicationState)
-        Timber.d("click")
-    },
-    shape = RoundedCornerShape(50),
+) = Box(
+    modifier = Modifier
+        .fillMaxSize()
+        .noRippleClickable {
+            onClick(item.applicationState)
+        }
 ) {
     Row(
         horizontalArrangement = Arrangement.Start,

@@ -26,7 +26,6 @@ import androidx.compose.runtime.remember
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
-import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.window.Dialog
@@ -40,7 +39,6 @@ import skustra.focusflow.ui.features.session.arc.BreaksCount
 import skustra.focusflow.ui.features.session.panel.SkipBreaksComposable
 import skustra.focusflow.ui.localization.LocalizationKey
 import skustra.focusflow.ui.localization.LocalizationManager
-import skustra.focusflow.ui.theme.ButtonColor
 import timber.log.Timber
 
 object PanelState {
@@ -93,7 +91,7 @@ object PanelState {
         val status = permissionState?.status
         Box(modifier = Modifier
             .clip(shape = RoundedCornerShape(size = 12.dp))
-            .background(color = ButtonColor)
+            .background(color = MaterialTheme.colorScheme.primary)
             .clickable {
                 when (status) {
                     is PermissionStatus.Granted -> startSession()
@@ -107,13 +105,13 @@ object PanelState {
                     Icon(
                         painter = painterResource(id = drawableProvider.getPlayIcon()),
                         contentDescription = "",
-                        tint = Color.Black
+                        tint = MaterialTheme.colorScheme.onPrimary
                     )
                 }
                 Text(
                     text = LocalizationManager.getText(LocalizationKey.CreateSession),
                     modifier = Modifier.padding(end = 16.dp, bottom = 2.dp),
-                    color = Color.Black,
+                    color = MaterialTheme.colorScheme.onPrimary,
                     style = MaterialTheme.typography.labelSmall,
                 )
             }
@@ -156,13 +154,15 @@ object PanelState {
             CircleButton(
                 onClick = {
                     resumeSession()
-                }, icon = drawableProvider.getResumeIcon()
+                },
+                icon = drawableProvider.getResumeIcon()
             )
             Spacer(modifier = Modifier.width(16.dp))
             CircleButton(
                 onClick = {
                     stopSession()
-                }, icon = drawableProvider.getStopIcon(), color = Color.White
+                },
+                icon = drawableProvider.getStopIcon()
             )
         }
     }

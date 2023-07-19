@@ -80,9 +80,9 @@ private fun Description(text: String) {
     Text(
         text,
         style = MaterialTheme.typography.bodyMedium,
-        color = Color.White,
         modifier = Modifier.alpha(0.5f),
-        textAlign = TextAlign.Center
+        textAlign = TextAlign.Center,
+        color = MaterialTheme.colorScheme.onSurface
     )
 }
 
@@ -91,6 +91,6 @@ private fun Title(text: String) {
     Text(
         text,
         style = MaterialTheme.typography.titleLarge,
-        color = Color.White
+        color = MaterialTheme.colorScheme.onSurface
     )
 }

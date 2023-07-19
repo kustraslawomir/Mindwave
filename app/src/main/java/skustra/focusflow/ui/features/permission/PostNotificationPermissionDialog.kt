@@ -28,7 +28,6 @@ import androidx.compose.ui.unit.dp
 import skustra.focusflow.domain.usecase.resources.DrawableProvider
 import skustra.focusflow.ui.localization.LocalizationKey
 import skustra.focusflow.ui.localization.LocalizationManager
-import skustra.focusflow.ui.theme.ButtonColor
 
 @Composable
 fun PostNotificationPermissionDialog(
@@ -53,12 +52,12 @@ fun PostNotificationPermissionDialog(
             Text(
                 text = LocalizationManager.getText(LocalizationKey.PostPermissionNeedMessage),
                 textAlign = TextAlign.Center,
-                color = Color.White,
+                //color color =   color = Color.White,
             )
             Spacer(modifier = Modifier.height(32.dp))
             Box(modifier = Modifier
                 .clip(shape = RoundedCornerShape(size = 12.dp))
-                .background(color = ButtonColor)
+              //  .background(color = ButtonColor)
                 .clickable {
                     if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.TIRAMISU) {
                         launcher.launch(Manifest.permission.POST_NOTIFICATIONS)
@@ -75,7 +74,7 @@ fun PostNotificationPermissionDialog(
                     Text(
                         text = LocalizationManager.getText(LocalizationKey.Allow),
                         modifier = Modifier.padding(end = 16.dp, bottom = 2.dp),
-                        color = Color.Black
+                       //color color = Color.Black
                     )
                 }
             }
