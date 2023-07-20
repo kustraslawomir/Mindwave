@@ -32,6 +32,8 @@ fun TimeProgress(
         )
         Text(
             text = LocalizationManager.getText(LocalizationKey.MinutesShort),
+            modifier = Modifier
+                .padding(horizontal = 8.dp, vertical = 6.dp),
             style = MaterialTheme.typography.bodyLarge
         )
     }
