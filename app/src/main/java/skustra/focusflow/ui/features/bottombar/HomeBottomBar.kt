@@ -31,7 +31,7 @@ fun HomeBottomBar(
     val currentDestination = navBackStackEntry?.destination
 
     BottomNavigation(
-        backgroundColor = MaterialTheme.colorScheme.background,
+        backgroundColor = MaterialTheme.colorScheme.surface,
         elevation = 10.dp
     ) {
         BottomNavigationSectionsSource.sections.forEach { section ->
