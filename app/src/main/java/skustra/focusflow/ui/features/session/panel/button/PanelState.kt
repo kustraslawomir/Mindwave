@@ -29,7 +29,6 @@ import androidx.compose.ui.draw.clip
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.unit.dp
-import androidx.compose.ui.window.Dialog
 import com.google.accompanist.permissions.ExperimentalPermissionsApi
 import com.google.accompanist.permissions.PermissionStatus
 import com.google.accompanist.permissions.rememberPermissionState
@@ -118,19 +117,14 @@ object PanelState {
                 )
             }
             if (showPermissionDialog.value) {
-                Dialog(
-                    onDismissRequest = {
+                GrantPostNotificationPermission(
+                    permissionState = permissionState,
+                    launcher = launcher,
+                    onDismissed = {
                         showPermissionDialog.value = false
                         startSession()
-                    }) {
-                    GrantPostNotificationPermission(
-                        permissionState = permissionState,
-                        launcher = launcher,
-                        onClick = {
-                            showPermissionDialog.value = false
-                        }, drawableProvider = drawableProvider
-                    )
-                }
+                    }, drawableProvider = drawableProvider
+                )
             }
         }
     }
