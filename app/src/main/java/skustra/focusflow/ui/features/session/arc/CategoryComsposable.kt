@@ -27,6 +27,6 @@ fun Category(
     }
 
     Text(
-        text = categoryText, style = MaterialTheme.typography.bodyMedium
+        text = categoryText, style = MaterialTheme.typography.bodySmall
     )
 }

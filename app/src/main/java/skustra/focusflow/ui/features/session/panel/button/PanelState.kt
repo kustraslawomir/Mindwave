@@ -26,6 +26,7 @@ import androidx.compose.runtime.remember
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
+import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.window.Dialog
@@ -39,6 +40,7 @@ import skustra.focusflow.ui.features.session.arc.BreaksCount
 import skustra.focusflow.ui.features.session.panel.SkipBreaksComposable
 import skustra.focusflow.ui.localization.LocalizationKey
 import skustra.focusflow.ui.localization.LocalizationManager
+import skustra.focusflow.ui.theme.CustomDimensions.DEFAULT_CORNERS_RADIUS
 import timber.log.Timber
 
 object PanelState {
@@ -90,7 +92,7 @@ object PanelState {
         val showPermissionDialog = remember { mutableStateOf(false) }
         val status = permissionState?.status
         Box(modifier = Modifier
-            .clip(shape = RoundedCornerShape(size = 12.dp))
+            .clip(shape = RoundedCornerShape(size = DEFAULT_CORNERS_RADIUS.dp))
             .background(color = MaterialTheme.colorScheme.primary)
             .clickable {
                 when (status) {
@@ -112,7 +114,7 @@ object PanelState {
                     text = LocalizationManager.getText(LocalizationKey.CreateSession),
                     modifier = Modifier.padding(end = 16.dp, bottom = 2.dp),
                     color = MaterialTheme.colorScheme.onPrimary,
-                    style = MaterialTheme.typography.labelSmall,
+                    style = MaterialTheme.typography.bodyMedium,
                 )
             }
             if (showPermissionDialog.value) {
@@ -162,6 +164,7 @@ object PanelState {
                 onClick = {
                     stopSession()
                 },
+                color = Color.White,
                 icon = drawableProvider.getStopIcon()
             )
         }

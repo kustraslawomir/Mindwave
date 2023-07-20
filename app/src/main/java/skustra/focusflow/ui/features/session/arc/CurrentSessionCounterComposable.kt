@@ -29,6 +29,6 @@ fun CurrentSessionCounter(session: Session) {
         SessionPartType.Break -> LocalizationManager.getText(LocalizationKey.Break)
     }
     Text(
-        text = sessionStateStatusText, style = MaterialTheme.typography.bodyMedium
+        text = sessionStateStatusText, style = MaterialTheme.typography.bodySmall
     )
 }

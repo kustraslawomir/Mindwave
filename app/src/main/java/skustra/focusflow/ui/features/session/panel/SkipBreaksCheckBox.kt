@@ -33,7 +33,7 @@ fun SkipBreaksComposable(shouldSkipBreaks: (Boolean) -> Unit, skipBreaks: Boolea
         )
         Text(
             text = LocalizationManager.getText(LocalizationKey.SkipBreaks),
-            style = MaterialTheme.typography.bodyMedium
+            style = MaterialTheme.typography.bodySmall
         )
     }
 }

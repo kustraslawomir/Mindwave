@@ -17,16 +17,17 @@ import androidx.compose.ui.draw.clip
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.unit.dp
 import skustra.focusflow.data.model.statistics.DurationUiModel
+import skustra.focusflow.ui.theme.CustomDimensions.DEFAULT_CORNERS_RADIUS
 
 @Composable
 fun StatisticGridItem(durationUiModel: DurationUiModel) {
     Box(
         modifier = Modifier
             .fillMaxSize()
-            .aspectRatio(1.3f)
+            .aspectRatio(1.5f)
             .padding(all = 5.dp)
             .clip(
-                shape = RoundedCornerShape(24.dp)
+                shape = RoundedCornerShape(DEFAULT_CORNERS_RADIUS.dp)
             )
             .background(MaterialTheme.colorScheme.secondary),
         contentAlignment = Alignment.Center
@@ -41,7 +42,7 @@ fun StatisticGridItem(durationUiModel: DurationUiModel) {
             )
             Text(
                 text = durationUiModel.value,
-                style = MaterialTheme.typography.bodyMedium
+                style = MaterialTheme.typography.bodySmall
             )
         }
     }

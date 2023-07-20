@@ -79,7 +79,7 @@ fun PauseDescription() {
 private fun Description(text: String) {
     Text(
         text,
-        style = MaterialTheme.typography.bodyMedium,
+        style = MaterialTheme.typography.bodySmall,
         modifier = Modifier.alpha(0.5f),
         textAlign = TextAlign.Center,
         color = MaterialTheme.colorScheme.onSurface
@@ -90,7 +90,7 @@ private fun Description(text: String) {
 private fun Title(text: String) {
     Text(
         text,
-        style = MaterialTheme.typography.titleLarge,
+        style = MaterialTheme.typography.titleMedium,
         color = MaterialTheme.colorScheme.onSurface
     )
 }

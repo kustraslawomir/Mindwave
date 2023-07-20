@@ -12,6 +12,7 @@ import skustra.focusflow.data.model.session.Session
 import skustra.focusflow.data.model.timer.TimerState
 import skustra.focusflow.ui.localization.LocalizationKey
 import skustra.focusflow.ui.localization.LocalizationManager
+import skustra.focusflow.ui.theme.SessionDurationButtonStyle
 
 @Composable
 fun TimeProgress(
@@ -24,17 +25,14 @@ fun TimeProgress(
         else -> 0.toString()
     }
 
-    Row {
+    Row(verticalAlignment = Alignment.Bottom) {
         Text(
             text = minutesLeft,
-            style = MaterialTheme.typography.labelLarge,
+            style = SessionDurationButtonStyle
         )
         Text(
             text = LocalizationManager.getText(LocalizationKey.MinutesShort),
-            modifier = Modifier
-                .align(Alignment.Bottom)
-                .padding(vertical = 8.dp, horizontal = 8.dp),
-            style = MaterialTheme.typography.labelMedium
+            style = MaterialTheme.typography.bodyLarge
         )
     }
 }

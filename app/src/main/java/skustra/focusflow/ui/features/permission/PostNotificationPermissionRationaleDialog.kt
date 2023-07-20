@@ -29,6 +29,7 @@ import androidx.compose.ui.unit.dp
 import skustra.focusflow.domain.usecase.resources.DrawableProvider
 import skustra.focusflow.ui.localization.LocalizationKey
 import skustra.focusflow.ui.localization.LocalizationManager
+import skustra.focusflow.ui.theme.CustomDimensions.DEFAULT_CORNERS_RADIUS
 
 @Composable
 fun PostNotificationPermissionRationaleDialog(
@@ -57,7 +58,7 @@ fun PostNotificationPermissionRationaleDialog(
             )
             Spacer(modifier = Modifier.height(32.dp))
             Box(modifier = Modifier
-                .clip(shape = RoundedCornerShape(size = 12.dp))
+                .clip(shape = RoundedCornerShape(size = DEFAULT_CORNERS_RADIUS.dp))
                // .background(color = ButtonColor)
                 .clickable {
                     context.startActivity(
