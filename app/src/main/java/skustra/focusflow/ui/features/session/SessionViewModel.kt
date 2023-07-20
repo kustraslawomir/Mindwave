@@ -15,6 +15,7 @@ import skustra.focusflow.domain.usecase.sessionstate.SessionStateHandler
 import skustra.focusflow.ui.service.SessionForegroundService
 import skustra.focusflow.ui.service.SessionForegroundService.Companion.DURATION_CHOSEN_BY_USER
 import skustra.focusflow.ui.service.SessionForegroundService.Companion.SKIP_BREAKS
+import skustra.focusflow.ui.utilities.logs.AppLog
 import javax.inject.Inject
 
 
@@ -29,6 +30,7 @@ class SessionViewModel @Inject constructor(
     private var durationChosenByUser = SessionConfig.DEFAULT_DURATION
 
     fun onSessionUiEvent(event: SessionUiEvent) {
+        AppLog.onSessionUiEvent(event)
         when (event) {
             is SessionUiEvent.Start -> startSession(event.context)
             SessionUiEvent.Pause -> sessionHandler.pauseSession()

@@ -4,7 +4,6 @@ import android.content.Context
 import android.content.Intent
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
-import kotlinx.coroutines.delay
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.SharingStarted
 import kotlinx.coroutines.flow.stateIn
@@ -20,8 +19,8 @@ import skustra.focusflow.domain.usecase.statenotification.BreakCompletedNotifica
 import skustra.focusflow.domain.usecase.statenotification.SessionCompletedNotification
 import skustra.focusflow.domain.usecase.statenotification.SessionStartedNotification
 import skustra.focusflow.domain.usecase.statenotification.WorkCompletedNotification
-import skustra.focusflow.ui.utilities.logs.AppLog
 import skustra.focusflow.ui.service.SessionForegroundService
+import skustra.focusflow.ui.utilities.logs.AppLog
 import timber.log.Timber
 
 class SessionStateHandler(
@@ -48,6 +47,7 @@ class SessionStateHandler(
                 initialValue = currentSessionState,
                 started = SharingStarted.WhileSubscribed(5000)
             ).collect { timerState ->
+                AppLog.logTimerStateCollection(timerState)
                 if (timerState is TimerState) {
                     handleNewTimerState(timerState)
                 }
@@ -78,9 +78,8 @@ class SessionStateHandler(
     }
 
     fun stopSession() {
-        sessionStateEmitter.stop()
         sessionScope.launch {
-            delay(1000)
+            sessionStateEmitter.stop()
             applicationContext.stopService(
                 Intent(
                     applicationContext, SessionForegroundService::class.java

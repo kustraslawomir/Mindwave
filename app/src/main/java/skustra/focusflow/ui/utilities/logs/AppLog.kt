@@ -2,6 +2,7 @@ package skustra.focusflow.ui.utilities.logs
 
 import skustra.focusflow.data.model.session.Session
 import skustra.focusflow.data.model.timer.TimerState
+import skustra.focusflow.ui.features.session.SessionUiEvent
 import timber.log.Timber
 
 object AppLog {
@@ -36,5 +37,13 @@ object AppLog {
 
     fun logNavigationPop() {
         Timber.w("[NAVIGATE] pop up")
+    }
+
+    fun onSessionUiEvent(event: SessionUiEvent) {
+        Timber.w("on session ui event change: $event")
+    }
+
+    fun logTimerStateCollection(timerState: Any) {
+        Timber.d("collect timer state: $timerState")
     }
 }
