@@ -8,9 +8,9 @@ import dagger.hilt.android.qualifiers.ApplicationContext
 import dagger.hilt.components.SingletonComponent
 import skustra.focusflow.data.database.dao.SessionArchiveDao
 import skustra.focusflow.data.repositories.sessionarchive.SessionArchiveRepository
+import skustra.focusflow.data.repositories.statistics.StatisticsRepository
 import skustra.focusflow.domain.ports.SessionArchiveRepositoryPort
 import skustra.focusflow.domain.ports.StatisticsRepositoryPort
-import skustra.focusflow.data.repositories.statistics.StatisticsRepository
 import skustra.focusflow.domain.usecase.mock.MockSessionArchiveData
 import skustra.focusflow.domain.usecase.playsound.PlaySoundUseCase
 import skustra.focusflow.domain.usecase.resources.DrawableProvider

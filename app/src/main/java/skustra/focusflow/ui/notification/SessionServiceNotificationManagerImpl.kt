@@ -13,7 +13,7 @@ import skustra.focusflow.data.model.timer.TimerState
 import skustra.focusflow.main.MainActivity
 import skustra.focusflow.ui.localization.LocalizationKey
 import skustra.focusflow.ui.localization.LocalizationManager
-import java.util.*
+import java.util.UUID
 
 class SessionServiceNotificationManagerImpl(
     private val applicationContext: Context

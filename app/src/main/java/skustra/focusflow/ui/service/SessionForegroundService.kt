@@ -3,7 +3,11 @@ package skustra.focusflow.ui.service
 import android.app.Service
 import android.content.Intent
 import dagger.hilt.android.AndroidEntryPoint
-import kotlinx.coroutines.*
+import kotlinx.coroutines.CoroutineScope
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.SupervisorJob
+import kotlinx.coroutines.cancel
+import kotlinx.coroutines.launch
 import skustra.focusflow.data.model.timer.TimerState
 import skustra.focusflow.domain.usecase.sessionstate.SessionStateHandler
 import skustra.focusflow.ui.notification.SessionServiceNotificationManager

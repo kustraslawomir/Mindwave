@@ -2,23 +2,19 @@ package skustra.focusflow.ui.features.bottombar
 
 
 import androidx.compose.foundation.layout.size
-import androidx.compose.material.BottomNavigation
-import androidx.compose.material.BottomNavigationItem
-import androidx.compose.material.Icon
-
-import androidx.compose.material.contentColorFor
+import androidx.compose.material3.Icon
 import androidx.compose.material3.MaterialTheme
+import androidx.compose.material3.NavigationBar
+import androidx.compose.material3.NavigationBarItem
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.unit.dp
 import androidx.navigation.NavDestination.Companion.hierarchy
 import androidx.navigation.NavGraph.Companion.findStartDestination
 import androidx.navigation.compose.currentBackStackEntryAsState
 import skustra.focusflow.common.navigation.BottomNavigationSectionsSource
-import skustra.focusflow.common.navigation.navigateAndPopBackStack
 import skustra.focusflow.common.navigation.navigateSaved
 import skustra.focusflow.main.ApplicationState
 
@@ -30,9 +26,9 @@ fun HomeBottomBar(
     val navBackStackEntry by applicationState.navController.currentBackStackEntryAsState()
     val currentDestination = navBackStackEntry?.destination
 
-    BottomNavigation(
-        backgroundColor = MaterialTheme.colorScheme.surface,
-        elevation = 10.dp
+    NavigationBar(
+        containerColor = MaterialTheme.colorScheme.surface,
+        tonalElevation = 10.dp
     ) {
         BottomNavigationSectionsSource.sections.forEach { section ->
 
@@ -40,7 +36,7 @@ fun HomeBottomBar(
                 it.route == section.route
             } == true
 
-            BottomNavigationItem(icon = {
+            NavigationBarItem(icon = {
                 Icon(
                     painter = painterResource(id = section.iconResourceId),
                     modifier = Modifier.size(24.dp),
@@ -48,8 +44,9 @@ fun HomeBottomBar(
                 )
             },
                 selected = selected,
-                unselectedContentColor = Color.Gray,
-                selectedContentColor = MaterialTheme.colorScheme.primary,
+
+                /* unselectedContentColor = Color.Gray,
+                 selectedContentColor = MaterialTheme.colorScheme.primary,*/
                 onClick = {
                     applicationState.navigateSaved(
                         route = section.route,

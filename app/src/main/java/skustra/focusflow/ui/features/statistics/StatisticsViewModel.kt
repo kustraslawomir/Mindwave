@@ -1,8 +1,6 @@
 package skustra.focusflow.ui.features.statistics
 
 import androidx.annotation.WorkerThread
-import androidx.compose.material3.MaterialTheme
-import androidx.compose.ui.graphics.Color
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.patrykandpatrick.vico.core.entry.ChartEntryModelProducer
@@ -10,24 +8,21 @@ import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.withContext
-import skustra.focusflow.BuildConfig
 import skustra.focusflow.data.database.entity.SessionArchiveEntity
 import skustra.focusflow.data.database.entity.SessionCategoryEntity
 import skustra.focusflow.data.model.statistics.DurationUiModel
-import skustra.focusflow.domain.usecase.session.SessionConfig
 import skustra.focusflow.domain.usecase.sessionarchive.SessionArchiveUseCase
-import skustra.focusflow.ui.utilities.dates.StatisticDateUtils
-import skustra.focusflow.ui.utilities.dates.StatisticDateUtils.generateDates
-import skustra.focusflow.ui.utilities.time.TimeUtils
 import skustra.focusflow.ui.features.statistics.chart.SessionArchiveEntry
 import skustra.focusflow.ui.features.statistics.chart.SessionArchiveEntryDataModel
 import skustra.focusflow.ui.localization.LocalizationKey
 import skustra.focusflow.ui.localization.LocalizationManager
+import skustra.focusflow.ui.utilities.dates.StatisticDateUtils
+import skustra.focusflow.ui.utilities.dates.StatisticDateUtils.generateDates
+import skustra.focusflow.ui.utilities.time.TimeUtils
 import java.util.Calendar
 import java.util.Date
 import java.util.UUID
 import javax.inject.Inject
-import kotlin.random.Random
 
 @HiltViewModel
 class StatisticsViewModel @Inject constructor(

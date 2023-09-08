@@ -1,7 +1,7 @@
 package skustra.focusflow.ui.localization
 
 import androidx.compose.runtime.mutableStateOf
-import java.util.*
+import java.util.Locale
 
 class Localize {
     private val currentLocale = mutableStateOf(Locale.getDefault())

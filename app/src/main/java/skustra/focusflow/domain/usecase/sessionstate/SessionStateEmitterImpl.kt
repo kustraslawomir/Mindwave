@@ -1,7 +1,11 @@
 package skustra.focusflow.domain.usecase.sessionstate
 
-import kotlinx.coroutines.*
-import kotlinx.coroutines.flow.*
+import kotlinx.coroutines.CoroutineScope
+import kotlinx.coroutines.Deferred
+import kotlinx.coroutines.flow.MutableStateFlow
+import kotlinx.coroutines.flow.StateFlow
+import kotlinx.coroutines.isActive
+import kotlinx.coroutines.launch
 import skustra.focusflow.data.model.alias.Minute
 import skustra.focusflow.data.model.session.SessionPart
 import skustra.focusflow.data.model.timer.Progress

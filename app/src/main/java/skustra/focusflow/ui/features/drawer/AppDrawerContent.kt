@@ -1,6 +1,5 @@
 package skustra.focusflow.ui.features.drawer
 
-import androidx.compose.foundation.Image
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.lazy.LazyColumn
@@ -9,20 +8,13 @@ import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.ModalDrawerSheet
 import androidx.compose.material3.Surface
 import androidx.compose.runtime.Composable
-import androidx.compose.runtime.getValue
-import androidx.compose.runtime.mutableStateOf
-import androidx.compose.runtime.remember
 import androidx.compose.runtime.rememberCoroutineScope
-import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.unit.dp
 import kotlinx.coroutines.launch
-import skustra.focusflow.R
 import skustra.focusflow.common.navigation.DrawerNavigationSection
 import skustra.focusflow.ui.features.drawer.model.AppDrawerItemInfo
-import timber.log.Timber
 
 @Composable
 fun <T : Enum<T>> AppDrawerContent(
